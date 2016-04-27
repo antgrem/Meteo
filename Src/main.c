@@ -77,7 +77,7 @@ int main(void)
 	
 	LM75_Temperature_ex(&data);
 		
-	Create_new_file();
+//	Create_new_file();
 	
 //	if (LM75_Temperature_ex(&data) != 0)
 //				while(1);//error with LM75. May be sensor not connected.
@@ -99,7 +99,6 @@ int main(void)
 	LCD_LED_SET;
 	Lcd_Clear(GRAY0);
 		
-	//Gui_DrawFont_GBK16(20,10,BLUE,GRAY0,"Color Test");
 	delay_ms(200);
 	Gui_DrawFont_GBK16(16,0,BLUE,GRAY0,(uint8_t*)"Temperature");
 	
@@ -108,19 +107,6 @@ int main(void)
 		delay_ms(200);
 		Gui_DrawFont_GBK16(16,40,BLACK,GRAY0,(uint8_t*)buffer);
 		
-		if (file_created==10)
-		{
-			delay_ms(200);
-			Gui_DrawFont_GBK16(16,80,BLACK,GRAY0,(uint8_t*)"file OK");
-		}
-		else
-		{
-			delay_ms(200);
-			Gui_DrawFont_GBK16(16,80,BLACK,GRAY0,(uint8_t*)"file FAIL");
-		}
-	
-	delay_ms(1500);
-	
 
 	//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
@@ -144,40 +130,6 @@ int main(void)
   while (1)
   {
 		
-//		/* Start temperature conversion */
-//		TM_BMP180_StartTemperature(&BMP180_Data);
-//		
-//		/* Wait delay in microseconds */
-//		/* You can do other things here instead of delay */
-//		delay_ms(5);
-//		
-//		/* Read temperature first */
-//		TM_BMP180_ReadTemperature(&BMP180_Data);
-
-//		BMP180_Oversampling = TM_BMP180_Oversampling_HighResolution;
-//		
-//		/* Start pressure conversion at ultra high resolution */
-//		TM_BMP180_StartPressure(&BMP180_Data, BMP180_Oversampling);
-//		
-//		/* Wait delay in microseconds */
-//		/* You can do other things here instead of delay */
-//		if (BMP180_Oversampling == TM_BMP180_Oversampling_UltraLowPower)
-//			delay_ms(5);
-//		else if (BMP180_Oversampling == TM_BMP180_Oversampling_Standard)
-//			delay_ms(8);
-//		else if (BMP180_Oversampling == TM_BMP180_Oversampling_HighResolution)
-//			delay_ms(14);
-//		else	delay_ms(26);
-//		
-//		/* Read pressure value */
-//		TM_BMP180_ReadPressure(&BMP180_Data);
-//	
-//		avarage_preshure = (avarage_preshure + BMP180_Data.Pressure)>>1;
-//		
-//  /* USER CODE END WHILE */
-
-
-
   }
 
 
