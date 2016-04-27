@@ -192,9 +192,17 @@ void Bmp_180(void)
 				//LM75_Init();	
 			
 				LM75_Temperature_ex(&data);
-				sprintf(buffer, "%d.%d *C", data/10, data%10);
+				if (data >= 0)
+					sprintf(buffer, "%d.%d *C", data/10, data%10);
+				else 
+					sprintf(buffer, "-%d.%d *C", data/10, data%10);
 				delay_ms(200);
-				Gui_DrawFont_GBK16(16,40,BLACK,GRAY0,(uint8_t*)buffer);
+				//Gui_DrawFont_GBK16(16,40,BLACK,GRAY0,(uint8_t*)buffer);
+				Gui_DrawFont_Num32(6, 20, RED, GRAY0, data/100);
+				Gui_DrawFont_Num32(26, 20, RED, GRAY0, (data%100)/10);
+				Gui_DrawFont_Num32(56, 20, RED, GRAY0, 10);
+				Gui_DrawFont_Num32(76, 20, RED, GRAY0, data%10);
+				Gui_DrawFont_Num32(96, 20, RED, GRAY0, 13);
 				
 				delay_ms(1500);
     }
