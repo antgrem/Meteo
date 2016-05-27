@@ -591,6 +591,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\I2Cdev.c</FilePath>
             </File>
+            <File>
+              <FileName>My_font.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\My_font.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

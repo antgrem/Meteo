@@ -120,7 +120,15 @@ int main(void)
 //				
 //				delay_ms(1500);
 //	}
-
+	
+	
+	Gui_DrawFont_GBK24(16,40,BLACK,GRAY0,(uint8_t*)" fds");
+	Gui_DrawFont_GBK16(16,20,BLACK,GRAY0,(uint8_t*)" fds");
+	
+	sprintf(buffer, "%c%c", (char) 32, (char) 32);
+	
+	PutStringRus(80,80,buffer,BLACK,GRAY0);
+		
 
 	Bmp_180();
 	
@@ -198,11 +206,11 @@ void Bmp_180(void)
 					sprintf(buffer, "-%d.%d *C", data/10, data%10);
 				delay_ms(200);
 				//Gui_DrawFont_GBK16(16,40,BLACK,GRAY0,(uint8_t*)buffer);
-				Gui_DrawFont_Num32(6, 20, RED, GRAY0, data/100);
-				Gui_DrawFont_Num32(26, 20, RED, GRAY0, (data%100)/10);
-				Gui_DrawFont_Num32(56, 20, RED, GRAY0, 10);
-				Gui_DrawFont_Num32(76, 20, RED, GRAY0, data%10);
-				Gui_DrawFont_Num32(96, 20, RED, GRAY0, 13);
+//				Gui_DrawFont_Num32(6, 20, RED, GRAY0, data/100);
+//				Gui_DrawFont_Num32(26, 20, RED, GRAY0, (data%100)/10);
+//				Gui_DrawFont_Num32(56, 20, RED, GRAY0, 10);
+//				Gui_DrawFont_Num32(76, 20, RED, GRAY0, data%10);
+//				Gui_DrawFont_Num32(96, 20, RED, GRAY0, 13);
 				
 				delay_ms(1500);
     }
