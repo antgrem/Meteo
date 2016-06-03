@@ -171,9 +171,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>53</LineNumber>
+          <LineNumber>47</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134231150</Address>
+          <Address>134231186</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -182,12 +182,12 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\Src\My_font.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\usb_Configuration\../Src/My_font.c\53</Expression>
+          <Expression>\\\../Src/My_font.c\47</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>29</LineNumber>
+          <LineNumber>62</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>

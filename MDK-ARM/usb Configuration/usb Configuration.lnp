@@ -32,6 +32,7 @@
 "usb configuration\gui.o"
 "usb configuration\bmp085.o"
 "usb configuration\i2cdev.o"
+"usb configuration\my_font.o"
 "usb configuration\startup_stm32f103xb.o"
 "usb configuration\usbd_ioreq.o"
 "usb configuration\usbd_ctlreq.o"
