@@ -18,6 +18,8 @@
 //void PutStringRus(uint8_t ix, uint8_t iy, char* iString, uint8_t iLength, uint16_t fc, uint16_t bc);
 void PutString6159Rus(uint8_t ix, uint8_t iy, char* iString, uint16_t fc, uint16_t bc);	
 
+void Colorized (void);
+
 
 #endif
 

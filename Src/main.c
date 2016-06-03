@@ -125,12 +125,13 @@ int main(void)
 	Gui_DrawFont_GBK24(16,40,BLACK,GRAY0,(uint8_t*)" fds");
 	Gui_DrawFont_GBK16(16,20,BLACK,GRAY0,(uint8_t*)" fds");
 	
-	sprintf(buffer, "123456");
+	sprintf(buffer, "+");
 	
 	PutStringRus(0,80,buffer,BLACK,GRAY0);
 		
-
-	Bmp_180();
+	Colorized();
+	
+//	Bmp_180();
 	
 
   
