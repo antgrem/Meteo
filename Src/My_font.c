@@ -2,7 +2,6 @@
 
 
 
-
 //WARNING: This Font Require X-GLCD Lib.
 //         You can not use it with MikroE GLCD Lib.
 
@@ -82,12 +81,20 @@ void PutStringRus (uint8_t ix, uint8_t iy, char* iString, uint16_t fc, uint16_t 
 
 
 void Colorized (void)
-{uint16_t count=0;
-	for(uint8_t i=0; i<128; i++)
-		for(uint8_t j=0; j<128; j++)
+{int32_t count=0;
+	for(uint8_t i=0; i<64; i++)
+		for(uint8_t j=0; j<64; j++)
 			{
 				count += 1;
-				Gui_DrawPoint(i,j,(((i/4)<<10) & 0xF800) | (((j/4)) & 0x1F) | ((((j + i)/4)<<5) & 0x07E0));
+				Gui_DrawPoint(63-i, 63-j, (0xFFFF - (((i>>1)<<11)&RED) - ((j>>1)&BLUE)));	
+				Gui_DrawPoint(63-i, 64+j, (0xFFFF - (((i>>1)<<11)&RED) - ((j<<5)&GREEN)));   
+				count = (0xFFFF - ((j>>2)&BLUE) - ((i>>2)&BLUE) - (((i>>1)<<11)&RED) - ((i<<5)&GREEN));
+				if (count < 0) count = 0;
+				Gui_DrawPoint(64+i, 63-j, count); 
+				count = (0xFFFF - ((j<<4)&GREEN) - ((i<<4)&GREEN) - (((i>>1)<<11)&RED) - ((i>>1)&BLUE));
+				if (count < 0) count = 0;
+				Gui_DrawPoint(64+i, 64+j, count);
+				
 			}
 }
 
