@@ -15,6 +15,7 @@
 "usb configuration\stm32f1xx_hal_i2c.o"
 "usb configuration\stm32f1xx_hal_spi.o"
 "usb configuration\stm32f1xx_hal_rtc.o"
+"usb configuration\stm32f1xx_hal_rtc_ex.o"
 "usb configuration\ff.o"
 "usb configuration\unicode.o"
 "usb configuration\fattime.o"

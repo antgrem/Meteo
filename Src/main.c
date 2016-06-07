@@ -30,6 +30,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 void Init_BMP085 (void);
 void Create_new_file(void);
+void Morda (void);
+void RTC_Init(void);
+void Error_Handler(void);
 
 	TM_BMP180_t BMP180_Data;
 	uint32_t avarage_preshure;
@@ -40,6 +43,9 @@ extern I2C_HandleTypeDef * I2Cdev_hi2c;
 extern I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 extern SPI_HandleTypeDef hspi1;
+RTC_HandleTypeDef hrtc;
+
+RTC_TimeTypeDef sTime;
 
 volatile float p, t, a;
 	
@@ -77,6 +83,8 @@ int main(void)
 	
 	Init_BMP085();
 	
+	RTC_Init();
+	
 	LM75_Temperature_ex(&data);
 		
 //	Create_new_file();
@@ -86,9 +94,11 @@ int main(void)
 	Lcd_Init();
 	
 	LCD_LED_SET;
-	Lcd_Clear(GRAY0);
+	Lcd_Clear(LIGHTGREY);
 		
 	delay_ms(200);
+	
+	Morda();
 
 
 	//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
@@ -118,9 +128,9 @@ int main(void)
         delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
         p = BMP085_getPressure();
 
- 				sprintf(buffer, "%.2f", p);
+ 				sprintf(buffer, "%.2f", p/1000);
 				delay_ms(200);
-				PutStringRus(0,60,buffer,BLACK,GRAY0);
+				PutStringRus(0,42,buffer,DARKGREY,LIGHTGREY);
 				
         a = BMP085_getAltitude(p, 101325);
 			
@@ -129,15 +139,19 @@ int main(void)
 				if (data >= 0)
 				{
 					sprintf(buffer, "+%d", data/10);
-					PutStringRus(0,10,buffer,RED,GRAY0);
+					PutStringRus(0,0,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
 					sprintf(buffer, "-%d", data/10);
-					PutStringRus(0,10,buffer,BLUE,GRAY0);
+					PutStringRus(0,0,buffer,BLUE,LIGHTGREY);
 				}
 				
-				PutStringRus(64,10,buffer,BLUE,GRAY0);
+				PutStringRus(64,0,buffer,BLUE,LIGHTGREY);
+				
+				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
 				
 				delay_ms(1500);
     }
@@ -146,6 +160,70 @@ int main(void)
 }
 
 
+void Morda (void)
+{//draw lines for meteo station
+	
+	Gui_DrawLine(63, 0, 63, 40, DARKGREY);
+	Gui_DrawLine(62, 0, 62, 40, DARKGREY);
+	
+	Gui_DrawLine(0, 40, 127, 40, DARKGREY);
+	Gui_DrawLine(0, 41, 127, 41, DARKGREY);
+	
+	Gui_DrawLine(0, 85, 127, 85, DARKGREY);
+	Gui_DrawLine(0, 86, 127, 86, DARKGREY);
+	
+}
+
+void RTC_Init(void)
+{
+
+  RTC_DateTypeDef DateToUpdate;
+
+    HAL_PWR_EnableBkUpAccess();
+    /* Enable BKP CLK enable for backup registers */
+    __HAL_RCC_BKP_CLK_ENABLE();
+    /* Peripheral clock enable */
+    __HAL_RCC_RTC_ENABLE();
+    /* Peripheral interrupt init */
+    HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(RTC_IRQn);
+    HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);	
+	
+    /**Initialize RTC and set the Time and Date 
+    */
+  hrtc.Instance = RTC;
+  hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
+  hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
+	HAL_RTC_Init(&hrtc);
+//  if (HAL_RTC_Init(&hrtc) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+
+  sTime.Hours = 0x1;
+  sTime.Minutes = 0x0;
+  sTime.Seconds = 0x0;
+
+	HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
+//  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+
+  DateToUpdate.WeekDay = RTC_WEEKDAY_MONDAY;
+  DateToUpdate.Month = RTC_MONTH_JANUARY;
+  DateToUpdate.Date = 0x1;
+  DateToUpdate.Year = 0x0;
+	
+	HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+
+//  if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+	
+}	
 
 void Init_BMP085 (void)
 {
@@ -194,25 +272,29 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+	RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   HAL_RCC_OscConfig(&RCC_OscInitStruct);
 
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1;
+  //RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1;
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
   HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
 
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-  PeriphClkInit.UsbClockSelection = RCC_USBPLLCLK_DIV1_5;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_USB;
+  PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+	PeriphClkInit.UsbClockSelection = RCC_USBPLLCLK_DIV1_5;
   HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
-
+	
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
@@ -253,7 +335,7 @@ void MX_GPIO_Init(void)
 
 }
 
-/* USER CODE BEGIN 4 */
+
 // try to created new file "DataX.txt", were X = 0...254
 // if no, one red flash.
 // if all 254 files already exist, then turn on Red Led and endless while();
@@ -321,7 +403,24 @@ void Create_new_file(void)
 						f_mount(0, "0:", 1);
 			}//end mount SD
 }
-/* USER CODE END 4 */
+
+
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @param  None
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  
+  /* User can add his own implementation to report the HAL error return state */
+  while(1) 
+  {
+  }
+  
+}
+
 
 #ifdef USE_FULL_ASSERT
 

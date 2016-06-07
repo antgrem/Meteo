@@ -42,6 +42,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
+extern RTC_HandleTypeDef hrtc;
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
@@ -61,6 +62,15 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   /* USER CODE END SysTick_IRQn 1 */
+}
+
+/**
+* @brief This function handles RTC global interrupt.
+*/
+void RTC_IRQHandler(void)
+{
+  
+	HAL_RTCEx_RTCIRQHandler(&hrtc);
 }
 
 /******************************************************************************/
