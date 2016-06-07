@@ -21,13 +21,15 @@
 #include "sd_spi_stm32.h"
 #include "fattime.h"
 #include <time.h>
-
+#include "My_font.h"
 
 
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+void Init_BMP085 (void);
+void Create_new_file(void);
 
 	TM_BMP180_t BMP180_Data;
 	uint32_t avarage_preshure;
@@ -39,21 +41,19 @@ extern I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 extern SPI_HandleTypeDef hspi1;
 
-void Bmp_180(void);
-void Create_new_file(void);
-
 volatile float p, t, a;
-	FRESULT result;
-	FATFS FATFS_Obj;
-	FIL file;
-	FILINFO fno;
-	UINT nWritten;
-	DSTATUS res;
-	char str[20], str_data_name[20];
-	char buffer[100];
+	
+FRESULT result;
+FATFS FATFS_Obj;
+FIL file;
+FILINFO fno;
+UINT nWritten;
+DSTATUS res;
+char str[20], str_data_name[20];
+char buffer[100];
 	
 int16_t data;
-uint8_t str_data[100];
+//uint8_t str_data[100];
 uint8_t file_created=0;
 
 
@@ -75,38 +75,21 @@ int main(void)
 	
 	LM75_Init();	
 	
+	Init_BMP085();
+	
 	LM75_Temperature_ex(&data);
 		
 //	Create_new_file();
-	
-//	if (LM75_Temperature_ex(&data) != 0)
-//				while(1);//error with LM75. May be sensor not connected.
-	
-//	TM_BMP180_Init(&BMP180_Data);
-//	 /* Initialize BMP180 pressure sensor */
-//		if (TM_BMP180_Init(&BMP180_Data) == TM_BMP180_Result_Ok) {
-//				/* Init OK */
-//			 // TM_USART_Puts(USART1, "BMP180 configured and ready to use\n\n");
-//		} else {
-//				/* Device error */
-//		}
 		
 	delay_init(72);//Delay init.
 	
 	Lcd_Init();
-//	delay_init(72);//Delay init.
 	
 	LCD_LED_SET;
 	Lcd_Clear(GRAY0);
 		
 	delay_ms(200);
-	Gui_DrawFont_GBK16(16,0,BLUE,GRAY0,(uint8_t*)"Temperature");
-	
-		LM75_Temperature_ex(&data);
-		sprintf(buffer, "%d.%d *C", data/10, data%10);
-		delay_ms(200);
-		Gui_DrawFont_GBK16(16,40,BLACK,GRAY0,(uint8_t*)buffer);
-		
+
 
 	//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
@@ -122,32 +105,51 @@ int main(void)
 //	}
 	
 	
-	Gui_DrawFont_GBK24(16,40,BLACK,GRAY0,(uint8_t*)" fds");
-	Gui_DrawFont_GBK16(16,20,BLACK,GRAY0,(uint8_t*)" fds");
-	
-	sprintf(buffer, "+");
-	
-	PutStringRus(0,80,buffer,BLACK,GRAY0);
-		
-	Colorized();
-	
-//	Bmp_180();
-	
 
   
 	/* Infinite loop */
-  while (1)
-  {
-		
-  }
+      while (1)
+    {
+        BMP085_setControl(BMP085_MODE_TEMPERATURE);
+        delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
+        t = BMP085_getTemperatureC();
+
+        BMP085_setControl(BMP085_MODE_PRESSURE_3);
+        delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
+        p = BMP085_getPressure();
+
+ 				sprintf(buffer, "%.2f", p);
+				delay_ms(200);
+				PutStringRus(0,60,buffer,BLACK,GRAY0);
+				
+        a = BMP085_getAltitude(p, 101325);
+			
+				delay_ms(200);
+				LM75_Temperature_ex(&data);
+				if (data >= 0)
+				{
+					sprintf(buffer, "+%d", data/10);
+					PutStringRus(0,10,buffer,RED,GRAY0);
+				}
+				else 
+				{
+					sprintf(buffer, "-%d", data/10);
+					PutStringRus(0,10,buffer,BLUE,GRAY0);
+				}
+				
+				PutStringRus(64,10,buffer,BLUE,GRAY0);
+				
+				delay_ms(1500);
+    }
 
 
 }
 
 
-void Bmp_180(void)
+
+void Init_BMP085 (void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct;
+	  GPIO_InitTypeDef GPIO_InitStruct;
 
 
         __I2C1_CLK_ENABLE();
@@ -181,42 +183,7 @@ void Bmp_180(void)
     while(!BMP085_testConnection()) ;
 
     BMP085_initialize();
-  
-      while (1)
-    {
-        BMP085_setControl(BMP085_MODE_TEMPERATURE);
-        delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
-        t = BMP085_getTemperatureC();
-
-        BMP085_setControl(BMP085_MODE_PRESSURE_3);
-        delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
-        p = BMP085_getPressure();
-
- 				sprintf(buffer, "%.2f Bar", p);
-				delay_ms(200);
-				Gui_DrawFont_GBK16(16,60,RED,GRAY0,(uint8_t*)buffer);
-
-        a = BMP085_getAltitude(p, 101325);
-			
-				//LM75_Init();	
-			
-				LM75_Temperature_ex(&data);
-				if (data >= 0)
-					sprintf(buffer, "%d.%d *C", data/10, data%10);
-				else 
-					sprintf(buffer, "-%d.%d *C", data/10, data%10);
-				delay_ms(200);
-				//Gui_DrawFont_GBK16(16,40,BLACK,GRAY0,(uint8_t*)buffer);
-//				Gui_DrawFont_Num32(6, 20, RED, GRAY0, data/100);
-//				Gui_DrawFont_Num32(26, 20, RED, GRAY0, (data%100)/10);
-//				Gui_DrawFont_Num32(56, 20, RED, GRAY0, 10);
-//				Gui_DrawFont_Num32(76, 20, RED, GRAY0, data%10);
-//				Gui_DrawFont_Num32(96, 20, RED, GRAY0, 13);
-				
-				delay_ms(1500);
-    }
 }
-
 
 /** System Clock Configuration
 */

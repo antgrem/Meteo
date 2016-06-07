@@ -30,3 +30,11 @@
 
 # Debug files
 *.dSYM/
+
+*.TMP
+*.d
+*.crf
+*.axf
+*.map
+*.dep
+
