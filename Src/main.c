@@ -22,6 +22,7 @@
 #include "fattime.h"
 #include <time.h>
 #include "My_font.h"
+#include "BMP_graph.h"
 
 
 
@@ -33,6 +34,7 @@ void Create_new_file(void);
 void Morda (void);
 void RTC_Init(void);
 void Error_Handler(void);
+void Draw_table (void);
 
 	TM_BMP180_t BMP180_Data;
 	uint32_t avarage_preshure;
@@ -61,6 +63,8 @@ char buffer[100];
 int16_t data;
 //uint8_t str_data[100];
 uint8_t file_created=0;
+
+void (* pfunction) (void);
 
 
 int main(void)
@@ -95,7 +99,10 @@ int main(void)
 	
 	LCD_LED_SET;
 	Lcd_Clear(LIGHTGREY);
-		
+	
+	//pfunction = Draw_table;
+	pfunction = Draw_graph;	
+	
 	delay_ms(200);
 	
 	Morda();
@@ -104,23 +111,27 @@ int main(void)
 	//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
 
-//	while(1)
-//	{
-//				LM75_Temperature_ex(&data);
-//				sprintf(buffer, "%d.%d *C", data/10, data%10);
-//				delay_ms(200);
-//				Gui_DrawFont_GBK16(16,40,BLACK,GRAY0,(uint8_t*)buffer);
-//				
-//				delay_ms(1500);
-//	}
 	
-	
+	while(1)
+	{
+		delay_ms(800);
+		//Draw_graph();
+		pfunction();
+	}
 
   
 	/* Infinite loop */
       while (1)
     {
-        BMP085_setControl(BMP085_MODE_TEMPERATURE);
+
+    }
+
+
+}
+
+void Draw_table (void)
+{
+	        BMP085_setControl(BMP085_MODE_TEMPERATURE);
         delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
         t = BMP085_getTemperatureC();
 
@@ -154,11 +165,7 @@ int main(void)
 				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
 				
 				delay_ms(1500);
-    }
-
-
 }
-
 
 void Morda (void)
 {//draw lines for meteo station

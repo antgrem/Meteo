@@ -55,3 +55,4 @@ usb configuration\main.o: ..\Fatf\sd_spi_stm32.h
 usb configuration\main.o: ..\Fatf\fattime.h
 usb configuration\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 usb configuration\main.o: ../Inc/My_font.h
+usb configuration\main.o: ../Inc/BMP_graph.h

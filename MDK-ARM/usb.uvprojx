@@ -601,6 +601,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\My_font.c</FilePath>
             </File>
+            <File>
+              <FileName>BMP_graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\BMP_graph.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
