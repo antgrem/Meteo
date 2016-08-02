@@ -35,6 +35,7 @@ void Morda (void);
 void RTC_Init(void);
 void Error_Handler(void);
 void Draw_table (void);
+void First_Draw_Table (void);
 
 	TM_BMP180_t BMP180_Data;
 	uint32_t avarage_preshure;
@@ -46,6 +47,11 @@ extern I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 extern SPI_HandleTypeDef hspi1;
 RTC_HandleTypeDef hrtc;
+
+extern float Average_pressure;
+extern int16_t Averaga_temperature;
+extern int16_t tempr_data;
+extern uint8_t pointer_count;
 
 RTC_TimeTypeDef sTime;
 
@@ -59,6 +65,8 @@ UINT nWritten;
 DSTATUS res;
 char str[20], str_data_name[20];
 char buffer[100];
+
+uint16_t second_1_flag=0, minuts_12_flag=0;
 	
 int16_t data;
 //uint8_t str_data[100];
@@ -101,12 +109,22 @@ int main(void)
 	Lcd_Clear(LIGHTGREY);
 	
 	//pfunction = Draw_table;
-	pfunction = Draw_graph;	
+	pfunction = First_Draw_Graph;	
+	pfunction();
 	
 	delay_ms(200);
 	
-	Morda();
+		BMP085_setControl(BMP085_MODE_TEMPERATURE);
+		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
+		t = BMP085_getTemperatureC();
 
+		BMP085_setControl(BMP085_MODE_PRESSURE_3);
+		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
+		Average_pressure = BMP085_getPressure()/1000;
+
+		LM75_Temperature_ex(&tempr_data);
+		Averaga_temperature = tempr_data;
+		
 
 	//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
@@ -114,19 +132,46 @@ int main(void)
 	
 	while(1)
 	{
-		delay_ms(800);
-		//Draw_graph();
-		pfunction();
+		if (second_1_flag >= 1)
+		{//every seconds
+			second_1_flag = 0;
+			minuts_12_flag++;
+			
+			if (pointer_count == 0)
+				pfunction();
+			
+			Take_average_data();
+		}
+		
+		if (minuts_12_flag == 300)
+		{//every 12 minuts if == 120
+			// 
+			pfunction();
+			minuts_12_flag = 0;
+		}
+		
+
 	}
 
   
-	/* Infinite loop */
-      while (1)
-    {
-
-    }
 
 
+}
+
+void First_Draw_Table (void)
+{
+	Lcd_Clear(LIGHTGREY);
+	
+	Gui_DrawLine(63, 0, 63, 40, DARKGREY);
+	Gui_DrawLine(62, 0, 62, 40, DARKGREY);
+	
+	Gui_DrawLine(0, 40, 127, 40, DARKGREY);
+	Gui_DrawLine(0, 41, 127, 41, DARKGREY);
+	
+	Gui_DrawLine(0, 85, 127, 85, DARKGREY);
+	Gui_DrawLine(0, 86, 127, 86, DARKGREY);
+	
+	pfunction = Draw_table;
 }
 
 void Draw_table (void)
@@ -224,6 +269,8 @@ void RTC_Init(void)
   DateToUpdate.Year = 0x0;
 	
 	HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+	
+	HAL_RTCEx_SetSecond_IT(&hrtc);
 
 //  if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD) != HAL_OK)
 //  {
@@ -340,6 +387,19 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+	// GPIOA 1, 3 input, pullup, buttom to gnd
+  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+		
 }
 
 

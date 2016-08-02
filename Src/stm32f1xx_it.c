@@ -35,6 +35,7 @@
 #include "stm32f1xx.h"
 #include "stm32f1xx_it.h"
 #include "diskio.h"
+#include "BMP_graph.h"
 
 /* USER CODE BEGIN 0 */
 
@@ -43,6 +44,14 @@
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern RTC_HandleTypeDef hrtc;
+extern void Draw_table (void);
+extern void (* pfunction) (void);
+extern void First_Draw_Table (void);
+
+
+extern uint16_t second_1_flag, minuts_12_flag;
+
+uint8_t pointer_count = 1;
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
@@ -69,9 +78,42 @@ void SysTick_Handler(void)
 */
 void RTC_IRQHandler(void)
 {
-  
+  second_1_flag++;
 	HAL_RTCEx_RTCIRQHandler(&hrtc);
 }
+
+
+void RTC_Alarm_IRQHandler(void)
+{
+	
+	HAL_RTC_AlarmIRQHandler(&hrtc);
+}
+
+// buttom
+void EXTI1_IRQHandler (void)
+{
+	pointer_count++;
+	pointer_count &= 0x01;
+	if (pointer_count)
+	{
+			
+		pfunction = First_Draw_Graph;	
+	}
+	else 
+	{
+		pfunction = First_Draw_Table;
+	}
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
+}
+
+
+// buttom
+void EXTI3_IRQHandler (void)
+{
+	
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+}
+
 
 /******************************************************************************/
 /* STM32F1xx Peripheral Interrupt Handlers                                    */
