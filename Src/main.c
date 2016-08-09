@@ -37,6 +37,9 @@ void Error_Handler(void);
 void Draw_table (void);
 void First_Draw_Table (void);
 
+void Hello_Screen(void);
+void Sensor_test(void);
+
 	TM_BMP180_t BMP180_Data;
 	uint32_t avarage_preshure;
 	TM_BMP180_Oversampling_t BMP180_Oversampling;
@@ -52,6 +55,7 @@ extern float Average_pressure;
 extern int16_t Averaga_temperature;
 extern int16_t tempr_data;
 extern uint8_t pointer_count;
+extern uint8_t sec_count, minute_flag;
 
 RTC_TimeTypeDef sTime;
 
@@ -77,8 +81,6 @@ void (* pfunction) (void);
 
 int main(void)
 {
-
-
   /* MCU Configuration----------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -90,24 +92,24 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USB_DEVICE_Init();
+	RTC_Init();
 	
 	LM75_Init();	
 	
 	Init_BMP085();
 	
-	RTC_Init();
-	
-	LM75_Temperature_ex(&data);
-		
-//	Create_new_file();
-		
-	delay_init(72);//Delay init.
+	delay_init(72);//Delay init.	
 	
 	Lcd_Init();
 	
 	LCD_LED_SET;
-	Lcd_Clear(LIGHTGREY);
+	//Lcd_Clear(LIGHTGREY);	
 	
+	Hello_Screen();
+	
+	Sensor_test();
+//	Create_new_file();
+		
 	//pfunction = Draw_table;
 	pfunction = First_Draw_Graph;	
 	pfunction();
@@ -132,6 +134,17 @@ int main(void)
 	
 	while(1)
 	{
+		
+		if (minute_flag == 1)
+		{
+			minute_flag = 0;
+			PutStringRus(5,5,".",RED,BLACK);
+			delay_ms(800);
+			PutStringRus(5,5,".",BLACK,BLACK);
+		}
+			
+		
+		
 		if (second_1_flag >= 1)
 		{//every seconds
 			second_1_flag = 0;
@@ -158,6 +171,56 @@ int main(void)
 
 }
 
+void Hello_Screen(void)
+{
+	// function for draw Hello screen 
+	// with firmware version
+	LCD_LED_SET;
+	Lcd_Clear(BLACK);	
+	
+	PutStringRus(30,30,"METEO",GREEN,BLACK);
+	
+	PutStringRus(60,100,"ver 1.0",YELLOW,BLACK);
+	
+	delay_ms(800);
+	delay_ms(800);
+}
+
+void Sensor_test(void)
+{
+	LCD_LED_SET;
+	Lcd_Clear(BLACK);
+	delay_ms(800);
+	
+	if (LM75_Temperature_ex(&data) != 0)
+		{// we have problem with sensor
+			PutStringRus(10,10,"IN T sensor: ERROR",RED,BLACK);	
+		}
+	else 
+		{
+			PutStringRus(10,10,"IN T sensor: OK",GREEN,BLACK);
+		}
+	delay_ms(800);	
+	
+		if (BMP085_testConnection() == 1)
+		{
+			PutStringRus(10,40,"P sensor: OK",GREEN,BLACK);
+		}
+		else 
+		{
+			PutStringRus(10,40,"P sensor: ERROR",RED,BLACK);
+		}
+	delay_ms(800);
+		
+		PutStringRus(10,80,"RTC: ERROR/OK?",YELLOW,BLACK);
+		
+		PutStringRus(10,120,"OUT T, SD: ERROR/OK?",BLUE,BLACK);
+		
+	delay_ms(800);
+	delay_ms(800);
+	delay_ms(800);		
+}
+
 void First_Draw_Table (void)
 {
 	Lcd_Clear(LIGHTGREY);
@@ -176,7 +239,7 @@ void First_Draw_Table (void)
 
 void Draw_table (void)
 {
-	        BMP085_setControl(BMP085_MODE_TEMPERATURE);
+	      BMP085_setControl(BMP085_MODE_TEMPERATURE);
         delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
         t = BMP085_getTemperatureC();
 
@@ -244,39 +307,29 @@ void RTC_Init(void)
 	
     /**Initialize RTC and set the Time and Date 
     */
-  hrtc.Instance = RTC;
-  hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
-  hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
-	HAL_RTC_Init(&hrtc);
-//  if (HAL_RTC_Init(&hrtc) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
+		hrtc.Instance = RTC;
+		hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
+		hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
+		HAL_RTC_Init(&hrtc);
 
-  sTime.Hours = 0x1;
-  sTime.Minutes = 0x0;
-  sTime.Seconds = 0x0;
 
-	HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
-//  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
+		sTime.Hours = 0x1;
+		sTime.Minutes = 0x0;
+		sTime.Seconds = 0x0;
 
-  DateToUpdate.WeekDay = RTC_WEEKDAY_MONDAY;
-  DateToUpdate.Month = RTC_MONTH_JANUARY;
-  DateToUpdate.Date = 0x1;
-  DateToUpdate.Year = 0x0;
-	
-	HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
-	
-	HAL_RTCEx_SetSecond_IT(&hrtc);
+		HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
 
-//  if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-	
+
+		DateToUpdate.WeekDay = RTC_WEEKDAY_MONDAY;
+		DateToUpdate.Month = RTC_MONTH_JANUARY;
+		DateToUpdate.Date = 0x1;
+		DateToUpdate.Year = 0x0;
+		
+		HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+		
+		HAL_RTCEx_SetSecond_IT(&hrtc);
+
+
 }	
 
 void Init_BMP085 (void)

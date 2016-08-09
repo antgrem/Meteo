@@ -95,10 +95,8 @@ void Take_average_data(void)
 			sprintf(buffer_loc, "%d", tempr_data/10);
 			PutStringRus(80,42,buffer_loc,BLUE,LIGHTGREY);
 		}
-		
-
 	
-}
+}// end Take_average_data()
 
 void Draw_graph (void)
 {
@@ -214,10 +212,7 @@ void Draw_graph (void)
 //				
 //				Gui_DrawPoint(graph_i + 4, temperature[graph_i], BLACK);
 //			}
-		
-		
 	
-		
 		graph_i++;
 		if (graph_i == ARRAY_GRAPH) graph_i = 0;
 }

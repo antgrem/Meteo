@@ -36,3 +36,4 @@ usb configuration\stm32f1xx_it.o: ..\Fatf\src\diskio.h
 usb configuration\stm32f1xx_it.o: ..\Fatf\src\integer.h
 usb configuration\stm32f1xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 usb configuration\stm32f1xx_it.o: ../Inc/BMP_graph.h
+usb configuration\stm32f1xx_it.o: ../Inc/Lcd_Driver.h

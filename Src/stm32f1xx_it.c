@@ -36,10 +36,9 @@
 #include "stm32f1xx_it.h"
 #include "diskio.h"
 #include "BMP_graph.h"
+#include "Lcd_Driver.h"
 
-/* USER CODE BEGIN 0 */
 
-/* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
@@ -52,6 +51,7 @@ extern void First_Draw_Table (void);
 extern uint16_t second_1_flag, minuts_12_flag;
 
 uint8_t pointer_count = 1;
+uint8_t sec_count=0, minute_flag=0;
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
@@ -62,15 +62,11 @@ uint8_t pointer_count = 1;
 */
 void SysTick_Handler(void)
 {
-  /* USER CODE BEGIN SysTick_IRQn 0 */
-	//HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_9);
-  /* USER CODE END SysTick_IRQn 0 */
+
   HAL_IncTick();
 	disk_timerproc();
   HAL_SYSTICK_IRQHandler();
-  /* USER CODE BEGIN SysTick_IRQn 1 */
 
-  /* USER CODE END SysTick_IRQn 1 */
 }
 
 /**
@@ -79,6 +75,13 @@ void SysTick_Handler(void)
 void RTC_IRQHandler(void)
 {
   second_1_flag++;
+	
+	if (++sec_count == 60)
+	{//one minute passed
+		minute_flag = 1;
+		sec_count = 0;
+	}
+	
 	HAL_RTCEx_RTCIRQHandler(&hrtc);
 }
 
@@ -110,7 +113,7 @@ void EXTI1_IRQHandler (void)
 // buttom
 void EXTI3_IRQHandler (void)
 {
-	
+	HAL_GPIO_TogglePin(LCD_PORT_P, LCD_LED);
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
 }
 
@@ -127,16 +130,10 @@ void EXTI3_IRQHandler (void)
 */
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
-  /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 0 */
 
-  /* USER CODE END USB_LP_CAN1_RX0_IRQn 0 */
   HAL_PCD_IRQHandler(&hpcd_USB_FS);
-  /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 1 */
 
-  /* USER CODE END USB_LP_CAN1_RX0_IRQn 1 */
 }
 
-/* USER CODE BEGIN 1 */
 
-/* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
