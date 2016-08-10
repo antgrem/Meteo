@@ -23,6 +23,8 @@ void Hello_Screen(void);
 void Sensor_test(void);
 void Take_new_Messure(Messure_DataTypeDef *data);
 
+void Draw_table_ex (void);
+
 	
 extern uint16_t I2Cdev_readTimeout;
 extern I2C_HandleTypeDef * I2Cdev_hi2c;
@@ -91,7 +93,7 @@ int main(void)
 //	Create_new_file();
 		
 	//pfunction = Draw_table;
-	pfunction = First_Draw_Graph;	
+	pfunction = Draw_table_ex;	
 	pfunction();
 	
 		BMP085_setControl(BMP085_MODE_TEMPERATURE);
@@ -248,6 +250,38 @@ void Draw_table (void)
 				
 				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
+				
+				delay_ms(1500);
+}
+
+void Draw_table_ex (void)
+{
+	
+	Take_new_Messure(&All_data);
+	
+	
+				sprintf(buffer, "%.2f", All_data.Pressure_p/1000);
+				delay_ms(200);
+				PutStringRus(0,42,buffer,DARKGREY,LIGHTGREY);
+	
+        	
+				delay_ms(200);
+
+				if (All_data.T_in >= 0)
+				{
+					sprintf(buffer, "+%d", All_data.T_in/10);
+					PutStringRus(0,0,buffer,RED,LIGHTGREY);
+				}
+				else 
+				{
+					sprintf(buffer, "-%d", All_data.T_in/10);
+					PutStringRus(0,0,buffer,BLUE,LIGHTGREY);
+				}
+				
+				PutStringRus(64,0,buffer,BLUE,LIGHTGREY);
+		
+				sprintf(buffer, "%02d:%02d:%02d", All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
 				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
 				
 				delay_ms(1500);
