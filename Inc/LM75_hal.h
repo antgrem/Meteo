@@ -3,8 +3,12 @@
 #define LM75_HAL_H
 
 #include "stdint.h"
+#include "stm32f1xx_hal.h"
 
 #define LM75_ADDRESS 0x9F
+
+#define LM75_ADDRESS_IN   0x9F
+#define LM75_ADDRESS_OUT  0x91
 
 /* LM75 defines */
 #define LM75_ADDR                     0x9F // LM75 address
@@ -17,7 +21,7 @@
 
 void LM75_Init(void);
 void LM75_Shutdown(FunctionalState newstate);
-int16_t LM75_Temperature(void);
+uint8_t LM75_Temperature(int16_t *temperature, uint8_t Addr);
 uint8_t LM75_Temperature_ex(int16_t *temperature);
 
 #endif

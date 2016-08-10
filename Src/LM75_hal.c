@@ -1,5 +1,5 @@
 //#include "stm32f1xx_hal.h"
-#include "stm32f1xx_hal.h"
+
 #include <lm75_hal.h>
 
 I2C_HandleTypeDef hi2c1;
@@ -60,15 +60,16 @@ void LM75_Shutdown(FunctionalState newstate) {
 //   III - integer part
 //   F   - fractional part
 // e.g. 355 means 35.5C
-int16_t LM75_Temperature(void) 
+uint8_t LM75_Temperature(int16_t *temperature, uint8_t Addr) 
 {
 	uint16_t raw;
 	int16_t temp;
 	uint8_t adr = 0, tempr[2];
+	uint8_t error = 0;
 
 	adr = LM75_REG_TEMP;	
-	HAL_I2C_Master_Transmit(&hi2c1, LM75_ADDR, &adr, 1, 1);
-	HAL_I2C_Master_Receive(&hi2c1, LM75_ADDR, tempr, 2, 1);
+	error = HAL_I2C_Master_Transmit(&hi2c1, Addr, &adr, 1, 1);
+	error = HAL_I2C_Master_Receive(&hi2c1, Addr, tempr, 2, 1);
 	
 	raw = ((tempr[0]<<8) | tempr[1])>>7;
 	if (raw & 0x0100) {
@@ -78,8 +79,10 @@ int16_t LM75_Temperature(void)
 		// Positive temperature
 		temp = ((raw & 0xFE) >> 1) * 10 + (raw & 0x01) * 5;
 	}
+	
+	*temperature = temp;
 
-	return temp;
+	return error;
 }
 
 

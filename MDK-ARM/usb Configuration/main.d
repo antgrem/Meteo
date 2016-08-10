@@ -1,4 +1,5 @@
 usb configuration\main.o: ../Src/main.c
+usb configuration\main.o: ../Inc/main.h
 usb configuration\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 usb configuration\main.o: ../Inc/stm32f1xx_hal_conf.h
 usb configuration\main.o: ../Inc/mxconstants.h
@@ -41,10 +42,9 @@ usb configuration\main.o: ../Inc/LM75_hal.h
 usb configuration\main.o: ../Inc/Lcd_Driver.h
 usb configuration\main.o: ../Inc/delay.h
 usb configuration\main.o: ../Inc/GUI.h
-usb configuration\main.o: ../Inc/tm_stm32f4_bmp180.h
-usb configuration\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 usb configuration\main.o: ../Inc/I2Cdev.h
 usb configuration\main.o: ../Inc/BMP085.h
+usb configuration\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 usb configuration\main.o: ..\Fatf\src\ffconf.h
 usb configuration\main.o: ..\Fatf\src\diskio.h
 usb configuration\main.o: ..\Fatf\src\integer.h
@@ -56,3 +56,4 @@ usb configuration\main.o: ..\Fatf\fattime.h
 usb configuration\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 usb configuration\main.o: ../Inc/My_font.h
 usb configuration\main.o: ../Inc/BMP_graph.h
+usb configuration\main.o: ../Inc/Init.h

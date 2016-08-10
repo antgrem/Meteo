@@ -6,50 +6,30 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f1xx_hal.h"
-#include "usb_device.h"
-#include "LM75_hal.h"
-#include "Lcd_Driver.h"
-#include "delay.h"
-#include "GUI.h"
-#include "tm_stm32f4_bmp180.h"
-#include "I2Cdev.h"
-#include "BMP085.h"
-#include "ffconf.h"
-#include "diskio.h"
-#include "ff.h"
-#include "sd_spi_stm32.h"
-#include "fattime.h"
-#include <time.h>
-#include "My_font.h"
-#include "BMP_graph.h"
+#include "main.h"
+
+
 
 
 
 /* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-void Init_BMP085 (void);
+
 void Create_new_file(void);
 void Morda (void);
-void RTC_Init(void);
 void Error_Handler(void);
 void Draw_table (void);
 void First_Draw_Table (void);
-
 void Hello_Screen(void);
 void Sensor_test(void);
+void Take_new_Messure(Messure_DataTypeDef *data);
 
-	TM_BMP180_t BMP180_Data;
-	uint32_t avarage_preshure;
-	TM_BMP180_Oversampling_t BMP180_Oversampling;
 	
 extern uint16_t I2Cdev_readTimeout;
 extern I2C_HandleTypeDef * I2Cdev_hi2c;
 extern I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c2;
+extern I2C_HandleTypeDef hi2c2;
 extern SPI_HandleTypeDef hspi1;
-RTC_HandleTypeDef hrtc;
+extern RTC_HandleTypeDef hrtc;
 
 extern float Average_pressure;
 extern int16_t Averaga_temperature;
@@ -57,7 +37,9 @@ extern int16_t tempr_data;
 extern uint8_t pointer_count;
 extern uint8_t sec_count, minute_flag;
 
-RTC_TimeTypeDef sTime;
+extern RTC_TimeTypeDef sTime;
+
+Messure_DataTypeDef All_data;
 
 volatile float p, t, a;
 	
@@ -67,14 +49,12 @@ FIL file;
 FILINFO fno;
 UINT nWritten;
 DSTATUS res;
-char str[20], str_data_name[20];
+char str_data_name[20];
 char buffer[100];
 
 uint16_t second_1_flag=0, minuts_12_flag=0;
 	
-int16_t data;
 //uint8_t str_data[100];
-uint8_t file_created=0;
 
 void (* pfunction) (void);
 
@@ -105,16 +85,14 @@ int main(void)
 	LCD_LED_SET;
 	//Lcd_Clear(LIGHTGREY);	
 	
-	Hello_Screen();
+//	Hello_Screen();
 	
-	Sensor_test();
+//	Sensor_test();
 //	Create_new_file();
 		
 	//pfunction = Draw_table;
 	pfunction = First_Draw_Graph;	
 	pfunction();
-	
-	delay_ms(200);
 	
 		BMP085_setControl(BMP085_MODE_TEMPERATURE);
 		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
@@ -124,7 +102,7 @@ int main(void)
 		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
 		Average_pressure = BMP085_getPressure()/1000;
 
-		LM75_Temperature_ex(&tempr_data);
+		LM75_Temperature(&tempr_data, LM75_ADDRESS_IN);
 		Averaga_temperature = tempr_data;
 		
 
@@ -192,7 +170,7 @@ void Sensor_test(void)
 	Lcd_Clear(BLACK);
 	delay_ms(800);
 	
-	if (LM75_Temperature_ex(&data) != 0)
+	if (LM75_Temperature_ex(&tempr_data) != 0)
 		{// we have problem with sensor
 			PutStringRus(10,10,"IN T sensor: ERROR",RED,BLACK);	
 		}
@@ -254,15 +232,15 @@ void Draw_table (void)
         a = BMP085_getAltitude(p, 101325);
 			
 				delay_ms(200);
-				LM75_Temperature_ex(&data);
-				if (data >= 0)
+				LM75_Temperature_ex(&tempr_data);
+				if (tempr_data >= 0)
 				{
-					sprintf(buffer, "+%d", data/10);
+					sprintf(buffer, "+%d", tempr_data/10);
 					PutStringRus(0,0,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
-					sprintf(buffer, "-%d", data/10);
+					sprintf(buffer, "-%d", tempr_data/10);
 					PutStringRus(0,0,buffer,BLUE,LIGHTGREY);
 				}
 				
@@ -289,172 +267,25 @@ void Morda (void)
 	
 }
 
-void RTC_Init(void)
+
+void Take_new_Messure(Messure_DataTypeDef *data)
 {
+		BMP085_setControl(BMP085_MODE_TEMPERATURE);
+		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
+		data->Temperature_p = BMP085_getTemperatureC();
 
-  RTC_DateTypeDef DateToUpdate;
+		BMP085_setControl(BMP085_MODE_PRESSURE_3);
+		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
+		data->Pressure_p = BMP085_getPressure()/1000;
 
-    HAL_PWR_EnableBkUpAccess();
-    /* Enable BKP CLK enable for backup registers */
-    __HAL_RCC_BKP_CLK_ENABLE();
-    /* Peripheral clock enable */
-    __HAL_RCC_RTC_ENABLE();
-    /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(RTC_IRQn);
-    HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);	
+		LM75_Temperature(&(data->T_in), LM75_ADDRESS_IN);
 	
-    /**Initialize RTC and set the Time and Date 
-    */
-		hrtc.Instance = RTC;
-		hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
-		hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
-		HAL_RTC_Init(&hrtc);
-
-
-		sTime.Hours = 0x1;
-		sTime.Minutes = 0x0;
-		sTime.Seconds = 0x0;
-
-		HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
-
-
-		DateToUpdate.WeekDay = RTC_WEEKDAY_MONDAY;
-		DateToUpdate.Month = RTC_MONTH_JANUARY;
-		DateToUpdate.Date = 0x1;
-		DateToUpdate.Year = 0x0;
-		
-		HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
-		
-		HAL_RTCEx_SetSecond_IT(&hrtc);
-
-
-}	
-
-void Init_BMP085 (void)
-{
-	  GPIO_InitTypeDef GPIO_InitStruct;
-
-
-        __I2C1_CLK_ENABLE();
-        __GPIOB_CLK_ENABLE();
-				__HAL_RCC_AFIO_CLK_ENABLE();
-	// Init I2C
-        GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_8;
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-        GPIO_InitStruct.Pull = GPIO_PULLUP;
-        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+		if (data->Present_T_out == 1)
+			LM75_Temperature(&(data->T_in), LM75_ADDRESS_OUT);
 	
-	__HAL_AFIO_REMAP_I2C1_ENABLE();
-
-				hi2c2.Instance = I2C1;
-        hi2c2.Init.ClockSpeed = 100000;
-        hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-        hi2c2.Init.OwnAddress1 = 0;
-        hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-        hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLED;
-        hi2c2.Init.OwnAddress2 = 0;
-        hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLED;
-        hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLED;
-        HAL_I2C_Init(&hi2c2);
-
-    
-    I2Cdev_hi2c = &hi2c2; // init of i2cdevlib.  
-    // You can select other i2c device anytime and 
-    // call the same driver functions on other sensors
-
-    while(!BMP085_testConnection()) ;
-
-    BMP085_initialize();
-}
-
-/** System Clock Configuration
-*/
-void SystemClock_Config(void)
-{
-
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_PeriphCLKInitTypeDef PeriphClkInit;
-
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
-	RCC_OscInitStruct.LSEState = RCC_LSE_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
-  HAL_RCC_OscConfig(&RCC_OscInitStruct);
-
-  //RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1;
-	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-  HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
-
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_USB;
-  PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
-	PeriphClkInit.UsbClockSelection = RCC_USBPLLCLK_DIV1_5;
-  HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
+		HAL_RTC_GetTime(&hrtc, &(data->Time), RTC_FORMAT_BIN);
 	
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
-
-  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
-
-  /* SysTick_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
-
-/** Configure pins as 
-        * Analog 
-        * Input 
-        * Output
-        * EVENT_OUT
-        * EXTI
-*/
-void MX_GPIO_Init(void)
-{
-
-  GPIO_InitTypeDef GPIO_InitStruct;
-
-  /* GPIO Ports Clock Enable */
-  __GPIOC_CLK_ENABLE();
-  __GPIOD_CLK_ENABLE();
-  __GPIOA_CLK_ENABLE();
-  __GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin : PA10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PB9 */
-  GPIO_InitStruct.Pin = GPIO_PIN_9;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	// GPIOA 1, 3 input, pullup, buttom to gnd
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_3;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
-		
-}
-
 
 // try to created new file "DataX.txt", were X = 0...254
 // if no, one red flash.
@@ -512,7 +343,6 @@ void Create_new_file(void)
 									result = f_open(&file, str_temp, FA_CREATE_NEW | FA_READ | FA_WRITE);
 										if (result == FR_OK)
 									{
-										file_created = 10;
 										//stage_led_control = ONE_GREEN_FLASH;
 										f_close(&file);
 									}
