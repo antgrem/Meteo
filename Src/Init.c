@@ -28,19 +28,24 @@ void RTC_Init(void)
 		HAL_RTC_Init(&hrtc);
 
 
-		sTime.Hours = 0x1;
-		sTime.Minutes = 0x0;
-		sTime.Seconds = 0x0;
-
-		HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
-
-
-		DateToUpdate.WeekDay = RTC_WEEKDAY_MONDAY;
-		DateToUpdate.Month = RTC_MONTH_JANUARY;
-		DateToUpdate.Date = 0x1;
-		DateToUpdate.Year = 0x0;
+		HAL_RTC_GetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
 		
-		HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+		if (DateToUpdate.Year == 0x0)
+		{
+				sTime.Hours = 0x20;
+				sTime.Minutes = 0x10;
+				sTime.Seconds = 0;
+
+				//HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
+
+
+				DateToUpdate.WeekDay = RTC_WEEKDAY_THURSDAY;
+				DateToUpdate.Month = RTC_MONTH_AUGUST;
+				DateToUpdate.Date = 0x11;
+				DateToUpdate.Year = 0x16;
+				
+				//HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+		}
 		
 		HAL_RTCEx_SetSecond_IT(&hrtc);
 

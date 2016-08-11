@@ -73,7 +73,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USB_DEVICE_Init();
+//  MX_USB_DEVICE_Init();
 	RTC_Init();
 	
 	LM75_Init();	
@@ -152,18 +152,21 @@ int main(void)
 }
 
 void Hello_Screen(void)
-{
+{ 
 	// function for draw Hello screen 
 	// with firmware version
 	LCD_LED_SET;
 	Lcd_Clear(BLACK);	
 	
-	PutStringRus(30,30,"METEO",GREEN,BLACK);
+	PutStringRus(30,15,"123",GREEN,BLACK);// "METEO"
 	
-	PutStringRus(60,100,"ver 1.0",YELLOW,BLACK);
+	PutStringRus(30,80,"1.0",YELLOW,BLACK); // "ver 1.0"
 	
-	delay_ms(800);
-	delay_ms(800);
+	delay_ms(500);
+	delay_ms(500);
+	delay_ms(500);
+	delay_ms(500);
+
 }
 
 void Sensor_test(void)
@@ -174,31 +177,42 @@ void Sensor_test(void)
 	
 	if (LM75_Temperature_ex(&tempr_data) != 0)
 		{// we have problem with sensor
-			PutStringRus(10,10,"IN T sensor: ERROR",RED,BLACK);	
+			//PutStringRus(10,10,"IN T sensor: ERROR",RED,BLACK);
+			PutStringRus(10,00,"1:0",RED,BLACK);			
 		}
 	else 
 		{
-			PutStringRus(10,10,"IN T sensor: OK",GREEN,BLACK);
+			//PutStringRus(10,10,"IN T sensor: OK",GREEN,BLACK);
+			PutStringRus(10,00,"1:0",GREEN,BLACK);
 		}
-	delay_ms(800);	
+	delay_ms(500);	
 	
-		if (BMP085_testConnection() == 1)
+		if (BMP085_testConnection() != 1)
 		{
-			PutStringRus(10,40,"P sensor: OK",GREEN,BLACK);
+			//PutStringRus(10,40,"P sensor: OK",GREEN,BLACK);
+			PutStringRus(10,35,"2:1",GREEN,BLACK);
 		}
 		else 
 		{
-			PutStringRus(10,40,"P sensor: ERROR",RED,BLACK);
+			//PutStringRus(10,40,"P sensor: ERROR",RED,BLACK);
+			PutStringRus(10,35,"2:0",RED,BLACK);
 		}
-	delay_ms(800);
+	delay_ms(500);
 		
-		PutStringRus(10,80,"RTC: ERROR/OK?",YELLOW,BLACK);
+		//PutStringRus(10,80,"RTC: ERROR/OK?",YELLOW,BLACK);
+		PutStringRus(10,70,"3:10",YELLOW,BLACK);
 		
-		PutStringRus(10,120,"OUT T, SD: ERROR/OK?",BLUE,BLACK);
+		delay_ms(500);
 		
-	delay_ms(800);
-	delay_ms(800);
-	delay_ms(800);		
+		//PutStringRus(10,120,"OUT T, SD: ERROR/OK?",BLUE,BLACK);
+		PutStringRus(10,90,"45:10",BLUE,BLACK);
+		
+				
+	delay_ms(500);
+	delay_ms(500);
+	delay_ms(500);
+	delay_ms(500);
+	delay_ms(500);		
 }
 
 void First_Draw_Table (void)
