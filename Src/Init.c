@@ -8,7 +8,7 @@ void RTC_Init(void)
 {
 
   RTC_DateTypeDef DateToUpdate;
-
+	
     HAL_PWR_EnableBkUpAccess();
     /* Enable BKP CLK enable for backup registers */
     __HAL_RCC_BKP_CLK_ENABLE();
@@ -48,6 +48,8 @@ void RTC_Init(void)
 		}
 		
 		HAL_RTCEx_SetSecond_IT(&hrtc);
+		
+		HAL_RTCEx_BKUPWrite(&hrtc, 1, RTC_IS_SET);
 
 }
 

@@ -74,7 +74,9 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
 //  MX_USB_DEVICE_Init();
-	RTC_Init();
+	
+	if (HAL_RTCEx_BKUPRead(&hrtc, 1) != RTC_IS_SET)
+			RTC_Init();// check RTC is init or no
 	
 	LM75_Init();	
 	
@@ -118,9 +120,9 @@ int main(void)
 		if (minute_flag == 1)
 		{
 			minute_flag = 0;
-			PutStringRus(5,5,".",RED,BLACK);
+			Gui_Circle(5, 5, 2, RED);
 			delay_ms(800);
-			PutStringRus(5,5,".",BLACK,BLACK);
+			Gui_Circle(5, 5, 2, LIGHTGREY);
 		}
 			
 		
@@ -145,8 +147,6 @@ int main(void)
 		
 
 	}
-
-  
 
 
 }
