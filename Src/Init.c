@@ -3,6 +3,7 @@
 I2C_HandleTypeDef hi2c2;
 RTC_HandleTypeDef hrtc;
 RTC_TimeTypeDef sTime;
+RTC_DateTypeDef sDate;
 
 void RTC_Init(void)
 {

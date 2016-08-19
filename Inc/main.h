@@ -41,4 +41,7 @@ typedef struct
   
 }Messure_DataTypeDef; 
 
+
+void Take_new_Messure(Messure_DataTypeDef *data);
+
 #endif

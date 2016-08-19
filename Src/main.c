@@ -14,14 +14,13 @@
 
 /* Private function prototypes -----------------------------------------------*/
 
-void Create_new_file(void);
+FRESULT Create_new_file(void);
 void Morda (void);
 void Error_Handler(void);
-void Draw_table (void);
 void First_Draw_Table (void);
 void Hello_Screen(void);
 void Sensor_test(void);
-void Take_new_Messure(Messure_DataTypeDef *data);
+
 
 void Draw_table_ex (void);
 
@@ -40,6 +39,7 @@ extern uint8_t pointer_count;
 extern uint8_t sec_count, minute_flag;
 
 extern RTC_TimeTypeDef sTime;
+extern RTC_DateTypeDef sDate;
 
 Messure_DataTypeDef All_data;
 
@@ -89,26 +89,17 @@ int main(void)
 	LCD_LED_SET;
 	//Lcd_Clear(LIGHTGREY);	
 	
-//	Hello_Screen();
+	Hello_Screen();
+	Sensor_test();
 	
-//	Sensor_test();
-//	Create_new_file();
+	Create_new_file();
 		
-	//pfunction = Draw_table;
 	pfunction = Draw_table_ex;	
 	pfunction();
 	
-		BMP085_setControl(BMP085_MODE_TEMPERATURE);
-		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
-		t = BMP085_getTemperatureC();
-
-		BMP085_setControl(BMP085_MODE_PRESSURE_3);
-		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
-		Average_pressure = BMP085_getPressure()/1000;
-
-		LM75_Temperature(&tempr_data, LM75_ADDRESS_IN);
-		Averaga_temperature = tempr_data;
-		
+	Take_new_Messure(&All_data);
+	Average_pressure = All_data.Pressure_p/1000;
+	Averaga_temperature = All_data.T_in;
 
 	//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
@@ -121,7 +112,15 @@ int main(void)
 		{
 			minute_flag = 0;
 			Gui_Circle(5, 5, 2, RED);
-			delay_ms(800);
+			
+			Take_average_data();
+			
+			HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BIN);
+			if ((sTime.Seconds == 0) && (sTime.Minutes == 0) && (sTime.Hours == 0))
+			{//we have new day/ time to create new file for data
+				Create_new_file();
+			}
+			
 			Gui_Circle(5, 5, 2, LIGHTGREY);
 		}
 			
@@ -228,46 +227,9 @@ void First_Draw_Table (void)
 	Gui_DrawLine(0, 85, 127, 85, DARKGREY);
 	Gui_DrawLine(0, 86, 127, 86, DARKGREY);
 	
-	pfunction = Draw_table;
+	pfunction = Draw_table_ex;
 }
 
-void Draw_table (void)
-{
-	      BMP085_setControl(BMP085_MODE_TEMPERATURE);
-        delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
-        t = BMP085_getTemperatureC();
-
-        BMP085_setControl(BMP085_MODE_PRESSURE_3);
-        delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
-        p = BMP085_getPressure();
-
- 				sprintf(buffer, "%.2f", p/1000);
-				delay_ms(200);
-				PutStringRus(0,42,buffer,DARKGREY,LIGHTGREY);
-				
-        a = BMP085_getAltitude(p, 101325);
-			
-				delay_ms(200);
-				LM75_Temperature_ex(&tempr_data);
-				if (tempr_data >= 0)
-				{
-					sprintf(buffer, "+%d", tempr_data/10);
-					PutStringRus(0,0,buffer,RED,LIGHTGREY);
-				}
-				else 
-				{
-					sprintf(buffer, "-%d", tempr_data/10);
-					PutStringRus(0,0,buffer,BLUE,LIGHTGREY);
-				}
-				
-				PutStringRus(64,0,buffer,BLUE,LIGHTGREY);
-				
-				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
-				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
-				
-				delay_ms(1500);
-}
 
 void Draw_table_ex (void)
 {
@@ -338,68 +300,40 @@ void Take_new_Messure(Messure_DataTypeDef *data)
 // try to created new file "DataX.txt", were X = 0...254
 // if no, one red flash.
 // if all 254 files already exist, then turn on Red Led and endless while();
-void Create_new_file(void)
-{ uint8_t i;
-	time_t time_temp;
-	struct tm* time_tm_temp;
-	char str_temp[20];
-
+FRESULT Create_new_file(void)
+{ FRESULT result;
 	
-	if (f_mount(&FATFS_Obj, "", 0) == FR_OK) 
+	result = f_mount(&FATFS_Obj, "", 0);
+
+	if (result == FR_OK) 
 		{
-				i = 0;	
-			
-			
-				result = FR_OK;
-				while ((result != FR_NO_FILE) && (i != 0xFF))
-					{
-						sprintf(str_data_name, "Data_%d.txt", i);
-						result = f_stat(str_data_name, &fno);
-						i++;
-					}
 				
-				if (i == 0xFF)
-					{	// all 255 files were created
-						//RED_ON;
-						//while(1);
-					}
-				else{
-							if (f_open(&file, str_data_name, FA_CREATE_NEW | FA_READ | FA_WRITE) == FR_OK)
-									{//write redline
-										
-										time_temp = 1456329855;//RTC_GetCounter();
-										/* If we put more than 0 characters (everything OK) */
-										if (f_puts(ctime(&time_temp), &file) > 0) 
-											{}//data were stored, but what to do I don't know
-																					
-										sprintf(buffer, "i\tX\tY\tZ\t\tX_min\tX_max\n");
-										if(f_lseek(&file, f_size(&file)) == FR_OK){};
-											
-										/* If we put more than 0 characters (everything OK) */
-										if (f_puts(buffer, &file) > 0) 
-											{}//data were stored, but what to do I don't know
-										//stage_led_control = ONE_GREEN_FLASH;
-											
-										f_close(&file);	
-									}
-									else ;//stage_led_control = ONE_RED_FLASH;
-									
-										time_temp = 1456329855;//RTC_GetCounter();
-										time_tm_temp = localtime(&time_temp);
-										
-										sprintf(str_temp, "%02d_%d_%d.txt", (time_tm_temp->tm_year)-100, (time_tm_temp->tm_mon)+1, time_tm_temp->tm_mday);
-									result = f_open(&file, str_temp, FA_CREATE_NEW | FA_READ | FA_WRITE);
-										if (result == FR_OK)
-									{
-										//stage_led_control = ONE_GREEN_FLASH;
-										f_close(&file);
-									}
-										
-						}
+			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
+			
+			sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+			if (f_stat(str_data_name, &fno) == FR_OK)
+				{// File already exist
+					return FR_OK;
+				}
+			
+			if (f_open(&file, str_data_name, FA_CREATE_NEW | FA_READ | FA_WRITE) == FR_OK)
+				{//write redline
+
+					sprintf(buffer, "Time\tT_in\tT_out\tPresure\t\n");
+					if(f_lseek(&file, f_size(&file)) == FR_OK)
+						{}//go to end of file
+						
+							/* If we put more than 0 characters (everything OK) */
+						if (f_puts(buffer, &file) > 0) 
+							{}//data were stored, but what to do I don't know
+					f_close(&file);	
+				}			
 					
 						/* Unmount drive, don't forget this! */
 						f_mount(0, "0:", 1);
 			}//end mount SD
+		
+		return result;
 }
 
 

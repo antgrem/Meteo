@@ -131,7 +131,7 @@ void EXTI3_IRQHandler (void)
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
 
-  HAL_PCD_IRQHandler(&hpcd_USB_FS);
+//  HAL_PCD_IRQHandler(&hpcd_USB_FS);
 
 }
 

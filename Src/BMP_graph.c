@@ -7,6 +7,7 @@
 #include "Lcd_Driver.h"
 #include "GUI.h"
 #include "My_font.h"
+#include "main.h"
 
 // array for pressure and temperature
 float pressure[ARRAY_GRAPH];
@@ -29,6 +30,7 @@ uint8_t changes_min_max_tempr = 0, changes_min_max_press = 0;
 
 extern float p, t, a;
 extern void (* pfunction) (void);
+extern Messure_DataTypeDef All_data;
 
 
 void First_Draw_Graph(void)
@@ -55,11 +57,11 @@ void First_Draw_Graph(void)
 //	Gui_DrawLine(128, 0, 128, 128, DARKGREY);	
 	
 			for (i=1; i<graph_i; i++)
-		{
-			//draw new dot on graph
-			Gui_DrawPoint(i + 4, pressure[i], BLACK);
-			Gui_DrawLine(i + 3, (60 - ((temperature[i-1]*2)/10))+2, i + 4, (60 - ((temperature[i]*2)/10))+2, BLACK);
-		}
+				{
+					//draw new dot on graph
+					Gui_DrawPoint(i + 4, pressure[i], BLACK);
+					Gui_DrawLine(i + 3, (60 - ((temperature[i-1]*2)/10))+2, i + 4, (60 - ((temperature[i]*2)/10))+2, BLACK);
+				}
 	
 	pfunction = Draw_graph;
 	
@@ -69,17 +71,10 @@ void Take_average_data(void)
 {
 	  char buffer_loc[10]; 
 
+	Take_new_Messure(&All_data);
 	
-		BMP085_setControl(BMP085_MODE_TEMPERATURE);
-		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
-		t = BMP085_getTemperatureC();
-
-		BMP085_setControl(BMP085_MODE_PRESSURE_3);
-		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
-		Average_pressure = (Average_pressure + BMP085_getPressure()/1000)/2.0;
-
-		LM75_Temperature_ex(&tempr_data);
-		Averaga_temperature = (Averaga_temperature + tempr_data)>>1;
+		Average_pressure = (Average_pressure + All_data.Pressure_p/1000)/2.0;
+		Averaga_temperature = (Averaga_temperature + All_data.T_in)>>1;
 	
 		sprintf(buffer_loc, "%.2f", Average_pressure);
 		delay_ms(200);
@@ -102,19 +97,11 @@ void Draw_graph (void)
 {
    
 //take pressure data
-		BMP085_setControl(BMP085_MODE_TEMPERATURE);
-		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_TEMPERATURE));
-		t = BMP085_getTemperatureC();
-
-		BMP085_setControl(BMP085_MODE_PRESSURE_3);
-		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
+	
 		old_pressure = pressure[graph_i];
-		//pressure[graph_i] = BMP085_getPressure()/1000;
 		pressure[graph_i] = Average_pressure;
 	
-		LM75_Temperature_ex(&tempr_data);
 		old_temprature = temperature[graph_i];
-		//temperature[graph_i] = tempr_data;
 		temperature[graph_i] = Averaga_temperature;
 	
 		if (graph_i == 0)
