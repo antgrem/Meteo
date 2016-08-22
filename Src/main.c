@@ -75,14 +75,14 @@ int main(void)
   MX_GPIO_Init();
 //  MX_USB_DEVICE_Init();
 	
-	if (HAL_RTCEx_BKUPRead(&hrtc, 1) != RTC_IS_SET)
-			RTC_Init();// check RTC is init or no
+
+	RTC_Init();
+	HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BCD);
+	sec_count = sTime.Seconds;	
 	
 	LM75_Init();	
 	
 	Init_BMP085();
-	
-	delay_init(72);//Delay init.	
 	
 	Lcd_Init();
 	
@@ -115,8 +115,9 @@ int main(void)
 			
 			Take_average_data();
 			
-			HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BIN);
-			if ((sTime.Seconds == 0) && (sTime.Minutes == 0) && (sTime.Hours == 0))
+			HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BCD);
+			//if ((sTime.Seconds == 0) && (sTime.Minutes == 0) && (sTime.Hours == 0))
+			if (sTime.Minutes == 0)		//test every hour
 			{//we have new day/ time to create new file for data
 				Create_new_file();
 			}
@@ -301,7 +302,7 @@ void Take_new_Messure(Messure_DataTypeDef *data)
 // if no, one red flash.
 // if all 254 files already exist, then turn on Red Led and endless while();
 FRESULT Create_new_file(void)
-{ FRESULT result;
+{ //FRESULT result;
 	
 	result = f_mount(&FATFS_Obj, "", 0);
 
@@ -309,14 +310,17 @@ FRESULT Create_new_file(void)
 		{
 				
 			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
+			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 			
-			sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+			//sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+			sprintf(str_data_name, "%d_%d_%d.txt", sDate.Month, sDate.Date, sTime.Hours);
 			if (f_stat(str_data_name, &fno) == FR_OK)
 				{// File already exist
 					return FR_OK;
 				}
 			
-			if (f_open(&file, str_data_name, FA_CREATE_NEW | FA_READ | FA_WRITE) == FR_OK)
+			result = f_open(&file, str_data_name, FA_CREATE_NEW | FA_READ | FA_WRITE);
+			if (result == FR_OK)
 				{//write redline
 
 					sprintf(buffer, "Time\tT_in\tT_out\tPresure\t\n");
@@ -353,6 +357,11 @@ void Error_Handler(void)
   
 }
 
+
+void delay_ms(uint16_t nms)
+{
+	HAL_Delay(nms);
+}
 
 #ifdef USE_FULL_ASSERT
 

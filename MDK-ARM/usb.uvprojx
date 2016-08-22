@@ -572,11 +572,6 @@
               <FilePath>..\Src\LM75_hal.c</FilePath>
             </File>
             <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\delay.c</FilePath>
-            </File>
-            <File>
               <FileName>Lcd_Driver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\Lcd_Driver.c</FilePath>

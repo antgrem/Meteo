@@ -43,5 +43,6 @@ typedef struct
 
 
 void Take_new_Messure(Messure_DataTypeDef *data);
+void delay_ms(uint16_t nms);
 
 #endif

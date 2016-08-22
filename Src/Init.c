@@ -28,29 +28,31 @@ void RTC_Init(void)
 		hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
 		HAL_RTC_Init(&hrtc);
 
+	if (HAL_RTCEx_BKUPRead(&hrtc, 1) != RTC_IS_SET)
+		{// check RTC is init or no
+			HAL_RTC_GetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+			
+			if (DateToUpdate.Year == 0x0)
+			{
+					sTime.Hours = 0x20;
+					sTime.Minutes = 0x10;
+					sTime.Seconds = 0;
 
-		HAL_RTC_GetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
-		
-		if (DateToUpdate.Year == 0x0)
-		{
-				sTime.Hours = 0x20;
-				sTime.Minutes = 0x10;
-				sTime.Seconds = 0;
-
-				//HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
+					//HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
 
 
-				DateToUpdate.WeekDay = RTC_WEEKDAY_THURSDAY;
-				DateToUpdate.Month = RTC_MONTH_AUGUST;
-				DateToUpdate.Date = 0x11;
-				DateToUpdate.Year = 0x16;
-				
-				//HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+					DateToUpdate.WeekDay = RTC_WEEKDAY_THURSDAY;
+					DateToUpdate.Month = RTC_MONTH_AUGUST;
+					DateToUpdate.Date = 0x11;
+					DateToUpdate.Year = 0x16;
+					
+					//HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+			}
+			HAL_RTCEx_BKUPWrite(&hrtc, 1, RTC_IS_SET);
 		}
 		
 		HAL_RTCEx_SetSecond_IT(&hrtc);
-		
-		HAL_RTCEx_BKUPWrite(&hrtc, 1, RTC_IS_SET);
+	
 
 }
 

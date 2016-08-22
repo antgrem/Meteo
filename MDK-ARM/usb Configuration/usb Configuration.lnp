@@ -28,7 +28,6 @@
 "usb configuration\stm32f1xx_hal_msp.o"
 "usb configuration\usbd_desc.o"
 "usb configuration\lm75_hal.o"
-"usb configuration\delay.o"
 "usb configuration\lcd_driver.o"
 "usb configuration\gui.o"
 "usb configuration\bmp085.o"
