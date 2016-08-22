@@ -41,6 +41,9 @@ extern uint8_t sec_count, minute_flag;
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
 
+RTC_TimeTypeDef sTime_temp;
+RTC_DateTypeDef sDate_temp;
+
 Messure_DataTypeDef All_data;
 
 volatile float p, t, a;
@@ -55,6 +58,7 @@ char str_data_name[20];
 char buffer[100];
 
 uint16_t second_1_flag=0, minuts_12_flag=0;
+uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
 	
 //uint8_t str_data[100];
 
@@ -115,7 +119,7 @@ int main(void)
 			
 			Take_average_data();
 			
-			HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BCD);
+			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
 			//if ((sTime.Seconds == 0) && (sTime.Minutes == 0) && (sTime.Hours == 0))
 			if (sTime.Minutes == 0)		//test every hour
 			{//we have new day/ time to create new file for data
@@ -143,6 +147,28 @@ int main(void)
 			// 
 			pfunction();
 			minuts_12_flag = 0;
+		}
+		
+		if (set_rtc_time == 1)
+		{
+			set_rtc_time = 0;
+						
+			HAL_RTC_SetTime(&hrtc, &sTime_temp, RTC_FORMAT_BCD);
+
+		}
+		
+		if (set_rtc_date == 1)
+		{
+			set_rtc_date = 0;
+			
+			HAL_RTC_SetDate(&hrtc, &sDate_temp, RTC_FORMAT_BCD);
+		}
+		
+		if (get_data ==1)
+		{
+			get_data = 0;
+			HAL_RTC_GetTime(&hrtc, &sTime_temp, RTC_FORMAT_BCD);
+			HAL_RTC_GetDate(&hrtc, &sDate_temp, RTC_FORMAT_BCD);
 		}
 		
 
