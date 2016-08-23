@@ -39,22 +39,22 @@ void First_Draw_Graph(void)
 
 	//draw lines and fill dot from array
 	Lcd_Clear(LIGHTGREY);
-//	Gui_DrawLine(0, 0, 128, 0, DARKGREY);
-//	Gui_DrawLine(0, 1, 128, 1, DARKGREY);
-//	
-//	Gui_DrawLine(0, 62, 128, 62, DARKGREY);
-//	Gui_DrawLine(0, 63, 128, 63, DARKGREY);
-//	Gui_DrawLine(0, 64, 128, 64, DARKGREY);
-//	Gui_DrawLine(0, 65, 128, 65, DARKGREY);
-//	
-//	Gui_DrawLine(0, 127, 128, 127, DARKGREY);
-//	Gui_DrawLine(0, 128, 128, 128, DARKGREY);
-//	
-//	Gui_DrawLine(0, 0, 0, 128, DARKGREY);
-//	Gui_DrawLine(1, 0, 1, 128, DARKGREY);
-//	
-//	Gui_DrawLine(127, 0, 127, 128, DARKGREY);
-//	Gui_DrawLine(128, 0, 128, 128, DARKGREY);	
+	Gui_DrawLine(0, 0, 128, 0, DARKGREY);
+	Gui_DrawLine(0, 1, 128, 1, DARKGREY);
+	
+	Gui_DrawLine(0, 62, 128, 62, DARKGREY);
+	Gui_DrawLine(0, 63, 128, 63, DARKGREY);
+	Gui_DrawLine(0, 64, 128, 64, DARKGREY);
+	Gui_DrawLine(0, 65, 128, 65, DARKGREY);
+	
+	Gui_DrawLine(0, 127, 128, 127, DARKGREY);
+	Gui_DrawLine(0, 128, 128, 128, DARKGREY);
+	
+	Gui_DrawLine(0, 0, 0, 128, DARKGREY);
+	Gui_DrawLine(1, 0, 1, 128, DARKGREY);
+	
+	Gui_DrawLine(127, 0, 127, 128, DARKGREY);
+	Gui_DrawLine(128, 0, 128, 128, DARKGREY);	
 	
 			for (i=1; i<graph_i; i++)
 				{
@@ -71,7 +71,7 @@ void Take_average_data(void)
 {
 	  char buffer_loc[10]; 
 
-	Take_new_Messure(&All_data);
+		Take_new_Messure(&All_data);
 	
 		Average_pressure = (Average_pressure + All_data.Pressure_p/1000)/2.0;
 		Averaga_temperature = (Averaga_temperature + All_data.T_in)>>1;

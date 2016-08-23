@@ -48,10 +48,11 @@ extern void (* pfunction) (void);
 extern void First_Draw_Table (void);
 
 
-extern uint16_t second_1_flag, minuts_12_flag;
+extern uint16_t minuts_12_flag;
 
-uint8_t pointer_count = 1;
+uint8_t pointer_count = 1, button_was_pressed = 0;
 uint8_t sec_count=0, minute_flag=0;
+uint8_t one_sec_flag =0;
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
@@ -74,13 +75,13 @@ void SysTick_Handler(void)
 */
 void RTC_IRQHandler(void)
 {
-  second_1_flag++;
+	one_sec_flag = 1;
 	
-	if (++sec_count == 60)
-	{//one minute passed
-		minute_flag = 1;
-		sec_count = 0;
-	}
+  if (++sec_count == 60)
+		{//one minute passed
+			minute_flag = 1;
+			sec_count = 0;
+		}
 	
 	HAL_RTCEx_RTCIRQHandler(&hrtc);
 }
@@ -100,11 +101,13 @@ void EXTI1_IRQHandler (void)
 	if (pointer_count)
 	{
 			
-		pfunction = First_Draw_Graph;	
+		pfunction = First_Draw_Graph;
+		button_was_pressed = 1;
 	}
 	else 
 	{
 		pfunction = First_Draw_Table;
+		button_was_pressed = 1;
 	}
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
 }

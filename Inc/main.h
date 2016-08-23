@@ -21,7 +21,7 @@
 #include "Init.h"
 
 
-
+#define DAY_DATA_ARRAY_LENGTH 144
 
 //data structure definition  
 typedef struct

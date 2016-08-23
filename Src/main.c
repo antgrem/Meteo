@@ -37,6 +37,8 @@ extern int16_t Averaga_temperature;
 extern int16_t tempr_data;
 extern uint8_t pointer_count;
 extern uint8_t sec_count, minute_flag;
+extern uint8_t button_was_pressed;
+extern uint8_t one_sec_flag;
 
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
@@ -45,6 +47,7 @@ RTC_TimeTypeDef sTime_temp;
 RTC_DateTypeDef sDate_temp;
 
 Messure_DataTypeDef All_data;
+Messure_DataTypeDef Day_data_Array[DAY_DATA_ARRAY_LENGTH];
 
 volatile float p, t, a;
 	
@@ -59,6 +62,7 @@ char buffer[100];
 
 uint16_t second_1_flag=0, minuts_12_flag=0;
 uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
+uint8_t minuts_10=0, count_10_min=0;
 	
 //uint8_t str_data[100];
 
@@ -96,6 +100,8 @@ int main(void)
 	Hello_Screen();
 	Sensor_test();
 	
+	sec_count = 0;
+	
 	Create_new_file();
 		
 	pfunction = Draw_table_ex;	
@@ -111,58 +117,56 @@ int main(void)
 	
 	while(1)
 	{
+		if (one_sec_flag == 1)
+		{// one second event
+			one_sec_flag = 0;
+		}// end if (one_sec_flag == 1)
+		
 		
 		if (minute_flag == 1)
-		{
+		{// one minut event
 			minute_flag = 0;
 			Gui_Circle(5, 5, 2, RED);
 			
-			Take_average_data();
+			Take_new_Messure(&All_data);
 			
-			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
-			//if ((sTime.Seconds == 0) && (sTime.Minutes == 0) && (sTime.Hours == 0))
-			if (sTime.Minutes == 0)		//test every hour
-			{//we have new day/ time to create new file for data
-				Create_new_file();
+			if (minuts_10++ == 9)
+			{
+				minuts_10 = 0; 
+				Day_data_Array[count_10_min].T_in = All_data.T_in;
+				Day_data_Array[count_10_min].Pressure_p = All_data.Pressure_p;
+				Day_data_Array[count_10_min].Time = All_data.Time;
+				count_10_min++;
+				if (count_10_min == DAY_DATA_ARRAY_LENGTH)
+					count_10_min = 0;
 			}
 			
-			Gui_Circle(5, 5, 2, LIGHTGREY);
-		}
-			
-		
-		
-		if (second_1_flag >= 1)
-		{//every seconds
-			second_1_flag = 0;
-			minuts_12_flag++;
-			
 			if (pointer_count == 0)
-				pfunction();
+				pfunction();// draw new data on screen if table
 			
-			Take_average_data();
-		}
+			
+			Gui_Circle(5, 5, 2, LIGHTGREY);
+		}// end if (minute_flag == 1)
+			
 		
-		if (minuts_12_flag == 300)
-		{//every 12 minuts if == 120
-			// 
-			pfunction();
-			minuts_12_flag = 0;
-		}
-		
-		if (set_rtc_time == 1)
+		if (button_was_pressed == 1)
 		{
-			set_rtc_time = 0;
-						
-			HAL_RTC_SetTime(&hrtc, &sTime_temp, RTC_FORMAT_BCD);
-
+			button_was_pressed = 0;
+			pfunction();
 		}
+		
+	
+		if (set_rtc_time == 1)
+			{
+				set_rtc_time = 0;
+				HAL_RTC_SetTime(&hrtc, &sTime_temp, RTC_FORMAT_BCD);
+			}
 		
 		if (set_rtc_date == 1)
-		{
-			set_rtc_date = 0;
-			
-			HAL_RTC_SetDate(&hrtc, &sDate_temp, RTC_FORMAT_BCD);
-		}
+			{
+				set_rtc_date = 0;
+				HAL_RTC_SetDate(&hrtc, &sDate_temp, RTC_FORMAT_BCD);
+			}
 		
 		if (get_data ==1)
 		{
@@ -170,7 +174,6 @@ int main(void)
 			HAL_RTC_GetTime(&hrtc, &sTime_temp, RTC_FORMAT_BCD);
 			HAL_RTC_GetDate(&hrtc, &sDate_temp, RTC_FORMAT_BCD);
 		}
-		
 
 	}
 
@@ -265,11 +268,10 @@ void Draw_table_ex (void)
 	
 	
 				sprintf(buffer, "%.2f", All_data.Pressure_p/1000);
-				delay_ms(200);
 				PutStringRus(0,42,buffer,DARKGREY,LIGHTGREY);
 	
         	
-				delay_ms(200);
+				delay_ms(50);
 
 				if (All_data.T_in >= 0)
 				{
@@ -287,7 +289,7 @@ void Draw_table_ex (void)
 				sprintf(buffer, "%02d:%02d:%02d", All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
 				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
 				
-				delay_ms(1500);
+				//delay_ms(800);
 }
 
 void Morda (void)
@@ -313,14 +315,14 @@ void Take_new_Messure(Messure_DataTypeDef *data)
 
 		BMP085_setControl(BMP085_MODE_PRESSURE_3);
 		delay_ms(BMP085_getMeasureDelayMilliseconds(BMP085_MODE_PRESSURE_3));
-		data->Pressure_p = BMP085_getPressure()/1000;
+		data->Pressure_p = BMP085_getPressure();
 
 		LM75_Temperature(&(data->T_in), LM75_ADDRESS_IN);
 	
 		if (data->Present_T_out == 1)
 			LM75_Temperature(&(data->T_in), LM75_ADDRESS_OUT);
 	
-		HAL_RTC_GetTime(&hrtc, &(data->Time), RTC_FORMAT_BIN);
+		HAL_RTC_GetTime(&hrtc, &(data->Time), RTC_FORMAT_BCD);
 	
 }
 
@@ -339,7 +341,7 @@ FRESULT Create_new_file(void)
 			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 			
 			//sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
-			sprintf(str_data_name, "%d_%d_%d.txt", sDate.Month, sDate.Date, sTime.Hours);
+			sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Date, sTime.Hours);
 			if (f_stat(str_data_name, &fno) == FR_OK)
 				{// File already exist
 					return FR_OK;
