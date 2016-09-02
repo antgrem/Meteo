@@ -50,6 +50,10 @@ Messure_DataTypeDef All_data;
 Messure_DataTypeDef Day_data_Array[DAY_DATA_ARRAY_LENGTH];
 
 volatile float p, t, a;
+volatile 	int count_store_data=0;
+
+volatile uint8_t store_data = 0;
+uint16_t count_time_store, count_time_store_en=0;
 	
 FRESULT result;
 FATFS FATFS_Obj;
@@ -120,6 +124,12 @@ int main(void)
 		if (one_sec_flag == 1)
 		{// one second event
 			one_sec_flag = 0;
+			if (pointer_count == 0)
+			{
+				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
+			}
 		}// end if (one_sec_flag == 1)
 		
 		
@@ -148,6 +158,12 @@ int main(void)
 			Gui_Circle(5, 5, 2, LIGHTGREY);
 		}// end if (minute_flag == 1)
 			
+		
+		if (store_data == 1)
+		{
+			store_data = 0;
+			Store_data_in_new_file();
+		}
 		
 		if (button_was_pressed == 1)
 		{
@@ -322,7 +338,7 @@ void Take_new_Messure(Messure_DataTypeDef *data)
 		if (data->Present_T_out == 1)
 			LM75_Temperature(&(data->T_in), LM75_ADDRESS_OUT);
 	
-		HAL_RTC_GetTime(&hrtc, &(data->Time), RTC_FORMAT_BCD);
+		HAL_RTC_GetTime(&hrtc, &(data->Time), RTC_FORMAT_BIN);
 	
 }
 
@@ -366,6 +382,62 @@ FRESULT Create_new_file(void)
 			}//end mount SD
 		
 		return result;
+}
+
+
+// Store data in new_file
+SD_result_TypeDef Store_data_in_new_file(void)
+{ //FRESULT result;
+	uint8_t ij;
+	count_time_store = 0;
+	count_time_store_en = 1;
+	SD_result_TypeDef res;
+	
+	res.SD_result = f_mount(&FATFS_Obj, "", 0);
+	res.Stage = 0;
+
+	if (res.SD_result == FR_OK) 
+		{
+				
+			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
+			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+			
+			//sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+			sprintf(str_data_name, "%d.txt", sTime.Minutes);
+			res.SD_result = f_open(&file, str_data_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+			res.Stage = 1;
+			if (res.SD_result == FR_OK)
+				{//write redline
+
+					sprintf(buffer, "Time\tT_in\tT_out\tPresure\t\n");
+					res.SD_result = f_lseek(&file, f_size(&file));
+					res.Stage = 2;
+					if(res.SD_result == FR_OK)
+						{}//go to end of file
+						
+							/* If we put more than 0 characters (everything OK) */
+							count_store_data = f_puts(buffer, &file);
+						if (count_store_data > 0) 
+							{}//data were stored, but what to do I don't know
+								
+						for (ij=0; ij < DAY_DATA_ARRAY_LENGTH; ij++)
+							{
+								
+								sprintf(buffer, "%02d:%02d:%02d\t%d\t%f\t\n", ij, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
+								
+								count_store_data = f_puts(buffer, &file);
+							}
+							
+					f_close(&file);	
+				}			
+					
+						/* Unmount drive, don't forget this! */
+						f_mount(0, "0:", 1);
+			}//end mount SD
+		
+		count_time_store_en = 0;//stop increment count_time_store value
+			
+		return res;
 }
 
 

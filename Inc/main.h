@@ -41,8 +41,18 @@ typedef struct
   
 }Messure_DataTypeDef; 
 
+//data structure definition  
+typedef struct
+{
+    
+  FRESULT SD_result; 
+
+	uint8_t	Stage;
+  
+}SD_result_TypeDef; 
 
 void Take_new_Messure(Messure_DataTypeDef *data);
 void delay_ms(uint16_t nms);
+SD_result_TypeDef Store_data_in_new_file(void);
 
 #endif
