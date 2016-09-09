@@ -171,9 +171,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>432</LineNumber>
+          <LineNumber>416</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134234228</Address>
+          <Address>134234042</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -187,9 +187,9 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>131</LineNumber>
+          <LineNumber>383</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134241914</Address>
+          <Address>134233854</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -198,14 +198,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>../Src/main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\usb_Configuration\../Src/main.c\131</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>131</LineNumber>
+          <LineNumber>381</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134241964</Address>
+          <Address>134233844</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -214,7 +214,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>../Src/main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\usb_Configuration\../Src/main.c\131</Expression>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>202</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134241900</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>../Src/main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\usb_Configuration\../Src/main.c\202</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -282,6 +298,11 @@
           <count>12</count>
           <WinNumber>1</WinNumber>
           <ItemText>count_store_data</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>buffer</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -652,7 +673,7 @@
 
   <Group>
     <GroupName>fatf</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -686,7 +707,7 @@
 
   <Group>
     <GroupName>fatf_drv</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

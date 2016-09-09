@@ -14,7 +14,6 @@
 
 /* Private function prototypes -----------------------------------------------*/
 
-FRESULT Create_new_file(void);
 void Morda (void);
 void Error_Handler(void);
 void First_Draw_Table (void);
@@ -39,6 +38,7 @@ extern uint8_t pointer_count;
 extern uint8_t sec_count, minute_flag;
 extern uint8_t button_was_pressed;
 extern uint8_t one_sec_flag;
+extern uint8_t min_count, hour_count;
 
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
@@ -67,6 +67,8 @@ char buffer[100];
 uint16_t second_1_flag=0, minuts_12_flag=0;
 uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
 uint8_t minuts_10=0, count_10_min=0;
+uint8_t end_of_day_flag=0;
+uint32_t count_32;
 	
 //uint8_t str_data[100];
 
@@ -89,8 +91,12 @@ int main(void)
 	
 
 	RTC_Init();
-	HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BCD);
+	HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BIN);
 	sec_count = sTime.Seconds;	
+	min_count = sTime.Minutes;
+	hour_count = sTime.Hours;
+	
+	count_10_min = (hour_count*60 + min_count) / 10;
 	
 	LM75_Init();	
 	
@@ -104,10 +110,6 @@ int main(void)
 	Hello_Screen();
 	Sensor_test();
 	
-	sec_count = 0;
-	
-	Create_new_file();
-		
 	pfunction = Draw_table_ex;	
 	pfunction();
 	
@@ -136,6 +138,16 @@ int main(void)
 		if (minute_flag == 1)
 		{// one minut event
 			minute_flag = 0;
+			if (++min_count == 60)
+			{
+				min_count = 0;
+				if (++hour_count == 24)
+				{
+					hour_count = 0;
+					end_of_day_flag = 1;
+				}
+			}
+			
 			Gui_Circle(5, 5, 2, RED);
 			
 			Take_new_Messure(&All_data);
@@ -158,6 +170,12 @@ int main(void)
 			Gui_Circle(5, 5, 2, LIGHTGREY);
 		}// end if (minute_flag == 1)
 			
+		
+		if (end_of_day_flag == 1)
+		{// wow, midnight 
+			end_of_day_flag = 0;
+			Store_data_in_new_file();
+		}
 		
 		if (store_data == 1)
 		{
@@ -182,6 +200,8 @@ int main(void)
 			{
 				set_rtc_date = 0;
 				HAL_RTC_SetDate(&hrtc, &sDate_temp, RTC_FORMAT_BCD);
+				  count_32 = READ_REG(hrtc.Instance->CNTH & RTC_CNTH_RTC_CNT) | READ_REG(hrtc.Instance->CNTL & RTC_CNTL_RTC_CNT);
+					
 			}
 		
 		if (get_data ==1)
@@ -342,48 +362,6 @@ void Take_new_Messure(Messure_DataTypeDef *data)
 	
 }
 
-// try to created new file "DataX.txt", were X = 0...254
-// if no, one red flash.
-// if all 254 files already exist, then turn on Red Led and endless while();
-FRESULT Create_new_file(void)
-{ //FRESULT result;
-	
-	result = f_mount(&FATFS_Obj, "", 0);
-
-	if (result == FR_OK) 
-		{
-				
-			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
-			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-			
-			//sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
-			sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Date, sTime.Hours);
-			if (f_stat(str_data_name, &fno) == FR_OK)
-				{// File already exist
-					return FR_OK;
-				}
-			
-			result = f_open(&file, str_data_name, FA_CREATE_NEW | FA_READ | FA_WRITE);
-			if (result == FR_OK)
-				{//write redline
-
-					sprintf(buffer, "Time\tT_in\tT_out\tPresure\t\n");
-					if(f_lseek(&file, f_size(&file)) == FR_OK)
-						{}//go to end of file
-						
-							/* If we put more than 0 characters (everything OK) */
-						if (f_puts(buffer, &file) > 0) 
-							{}//data were stored, but what to do I don't know
-					f_close(&file);	
-				}			
-					
-						/* Unmount drive, don't forget this! */
-						f_mount(0, "0:", 1);
-			}//end mount SD
-		
-		return result;
-}
-
 
 // Store data in new_file
 SD_result_TypeDef Store_data_in_new_file(void)
@@ -402,8 +380,7 @@ SD_result_TypeDef Store_data_in_new_file(void)
 			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
 			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 			
-			//sprintf(str_data_name, "%d_%d_%d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
-			sprintf(str_data_name, "%d.txt", sTime.Minutes);
+			sprintf(str_data_name, "%04d%02d%02d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
 			res.SD_result = f_open(&file, str_data_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 			res.Stage = 1;
 			if (res.SD_result == FR_OK)
@@ -423,7 +400,7 @@ SD_result_TypeDef Store_data_in_new_file(void)
 						for (ij=0; ij < DAY_DATA_ARRAY_LENGTH; ij++)
 							{
 								
-								sprintf(buffer, "%02d:%02d:%02d\t%d\t%f\t\n", ij, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
+								sprintf(buffer, "%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
 								
 								count_store_data = f_puts(buffer, &file);
 							}
@@ -435,6 +412,8 @@ SD_result_TypeDef Store_data_in_new_file(void)
 						f_mount(0, "0:", 1);
 			}//end mount SD
 		
+			if (count_store_data == EOF)
+				store_data = 1;
 		count_time_store_en = 0;//stop increment count_time_store value
 			
 		return res;
