@@ -69,7 +69,7 @@ uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
 uint8_t minuts_10=0, count_10_min=0;
 uint8_t end_of_day_flag=0;
 uint32_t count_32;
-	
+
 //uint8_t str_data[100];
 
 void (* pfunction) (void);
@@ -176,12 +176,7 @@ int main(void)
 			end_of_day_flag = 0;
 			Store_data_in_new_file();
 		}
-		
-		if (store_data == 1)
-		{
-			store_data = 0;
-			Store_data_in_new_file();
-		}
+
 		
 		if (button_was_pressed == 1)
 		{
@@ -189,19 +184,17 @@ int main(void)
 			pfunction();
 		}
 		
+//test functions		
+		if (store_data == 1)
+		{
+			store_data = 0;
+			Store_data_in_new_file();
+		}
 	
 		if (set_rtc_time == 1)
 			{
 				set_rtc_time = 0;
 				HAL_RTC_SetTime(&hrtc, &sTime_temp, RTC_FORMAT_BCD);
-			}
-		
-		if (set_rtc_date == 1)
-			{
-				set_rtc_date = 0;
-				HAL_RTC_SetDate(&hrtc, &sDate_temp, RTC_FORMAT_BCD);
-				  count_32 = READ_REG(hrtc.Instance->CNTH & RTC_CNTH_RTC_CNT) | READ_REG(hrtc.Instance->CNTL & RTC_CNTL_RTC_CNT);
-					
 			}
 		
 		if (get_data ==1)

@@ -47,6 +47,19 @@ void RTC_Init(void)
 					DateToUpdate.Year = 0x16;
 					
 					//HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+				
+//directly write to counter						
+//		if(something == 1)
+//		{
+//			something = 0;
+//			while ((hrtc.Instance->CRL | RTC_CRL_RTOFF) == 0);
+//			hrtc.Instance->CRL |= RTC_CRL_CNF;
+//			hrtc.Instance->CNTL = 0xD63C;
+//			hrtc.Instance->CNTH = 0x57DF;
+//			hrtc.Instance->CRL &= ~RTC_CRL_CNF;
+//		}
+
+
 			}
 			HAL_RTCEx_BKUPWrite(&hrtc, 1, RTC_IS_SET);
 		}

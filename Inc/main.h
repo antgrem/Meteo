@@ -19,6 +19,7 @@
 #include "My_font.h"
 #include "BMP_graph.h"
 #include "Init.h"
+#include "stm32f1xx_hal_rtc.h"
 
 
 #define DAY_DATA_ARRAY_LENGTH 144

@@ -307,7 +307,7 @@ typedef struct
   *            @arg RTC_FLAG_SEC
   * @retval None
   */
-#define __HAL_RTC_SECOND_CLEAR_FLAG(__HANDLE__, __FLAG__)      ((__HANDLE__)->Instance->CRL) = ~(__FLAG__)
+#define __HAL_RTC_SECOND_CLEAR_FLAG(__HANDLE__, __FLAG__)      ((__HANDLE__)->Instance->CRL) &= ~(__FLAG__)
 
 /**
   * @brief  Enable the RTC Overflow interrupt.
@@ -357,7 +357,7 @@ typedef struct
   *            @arg RTC_FLAG_OW
   * @retval None
   */
-#define __HAL_RTC_OVERFLOW_CLEAR_FLAG(__HANDLE__, __FLAG__)      ((__HANDLE__)->Instance->CRL) = ~(__FLAG__)
+#define __HAL_RTC_OVERFLOW_CLEAR_FLAG(__HANDLE__, __FLAG__)      ((__HANDLE__)->Instance->CRL) &= ~(__FLAG__)
 
 /**
   * @}

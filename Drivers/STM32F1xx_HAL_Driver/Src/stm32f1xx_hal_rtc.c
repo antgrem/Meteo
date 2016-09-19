@@ -611,49 +611,49 @@ HAL_StatusTypeDef HAL_RTC_GetTime(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *sTim
     /* Set Hours in RTC_TimeTypeDef structure*/
     sTime->Hours = (hours % 24);    
 
-    /* Read Alarm counter in RTC registers */
-    counter_alarm = RTC_ReadAlarmCounter(hrtc);
+//    /* Read Alarm counter in RTC registers */
+//    counter_alarm = RTC_ReadAlarmCounter(hrtc);
 
-    /* Calculate remaining time to reach alarm (only if set and not yet expired)*/
-    if ((counter_alarm != RTC_ALARM_RESETVALUE) && (counter_alarm > counter_time))
-    {
-      counter_alarm -= counter_time;
-    }
-    else 
-    {
-      /* In case of counter_alarm < counter_time */
-      /* Alarm expiration already occurred but alarm not deactivated */
-      counter_alarm = RTC_ALARM_RESETVALUE;
-    }
+//    /* Calculate remaining time to reach alarm (only if set and not yet expired)*/
+//    if ((counter_alarm != RTC_ALARM_RESETVALUE) && (counter_alarm > counter_time))
+//    {
+//      counter_alarm -= counter_time;
+//    }
+//    else 
+//    {
+//      /* In case of counter_alarm < counter_time */
+//      /* Alarm expiration already occurred but alarm not deactivated */
+//      counter_alarm = RTC_ALARM_RESETVALUE;
+//    }
 
-    /* Set updated time in decreasing counter by number of days elapsed */
-    counter_time -= (days_elapsed * 24 * 3600);
-    
-    /* Write time counter in RTC registers */
-    if (RTC_WriteTimeCounter(hrtc, counter_time) != HAL_OK)
-    {
-      return HAL_ERROR;
-    }
+//    /* Set updated time in decreasing counter by number of days elapsed */
+//    counter_time -= (days_elapsed * 24 * 3600);
+//    
+//    /* Write time counter in RTC registers */
+//    if (RTC_WriteTimeCounter(hrtc, counter_time) != HAL_OK)
+//    {
+//      return HAL_ERROR;
+//    }
 
-    /* Set updated alarm to be set */
-    if (counter_alarm != RTC_ALARM_RESETVALUE)
-    {
-      counter_alarm += counter_time;
-      
-      /* Write time counter in RTC registers */
-      if (RTC_WriteAlarmCounter(hrtc, counter_alarm) != HAL_OK)
-      {
-        return HAL_ERROR;
-      }
-    }
-    else
-    {
-      /* Alarm already occurred. Set it to reset values to avoid unexpected expiration */
-      if (RTC_WriteAlarmCounter(hrtc, counter_alarm) != HAL_OK)
-      {
-        return HAL_ERROR;
-      }
-    }
+//    /* Set updated alarm to be set */
+//    if (counter_alarm != RTC_ALARM_RESETVALUE)
+//    {
+//      counter_alarm += counter_time;
+//      
+//      /* Write time counter in RTC registers */
+//      if (RTC_WriteAlarmCounter(hrtc, counter_alarm) != HAL_OK)
+//      {
+//        return HAL_ERROR;
+//      }
+//    }
+//    else
+//    {
+//      /* Alarm already occurred. Set it to reset values to avoid unexpected expiration */
+//      if (RTC_WriteAlarmCounter(hrtc, counter_alarm) != HAL_OK)
+//      {
+//        return HAL_ERROR;
+//      }
+//    }
     
     /* Update date */
     RTC_DateUpdate(hrtc, days_elapsed);
