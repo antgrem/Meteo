@@ -182,7 +182,7 @@ void PutStringRus (uint8_t ix, uint8_t iy, char* iString, uint16_t fc, uint16_t 
 const unsigned short* fontVerdana11x11 = &Verdana11x11[0];
 
 uint8_t X_font11=11, Y_font11=11, Bytes_font11;
-uint16_t Start_font11 = 0x20, Additional_start11 = 11;
+uint16_t Start_font11 = 0x20, Additional_start11 = 0;
 
 void PutStringRus11 (uint8_t ix, uint8_t iy, char* iString, uint16_t fc, uint16_t bc)
 {
@@ -191,10 +191,10 @@ void PutStringRus11 (uint8_t ix, uint8_t iy, char* iString, uint16_t fc, uint16_
 	
      xpos = ix;
 	
-	if (Y_font%8) 
-		Bytes_font11 = (Y_font/8) + 1;
+	if (Y_font11%8) 
+		Bytes_font11 = (Y_font11/8) + 1;
 	else
-		Bytes_font11 = (Y_font/8);
+		Bytes_font11 = (Y_font11/8);
 		
     for(int sym = 0; iString[sym]; ++sym)
     {
@@ -202,12 +202,12 @@ void PutStringRus11 (uint8_t ix, uint8_t iy, char* iString, uint16_t fc, uint16_
         // snum = iString[sym];
 				 snum = sm-Start_font11 - Additional_start11;//Sdvig setki na na4alo tablicu
 			
-			const unsigned short* symbol = &(fontVerdana11x11)[(1+X_font*Bytes_font11)*(snum)];
+			const unsigned short* symbol = &(fontVerdana11x11)[(1+X_font11*Bytes_font11)*(snum)];
 			
 			
         for(uint8_t x = 0; x<symbol[0]; ++x)
         {
-            for(uint8_t y = 0; y<Y_font; ++y)
+            for(uint8_t y = 0; y<Y_font11; ++y)
             {
                 if(symbol[1+y/8+x*Bytes_font11] & (0x01<<(y%8)))
                     Gui_DrawPoint(xpos+x,iy+y,fc);

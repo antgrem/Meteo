@@ -78,17 +78,17 @@ void Take_average_data(void)
 	
 		sprintf(buffer_loc, "%.2f", Average_pressure);
 		delay_ms(200);
-		PutStringRus(0,42,buffer_loc,DARKGREY,LIGHTGREY);
+		PutStringRus11(0,42,buffer_loc,DARKGREY,LIGHTGREY);
 	
 		if (tempr_data >= 0)
 		{
 			sprintf(buffer_loc, "%d", tempr_data/10);
-			PutStringRus(80,42,buffer_loc,RED,LIGHTGREY);
+			PutStringRus11(80,42,buffer_loc,RED,LIGHTGREY);
 		}
 		else 
 		{
 			sprintf(buffer_loc, "%d", tempr_data/10);
-			PutStringRus(80,42,buffer_loc,BLUE,LIGHTGREY);
+			PutStringRus11(80,42,buffer_loc,BLUE,LIGHTGREY);
 		}
 	
 }// end Take_average_data()

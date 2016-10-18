@@ -130,7 +130,7 @@ int main(void)
 			{
 				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
-				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
+				PutStringRus11(0,87,buffer,BLUE,LIGHTGREY);
 			}
 		}// end if (one_sec_flag == 1)
 		
@@ -174,7 +174,7 @@ int main(void)
 		if (end_of_day_flag == 1)
 		{// wow, midnight 
 			end_of_day_flag = 0;
-			Store_data_in_new_file();
+			//Store_data_in_new_file();
 		}
 
 		
@@ -188,7 +188,7 @@ int main(void)
 		if (store_data == 1)
 		{
 			store_data = 0;
-			Store_data_in_new_file();
+			//Store_data_in_new_file();
 		}
 	
 		if (set_rtc_time == 1)
@@ -216,9 +216,9 @@ void Hello_Screen(void)
 	LCD_LED_SET;
 	Lcd_Clear(BLACK);	
 	
-	PutStringRus(30,15,"123",GREEN,BLACK);// "METEO"
+	PutStringRus11(30,15,"METEO",GREEN,BLACK);// "METEO"
 	
-	PutStringRus(30,80,"1.0",YELLOW,BLACK); // "ver 1.0"
+	PutStringRus11(30,80,"ver 1.0",YELLOW,BLACK); // "ver 1.0"
 	
 	delay_ms(500);
 	delay_ms(500);
@@ -235,35 +235,36 @@ void Sensor_test(void)
 	
 	if (LM75_Temperature_ex(&tempr_data) != 0)
 		{// we have problem with sensor
-			//PutStringRus(10,10,"IN T sensor: ERROR",RED,BLACK);
-			PutStringRus(10,00,"1:0",RED,BLACK);			
+			PutStringRus11(10,10,"IN T sensor: ERROR",RED,BLACK);
+			//PutStringRus11(10,00,"1:0",RED,BLACK);			
 		}
 	else 
 		{
-			//PutStringRus(10,10,"IN T sensor: OK",GREEN,BLACK);
-			PutStringRus(10,00,"1:0",GREEN,BLACK);
+			PutStringRus11(10,10,"IN T sensor: OK",GREEN,BLACK);
+			//PutStringRus11(10,00,"1:0",GREEN,BLACK);
 		}
-	delay_ms(500);	
+		delay_ms(500);	
 	
-		if (BMP085_testConnection() != 1)
+		if (BMP085_testConnection() == 1)
 		{
-			//PutStringRus(10,40,"P sensor: OK",GREEN,BLACK);
-			PutStringRus(10,35,"2:1",GREEN,BLACK);
+			PutStringRus11(10,30,"P sensor: OK",GREEN,BLACK);
+			//PutStringRus11(10,35,"2:1",GREEN,BLACK);
 		}
 		else 
 		{
-			//PutStringRus(10,40,"P sensor: ERROR",RED,BLACK);
-			PutStringRus(10,35,"2:0",RED,BLACK);
+			PutStringRus11(10,30,"P sensor: ERROR",RED,BLACK);
+			//PutStringRus11(10,35,"2:0",RED,BLACK);
 		}
-	delay_ms(500);
+		delay_ms(500);
 		
-		//PutStringRus(10,80,"RTC: ERROR/OK?",YELLOW,BLACK);
-		PutStringRus(10,70,"3:10",YELLOW,BLACK);
+		if (HAL_RTCEx_BKUPRead(&hrtc, 1) == RTC_IS_SET)
+			PutStringRus11(10,60,"RTC: OK",GREEN,BLACK);
+		else PutStringRus11(10,60,"RTC: ERROR",RED,BLACK);
 		
 		delay_ms(500);
 		
-		//PutStringRus(10,120,"OUT T, SD: ERROR/OK?",BLUE,BLACK);
-		PutStringRus(10,90,"45:10",BLUE,BLACK);
+		PutStringRus11(10,90,"OUT T, SD: ERROR/OK?",BLUE,BLACK);
+		//PutStringRus11(10,90,"45:10",BLUE,BLACK);
 		
 				
 	delay_ms(500);
@@ -297,7 +298,7 @@ void Draw_table_ex (void)
 	
 	
 				sprintf(buffer, "%.2f", All_data.Pressure_p/1000);
-				PutStringRus(0,42,buffer,DARKGREY,LIGHTGREY);
+				PutStringRus11(0,42,buffer,DARKGREY,LIGHTGREY);
 	
         	
 				delay_ms(50);
@@ -305,18 +306,18 @@ void Draw_table_ex (void)
 				if (All_data.T_in >= 0)
 				{
 					sprintf(buffer, "+%d", All_data.T_in/10);
-					PutStringRus(0,0,buffer,RED,LIGHTGREY);
+					PutStringRus11(0,0,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
 					sprintf(buffer, "-%d", All_data.T_in/10);
-					PutStringRus(0,0,buffer,BLUE,LIGHTGREY);
+					PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
 				}
 				
-				PutStringRus(64,0,buffer,BLUE,LIGHTGREY);
+				PutStringRus11(64,0,buffer,BLUE,LIGHTGREY);
 		
 				sprintf(buffer, "%02d:%02d:%02d", All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-				PutStringRus(0,87,buffer,BLUE,LIGHTGREY);
+				PutStringRus11(0,87,buffer,BLUE,LIGHTGREY);
 				
 				//delay_ms(800);
 }
