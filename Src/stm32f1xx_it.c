@@ -51,7 +51,7 @@ extern void First_Draw_Table (void);
 extern uint16_t minuts_12_flag;
 extern uint16_t count_time_store, count_time_store_en;
 
-uint8_t pointer_count = 1, button_was_pressed = 0;
+uint8_t pointer_count = 0, button_was_pressed = 0;
 uint8_t sec_count=0, minute_flag=0;
 uint8_t min_count, hour_count;
 uint8_t one_sec_flag =0;
@@ -101,19 +101,19 @@ void RTC_Alarm_IRQHandler(void)
 // buttom
 void EXTI1_IRQHandler (void)
 {
-	pointer_count++;
-	pointer_count &= 0x01;
-	if (pointer_count)
-	{
-			
-		pfunction = First_Draw_Graph;
-		button_was_pressed = 1;
-	}
-	else 
-	{
-		pfunction = First_Draw_Table;
-		button_was_pressed = 1;
-	}
+//	pointer_count++;
+//	pointer_count &= 0x01;
+//	if (pointer_count)
+//	{
+//			
+//		pfunction = First_Draw_Graph;
+//		button_was_pressed = 1;
+//	}
+//	else 
+//	{
+//		pfunction = First_Draw_Table;
+//		button_was_pressed = 1;
+//	}
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
 }
 

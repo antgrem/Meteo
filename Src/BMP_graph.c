@@ -67,31 +67,6 @@ void First_Draw_Graph(void)
 	
 }
 
-void Take_average_data(void)
-{
-	  char buffer_loc[10]; 
-
-		Take_new_Messure(&All_data);
-	
-		Average_pressure = (Average_pressure + All_data.Pressure_p/1000)/2.0;
-		Averaga_temperature = (Averaga_temperature + All_data.T_in)>>1;
-	
-		sprintf(buffer_loc, "%.2f", Average_pressure);
-		delay_ms(200);
-		PutStringRus11(0,42,buffer_loc,DARKGREY,LIGHTGREY);
-	
-		if (tempr_data >= 0)
-		{
-			sprintf(buffer_loc, "%d", tempr_data/10);
-			PutStringRus11(80,42,buffer_loc,RED,LIGHTGREY);
-		}
-		else 
-		{
-			sprintf(buffer_loc, "%d", tempr_data/10);
-			PutStringRus11(80,42,buffer_loc,BLUE,LIGHTGREY);
-		}
-	
-}// end Take_average_data()
 
 void Draw_graph (void)
 {

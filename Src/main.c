@@ -7,9 +7,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
-
-
+#include "Terminal.h"
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -107,8 +105,11 @@ int main(void)
 	LCD_LED_SET;
 	//Lcd_Clear(LIGHTGREY);	
 	
+//		Terminal_shift_line();
+		
 	Hello_Screen();
 	Sensor_test();
+	Lcd_Clear(BLACK);
 	
 	pfunction = Draw_table_ex;	
 	pfunction();
@@ -307,17 +308,23 @@ void Draw_table_ex (void)
 				{
 					sprintf(buffer, "+%d", All_data.T_in/10);
 					PutStringRus11(0,0,buffer,RED,LIGHTGREY);
+					sprintf(buffer, "%.2f +%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+					PutStringRus11(0,100,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
 					sprintf(buffer, "-%d", All_data.T_in/10);
 					PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
+					sprintf(buffer, "%.2f -%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+					PutStringRus11(0,100,buffer,RED,LIGHTGREY);
 				}
 				
-				PutStringRus11(64,0,buffer,BLUE,LIGHTGREY);
+				//PutStringRus11(64,0,buffer,BLUE,LIGHTGREY);
 		
 				sprintf(buffer, "%02d:%02d:%02d", All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
 				PutStringRus11(0,87,buffer,BLUE,LIGHTGREY);
+				
+				
 				
 				//delay_ms(800);
 }
