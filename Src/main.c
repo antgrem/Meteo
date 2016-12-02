@@ -185,25 +185,6 @@ int main(void)
 			pfunction();
 		}
 		
-//test functions		
-		if (store_data == 1)
-		{
-			store_data = 0;
-			//Store_data_in_new_file();
-		}
-	
-		if (set_rtc_time == 1)
-			{
-				set_rtc_time = 0;
-				HAL_RTC_SetTime(&hrtc, &sTime_temp, RTC_FORMAT_BCD);
-			}
-		
-		if (get_data ==1)
-		{
-			get_data = 0;
-			HAL_RTC_GetTime(&hrtc, &sTime_temp, RTC_FORMAT_BCD);
-			HAL_RTC_GetDate(&hrtc, &sDate_temp, RTC_FORMAT_BCD);
-		}
 
 	}
 

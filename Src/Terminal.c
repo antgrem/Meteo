@@ -4,6 +4,8 @@ uint8_t string_array_max=4;
 char *string_array[] = {"First line", "+-*/", "Home", "HTML code", "Just English",
 									"Very long line", "flash","light", "Happy", "dOREWD","qwer"};
 
+									
+									
 void Terminal_shift_line (void)
 {
 	uint8_t i,j, a;
@@ -21,13 +23,11 @@ void Terminal_shift_line (void)
 				
 				}
 		
-		
 		delay_ms(500);
 		delay_ms(500);
 		delay_ms(500);
 		Lcd_Clear(BLACK);
 		}
 	}
-	
 	
 }
