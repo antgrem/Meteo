@@ -110,7 +110,9 @@ int main(void)
 	Hello_Screen();
 	Sensor_test();
 	Lcd_Clear(BLACK);
-	
+
+//end of initialls
+
 	pfunction = Draw_table_ex;	
 	pfunction();
 	
@@ -211,6 +213,8 @@ void Hello_Screen(void)
 
 void Sensor_test(void)
 {
+	SD_result_TypeDef res;
+	
 	LCD_LED_SET;
 	Lcd_Clear(BLACK);
 	delay_ms(800);
@@ -245,9 +249,21 @@ void Sensor_test(void)
 		
 		delay_ms(500);
 		
-		PutStringRus11(10,90,"OUT T, SD: ERROR/OK?",BLUE,BLACK);
-		//PutStringRus11(10,90,"45:10",BLUE,BLACK);
+		PutStringRus11(10,90,"OUT T ERROR",RED,BLACK);
 		
+	res.SD_result = f_mount(&FATFS_Obj, "", 0);
+	res.Stage = 0;
+
+	if (res.SD_result == FR_OK) 
+		{
+			PutStringRus11(10,100,"SD: OK",GREEN,BLACK);
+			f_mount(0, "0:", 1);
+			}//end mount SD
+		else 
+		{
+			PutStringRus11(10,100,"SD: ERROR",RED,BLACK);
+		}
+				
 				
 	delay_ms(500);
 	delay_ms(500);
