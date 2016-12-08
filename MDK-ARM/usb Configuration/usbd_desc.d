@@ -1,4 +1,4 @@
-usb configuration\usbd_desc.o: ../Src/usbd_desc.c
+usb configuration\usbd_desc.o: ..\Src\usbd_desc.c
 usb configuration\usbd_desc.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
 usb configuration\usbd_desc.o: ../Inc/usbd_conf.h
 usb configuration\usbd_desc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

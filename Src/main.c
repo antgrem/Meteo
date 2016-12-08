@@ -8,6 +8,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "Terminal.h"
+#include "Hello_screen.h"
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -15,8 +16,7 @@
 void Morda (void);
 void Error_Handler(void);
 void First_Draw_Table (void);
-void Hello_Screen(void);
-void Sensor_test(void);
+
 
 
 void Draw_table_ex (void);
@@ -68,7 +68,6 @@ uint8_t minuts_10=0, count_10_min=0;
 uint8_t end_of_day_flag=0;
 uint32_t count_32;
 
-//uint8_t str_data[100];
 
 void (* pfunction) (void);
 
@@ -167,7 +166,10 @@ int main(void)
 			}
 			
 			if (pointer_count == 0)
-				pfunction();// draw new data on screen if table
+			{
+				//pfunction();// draw new data on screen if table
+				Draw_table_ex();
+			}
 			
 			
 			Gui_Circle(5, 5, 2, LIGHTGREY);
@@ -193,84 +195,6 @@ int main(void)
 
 }
 
-void Hello_Screen(void)
-{ 
-	// function for draw Hello screen 
-	// with firmware version
-	LCD_LED_SET;
-	Lcd_Clear(BLACK);	
-	
-	PutStringRus11(30,15,"METEO",GREEN,BLACK);// "METEO"
-	
-	PutStringRus11(30,80,"ver 1.0",YELLOW,BLACK); // "ver 1.0"
-	
-	delay_ms(500);
-	delay_ms(500);
-	delay_ms(500);
-	delay_ms(500);
-
-}
-
-void Sensor_test(void)
-{
-	SD_result_TypeDef res;
-	
-	LCD_LED_SET;
-	Lcd_Clear(BLACK);
-	delay_ms(800);
-	
-	if (LM75_Temperature_ex(&tempr_data) != 0)
-		{// we have problem with sensor
-			PutStringRus11(10,10,"IN T sensor: ERROR",RED,BLACK);
-			//PutStringRus11(10,00,"1:0",RED,BLACK);			
-		}
-	else 
-		{
-			PutStringRus11(10,10,"IN T sensor: OK",GREEN,BLACK);
-			//PutStringRus11(10,00,"1:0",GREEN,BLACK);
-		}
-		delay_ms(500);	
-	
-		if (BMP085_testConnection() == 1)
-		{
-			PutStringRus11(10,30,"P sensor: OK",GREEN,BLACK);
-			//PutStringRus11(10,35,"2:1",GREEN,BLACK);
-		}
-		else 
-		{
-			PutStringRus11(10,30,"P sensor: ERROR",RED,BLACK);
-			//PutStringRus11(10,35,"2:0",RED,BLACK);
-		}
-		delay_ms(500);
-		
-		if (HAL_RTCEx_BKUPRead(&hrtc, 1) == RTC_IS_SET)
-			PutStringRus11(10,60,"RTC: OK",GREEN,BLACK);
-		else PutStringRus11(10,60,"RTC: ERROR",RED,BLACK);
-		
-		delay_ms(500);
-		
-		PutStringRus11(10,90,"OUT T ERROR",RED,BLACK);
-		
-	res.SD_result = f_mount(&FATFS_Obj, "", 0);
-	res.Stage = 0;
-
-	if (res.SD_result == FR_OK) 
-		{
-			PutStringRus11(10,100,"SD: OK",GREEN,BLACK);
-			f_mount(0, "0:", 1);
-			}//end mount SD
-		else 
-		{
-			PutStringRus11(10,100,"SD: ERROR",RED,BLACK);
-		}
-				
-				
-	delay_ms(500);
-	delay_ms(500);
-	delay_ms(500);
-	delay_ms(500);
-	delay_ms(500);		
-}
 
 void First_Draw_Table (void)
 {
@@ -360,7 +284,7 @@ void Take_new_Messure(Messure_DataTypeDef *data)
 	
 }
 
-
+//
 // Store data in new_file
 SD_result_TypeDef Store_data_in_new_file(void)
 { //FRESULT result;

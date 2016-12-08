@@ -58,3 +58,4 @@ usb configuration\main.o: ../Inc/My_font.h
 usb configuration\main.o: ../Inc/BMP_graph.h
 usb configuration\main.o: ../Inc/Init.h
 usb configuration\main.o: ../Inc/Terminal.h
+usb configuration\main.o: ../Inc/Hello_screen.h

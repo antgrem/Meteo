@@ -1,4 +1,4 @@
-usb configuration\usbd_cdc_if.o: ../Src/usbd_cdc_if.c
+usb configuration\usbd_cdc_if.o: ..\Src\usbd_cdc_if.c
 usb configuration\usbd_cdc_if.o: ../Inc/usbd_cdc_if.h
 usb configuration\usbd_cdc_if.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h
 usb configuration\usbd_cdc_if.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h

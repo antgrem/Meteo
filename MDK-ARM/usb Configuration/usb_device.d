@@ -1,4 +1,4 @@
-usb configuration\usb_device.o: ../Src/usb_device.c
+usb configuration\usb_device.o: ..\Src\usb_device.c
 usb configuration\usb_device.o: ../Inc/usb_device.h
 usb configuration\usb_device.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 usb configuration\usb_device.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h

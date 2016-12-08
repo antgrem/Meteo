@@ -1,4 +1,4 @@
-usb configuration\usbd_conf.o: ../Src/usbd_conf.c
+usb configuration\usbd_conf.o: ..\Src\usbd_conf.c
 usb configuration\usbd_conf.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 usb configuration\usbd_conf.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 usb configuration\usbd_conf.o: ../Drivers/CMSIS/Include/core_cm3.h
