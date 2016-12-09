@@ -37,7 +37,7 @@
 #include "diskio.h"
 #include "BMP_graph.h"
 #include "Lcd_Driver.h"
-
+#include "buttoms.h"
 
 
 /* External variables --------------------------------------------------------*/
@@ -47,6 +47,7 @@ extern void Draw_table (void);
 extern void (* pfunction) (void);
 extern void First_Draw_Table (void);
 
+extern Buttom_struct BM_1;
 
 extern uint16_t minuts_12_flag;
 extern uint16_t count_time_store, count_time_store_en;
@@ -72,6 +73,9 @@ void SysTick_Handler(void)
 	
 	if (count_time_store_en == 1)
 		count_time_store++;
+	
+	if(BM_1.State == BM_PRESSED)
+		BM_1.time_presed++;
 
 }
 
@@ -114,6 +118,17 @@ void EXTI1_IRQHandler (void)
 //		pfunction = First_Draw_Table;
 //		button_was_pressed = 1;
 //	}
+	if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)==0)
+	{//buttom pressed
+		BM_1.time_presed = 0;
+		BM_1.State = BM_PRESSED;
+	}
+	else
+	{
+		BM_1.State = BM_RELEASED;
+	}
+	button_was_pressed = 1;
+	
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
 }
 

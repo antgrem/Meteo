@@ -626,6 +626,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\Hello_screen.c</FilePath>
             </File>
+            <File>
+              <FileName>buttoms.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\buttoms.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

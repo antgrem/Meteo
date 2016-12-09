@@ -9,7 +9,7 @@
 #include "main.h"
 #include "Terminal.h"
 #include "Hello_screen.h"
-
+#include "buttoms.h"
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -40,6 +40,8 @@ extern uint8_t min_count, hour_count;
 
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
+
+extern Buttom_struct BM_1;
 
 RTC_TimeTypeDef sTime_temp;
 RTC_DateTypeDef sDate_temp;
@@ -186,7 +188,9 @@ int main(void)
 		if (button_was_pressed == 1)
 		{
 			button_was_pressed = 0;
-			pfunction();
+			sprintf(buffer, "%d", BM_1.time_presed);
+			PutStringRus11(10,110,buffer,BLUE,LIGHTGREY);
+			//pfunction();
 		}
 		
 
