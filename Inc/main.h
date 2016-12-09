@@ -21,7 +21,6 @@
 #include "Init.h"
 #include "stm32f1xx_hal_rtc.h"
 
-
 #define DAY_DATA_ARRAY_LENGTH 144
 
 //data structure definition  
@@ -38,7 +37,6 @@ typedef struct
 	float Pressure_p;
   
   RTC_TimeTypeDef Time;   
-
   
 }Messure_DataTypeDef; 
 
