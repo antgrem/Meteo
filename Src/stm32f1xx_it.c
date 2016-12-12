@@ -47,7 +47,7 @@ extern void Draw_table (void);
 extern void (* pfunction) (void);
 extern void First_Draw_Table (void);
 
-extern Buttom_struct BM_1;
+extern Buttom_struct BM_1, BM_2, BM_3;
 
 extern uint16_t minuts_12_flag;
 extern uint16_t count_time_store, count_time_store_en;
@@ -76,6 +76,12 @@ void SysTick_Handler(void)
 	
 	if(BM_1.State == BM_PRESSED)
 		BM_1.time_presed++;
+	
+	if(BM_2.State == BM_PRESSED)
+		BM_2.time_presed++;
+	
+	if(BM_3.State == BM_PRESSED)
+		BM_3.time_presed++;
 
 }
 

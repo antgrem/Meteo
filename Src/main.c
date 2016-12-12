@@ -41,7 +41,7 @@ extern uint8_t min_count, hour_count;
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
 
-extern Buttom_struct BM_1;
+extern Buttom_struct BM_1, BM_2, BM_3;
 
 RTC_TimeTypeDef sTime_temp;
 RTC_DateTypeDef sDate_temp;
@@ -152,7 +152,7 @@ int main(void)
 				}
 			}
 			
-			Gui_Circle(5, 5, 2, RED);
+			Gui_Circle(120, 5, 2, RED);
 			
 			Take_new_Messure(&All_data);
 			
@@ -174,7 +174,7 @@ int main(void)
 			}
 			
 			
-			Gui_Circle(5, 5, 2, LIGHTGREY);
+			Gui_Circle(120, 5, 2, LIGHTGREY);
 		}// end if (minute_flag == 1)
 			
 		
@@ -232,22 +232,26 @@ void Draw_table_ex (void)
 				if (All_data.T_in >= 0)
 				{
 					sprintf(buffer, "+%d", All_data.T_in/10);
-					PutStringRus11(0,0,buffer,RED,LIGHTGREY);
-					sprintf(buffer, "%.2f +%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-					PutStringRus11(0,100,buffer,RED,LIGHTGREY);
+					//PutStringRus11(0,0,buffer,RED,LIGHTGREY);
+					PutStringRus(0,0,buffer,RED,LIGHTGREY);
+					sprintf(buffer, "%.2f +%3d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+					//PutStringRus11(0,100,buffer,RED,LIGHTGREY);
+					PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
 					sprintf(buffer, "-%d", All_data.T_in/10);
-					PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
-					sprintf(buffer, "%.2f -%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-					PutStringRus11(0,100,buffer,RED,LIGHTGREY);
+					//PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
+					PutStringRus(0,0,buffer,BLUE,LIGHTGREY);
+					sprintf(buffer, "%.2f -%3d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+					//PutStringRus11(0,100,buffer,RED,LIGHTGREY);
+					PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				
 				//PutStringRus11(64,0,buffer,BLUE,LIGHTGREY);
 		
-				sprintf(buffer, "%02d:%02d:%02d", All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-				PutStringRus11(0,87,buffer,BLUE,LIGHTGREY);
+			//	sprintf(buffer, "%02d:%02d:%02d", All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+			//	PutStringRus11(0,87,buffer,BLUE,LIGHTGREY);
 				
 				
 				
