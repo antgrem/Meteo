@@ -13,6 +13,9 @@
 
 /* Private function prototypes -----------------------------------------------*/
 
+#define BACKGROUND_COLOR BLACK
+#define FONT_COLOR RED
+
 void Morda (void);
 void Error_Handler(void);
 void First_Draw_Table (void);
@@ -63,6 +66,7 @@ UINT nWritten;
 DSTATUS res;
 char str_data_name[20];
 char buffer[100];
+SD_result_TypeDef results;
 
 uint16_t second_1_flag=0, minuts_12_flag=0;
 uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
@@ -190,6 +194,9 @@ int main(void)
 			button_was_pressed = 0;
 			sprintf(buffer, "%d", BM_1.time_presed);
 			PutStringRus11(10,110,buffer,BLUE,LIGHTGREY);
+			Store_data_in_new_file();
+			sprintf(buffer, "%d", results.SD_result);
+			PutStringRus11(50,110,buffer,BLUE,LIGHTGREY);
 			//pfunction();
 		}
 		
@@ -233,19 +240,19 @@ void Draw_table_ex (void)
 				{
 					sprintf(buffer, "+%d", All_data.T_in/10);
 					//PutStringRus11(0,0,buffer,RED,LIGHTGREY);
-					PutStringRus(0,0,buffer,RED,LIGHTGREY);
-					sprintf(buffer, "%.2f +%3d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-					//PutStringRus11(0,100,buffer,RED,LIGHTGREY);
-					PutStringRus(0,100,buffer,RED,LIGHTGREY);
+					PutStringRus(0,0,buffer,RED,BLACK);
+					sprintf(buffer, "%.2f +%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+					PutStringRus11(0,100,buffer,RED,BLACK);
+					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
 					sprintf(buffer, "-%d", All_data.T_in/10);
 					//PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
-					PutStringRus(0,0,buffer,BLUE,LIGHTGREY);
-					sprintf(buffer, "%.2f -%3d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-					//PutStringRus11(0,100,buffer,RED,LIGHTGREY);
-					PutStringRus(0,100,buffer,RED,LIGHTGREY);
+					PutStringRus(0,0,buffer,BLUE,BLACK);
+					sprintf(buffer, "%.2f -%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+					PutStringRus11(0,100,buffer,RED,BLACK);
+					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				
 				//PutStringRus11(64,0,buffer,BLUE,LIGHTGREY);

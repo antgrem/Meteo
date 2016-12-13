@@ -30,9 +30,9 @@ void Hello_Screen(void)
 
 void Sensor_test(void)
 {
-	SD_result_TypeDef res;
-	FRESULT fr;    /* FatFs return code */
+volatile	SD_result_TypeDef res;
 	int16_t test;
+	char df[20];
 	
 	LCD_LED_SET;
 	Lcd_Clear(BLACK);
@@ -70,24 +70,21 @@ void Sensor_test(void)
 		
 		PutStringRus11(10,90,"OUT T ERROR",RED,BLACK);
 		
-	res.SD_result = f_mount(&FATFS_Obj, "", 0);
-
+		res.SD_result = f_mount(&FATFS_Obj, "", 1);
 
 	if (res.SD_result == FR_OK) 
 		{
-
-    /* Open a text file */
-    fr = f_open(&file, "message.txt", FA_READ);
-    if (fr) 
-		{
-			PutStringRus11(10,100,"SD: OK",GREEN,BLACK);
+				PutStringRus11(10,100,"SD: OK",GREEN,BLACK);
+				f_mount(0, "0:", 1);
 		}
-		else 
+	else 
 		{
+			sprintf(df, "%d", res.SD_result);
 			PutStringRus11(10,100,"SD: ERROR",RED,BLACK);
+			PutStringRus11(10,115,df,RED,BLACK);
 		}
-		f_mount(0, "0:", 1);
-			}//end mount SD
+		
+			
 			
 				
 	delay_ms(500);
