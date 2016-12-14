@@ -36,6 +36,8 @@
 #include "ffconf.h"
 #include "diskio.h"
 
+extern uint16_t stage_sd;
+
 // demo uses a command line option to define this (see Makefile):
 // #define STM32_SD_USE_DMA
 
@@ -720,8 +722,9 @@ DSTATUS disk_initialize (
 	for (n = 10; n; n--) rcvr_spi();	/* 80 dummy clocks */
 
 	ty = 0;
+	stage_sd = 0;
 	if (send_cmd(CMD0, 0) == 1) {			/* Enter Idle state */
-		Timer1 = 100;						/* Initialization timeout of 1000 milliseconds */
+		Timer1 = 1000;						/* Initialization timeout of 1000 milliseconds */
 		if (send_cmd(CMD8, 0x1AA) == 1) {	/* SDHC */
 			for (n = 0; n < 4; n++) ocr[n] = rcvr_spi();		/* Get trailing return value of R7 response */
 			if (ocr[2] == 0x01 && ocr[3] == 0xAA) {				/* The card can work at VDD range of 2.7-3.6V */
@@ -733,11 +736,15 @@ DSTATUS disk_initialize (
 			}
 		} else {							/* SDSC or MMC */
 			if (send_cmd(ACMD41, 0) <= 1) 	{
-				ty = CT_SD1; cmd = ACMD41;	/* SDSC */
+				ty = CT_SD1; 
+				cmd = ACMD41;	/* SDSC */
 			} else {
-				ty = CT_MMC; cmd = CMD1;	/* MMC */
+				ty = CT_MMC; 
+				cmd = CMD1;	/* MMC */
 			}
+
 			while (Timer1 && send_cmd(cmd, 0));			/* Wait for leaving idle state */
+
 			if (!Timer1 || send_cmd(CMD16, 512) != 0)	/* Set R/W block length to 512 */
 				ty = 0;
 		}
@@ -997,7 +1004,7 @@ RAMFUNC void disk_timerproc (void)
 {
 	static DWORD pv;
 	DWORD ns;
-	BYTE n, s;
+	DWORD n, s;
 
 
 	n = Timer1;                /* 100Hz decrement timers */

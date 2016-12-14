@@ -50,6 +50,16 @@ typedef struct
   
 }SD_result_TypeDef; 
 
+typedef struct
+{
+	uint8_t SD_Card_Present;
+	uint8_t Wifi_Present;
+	uint8_t T_in_Present;
+	uint8_t T_out_Present;
+	uint8_t Presure_Present;
+	uint8_t RTC_Present;
+} System_TypeDef;
+
 void Take_new_Messure(Messure_DataTypeDef *data);
 void delay_ms(uint16_t nms);
 SD_result_TypeDef Store_data_in_new_file(void);

@@ -13,8 +13,6 @@
 
 /* Private function prototypes -----------------------------------------------*/
 
-#define BACKGROUND_COLOR BLACK
-#define FONT_COLOR RED
 
 void Morda (void);
 void Error_Handler(void);
@@ -55,6 +53,8 @@ Messure_DataTypeDef Day_data_Array[DAY_DATA_ARRAY_LENGTH];
 volatile float p, t, a;
 volatile 	int count_store_data=0;
 
+uint16_t Global_Font_Color = RED, Global_BG_Color = BLACK;
+
 volatile uint8_t store_data = 0;
 uint16_t count_time_store, count_time_store_en=0;
 	
@@ -65,14 +65,16 @@ FILINFO fno;
 UINT nWritten;
 DSTATUS res;
 char str_data_name[20];
-char buffer[100];
+char buffer[100], dot[2]="~";
 SD_result_TypeDef results;
+System_TypeDef System;
 
 uint16_t second_1_flag=0, minuts_12_flag=0;
 uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
 uint8_t minuts_10=0, count_10_min=0;
 uint8_t end_of_day_flag=0;
 uint32_t count_32;
+uint16_t stage_sd=0;
 
 
 void (* pfunction) (void);
@@ -114,7 +116,7 @@ int main(void)
 		
 	Hello_Screen();
 	Sensor_test();
-	Lcd_Clear(BLACK);
+	Lcd_Clear(Global_BG_Color);
 
 //end of initialls
 
@@ -138,7 +140,33 @@ int main(void)
 			{
 				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
-				PutStringRus11(0,87,buffer,BLUE,LIGHTGREY);
+				PutStringRus11(0,87,buffer,BLUE,Global_BG_Color);
+			}
+			
+			sprintf(buffer, "# $ & ~");
+			PutStringRus11(60,60,buffer,RED,Global_BG_Color);
+			
+			// system states on screen
+			if (System.SD_Card_Present)
+			{
+				sprintf(buffer, "$");
+				PutStringRus11(118,118,buffer,GREEN,Global_BG_Color);
+			}
+			else
+			{
+			sprintf(buffer, "#");
+			PutStringRus11(118,118,buffer,RED,Global_BG_Color);
+			}
+			
+			if (System.Wifi_Present)
+			{
+				sprintf(buffer, "&");
+				PutStringRus11(105,119,buffer,GREEN,Global_BG_Color);
+			}
+			else
+			{
+				sprintf(buffer, "&");
+				PutStringRus11(105,119,buffer,RED,Global_BG_Color);
 			}
 		}// end if (one_sec_flag == 1)
 		
@@ -156,7 +184,8 @@ int main(void)
 				}
 			}
 			
-			Gui_Circle(120, 5, 2, RED);
+			//Gui_Circle(120, 5, 2, RED);
+			PutStringRus11(110,0,dot,RED,Global_BG_Color);
 			
 			Take_new_Messure(&All_data);
 			
@@ -178,7 +207,8 @@ int main(void)
 			}
 			
 			
-			Gui_Circle(120, 5, 2, LIGHTGREY);
+			//Gui_Circle(120, 5, 2, Global_BG_Color);
+			PutStringRus11(110,0,dot,Global_BG_Color,Global_BG_Color);
 		}// end if (minute_flag == 1)
 			
 		
@@ -193,10 +223,10 @@ int main(void)
 		{
 			button_was_pressed = 0;
 			sprintf(buffer, "%d", BM_1.time_presed);
-			PutStringRus11(10,110,buffer,BLUE,LIGHTGREY);
-			Store_data_in_new_file();
+			PutStringRus11(10,110,buffer,BLUE,Global_BG_Color);
+			//Store_data_in_new_file();
 			sprintf(buffer, "%d", results.SD_result);
-			PutStringRus11(50,110,buffer,BLUE,LIGHTGREY);
+			PutStringRus11(50,110,buffer,BLUE,Global_BG_Color);
 			//pfunction();
 		}
 		
@@ -231,7 +261,7 @@ void Draw_table_ex (void)
 	
 	
 				sprintf(buffer, "%.2f", All_data.Pressure_p/1000);
-				PutStringRus11(0,42,buffer,DARKGREY,LIGHTGREY);
+				PutStringRus11(0,42,buffer,DARKGREY,Global_BG_Color);
 	
         	
 				delay_ms(50);
@@ -240,18 +270,18 @@ void Draw_table_ex (void)
 				{
 					sprintf(buffer, "+%d", All_data.T_in/10);
 					//PutStringRus11(0,0,buffer,RED,LIGHTGREY);
-					PutStringRus(0,0,buffer,RED,BLACK);
+					PutStringRus(0,0,buffer,RED,Global_BG_Color);
 					sprintf(buffer, "%.2f +%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-					PutStringRus11(0,100,buffer,RED,BLACK);
+					PutStringRus11(0,100,buffer,RED,Global_BG_Color);
 					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
 					sprintf(buffer, "-%d", All_data.T_in/10);
 					//PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
-					PutStringRus(0,0,buffer,BLUE,BLACK);
+					PutStringRus(0,0,buffer,BLUE,Global_BG_Color);
 					sprintf(buffer, "%.2f -%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-					PutStringRus11(0,100,buffer,RED,BLACK);
+					PutStringRus11(0,100,buffer,RED,Global_BG_Color);
 					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				
