@@ -66,8 +66,10 @@ UINT nWritten;
 DSTATUS res;
 char str_data_name[20];
 char buffer[100], dot[2]="~";
+char BM_time_buffer[10] = "";
 SD_result_TypeDef results;
 System_TypeDef System;
+Coord_TypeDef Coordinate;
 
 uint16_t second_1_flag=0, minuts_12_flag=0;
 uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
@@ -93,7 +95,22 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
 //  MX_USB_DEVICE_Init();
-	
+	Coordinate.Tempr_in_x = 10;
+	Coordinate.Tempr_in_y = 10;
+	Coordinate.Tempr_out_x = 64;
+	Coordinate.Tempr_out_y = 10;
+	Coordinate.Dot_x = 110;
+	Coordinate.Dot_y = 0;
+	Coordinate.Presure_x = 0;
+	Coordinate.Presure_y = 52;
+	Coordinate.Time_x = 0;
+	Coordinate.Time_y = 87;
+	Coordinate.SD_char_x= 118;
+	Coordinate.SD_char_y = 118;
+	Coordinate.Wifi_char_x = 105;
+	Coordinate.Wifi_char_y = 119;
+	Coordinate.Weather_x = 96;
+	Coordinate.Weather_y = 52;
 
 	RTC_Init();
 	HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BIN);
@@ -140,34 +157,16 @@ int main(void)
 			{
 				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
-				PutStringRus11(0,87,buffer,BLUE,Global_BG_Color);
+				PutStringRus(Coordinate.Time_x,Coordinate.Time_y,buffer,BLUE,Global_BG_Color);
 			}
 			
-			sprintf(buffer, "# $ & ~");
-			PutStringRus11(60,60,buffer,RED,Global_BG_Color);
+			System_Status_Update_Screen();
 			
-			// system states on screen
-			if (System.SD_Card_Present)
-			{
-				sprintf(buffer, "$");
-				PutStringRus11(118,118,buffer,GREEN,Global_BG_Color);
-			}
-			else
-			{
-			sprintf(buffer, "#");
-			PutStringRus11(118,118,buffer,RED,Global_BG_Color);
-			}
+			sprintf(buffer, "A");
+			PutStringRus(Coordinate.Weather_x,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
+			sprintf(buffer, "B");
+			PutStringRus(Coordinate.Weather_x+16,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
 			
-			if (System.Wifi_Present)
-			{
-				sprintf(buffer, "&");
-				PutStringRus11(105,119,buffer,GREEN,Global_BG_Color);
-			}
-			else
-			{
-				sprintf(buffer, "&");
-				PutStringRus11(105,119,buffer,RED,Global_BG_Color);
-			}
 		}// end if (one_sec_flag == 1)
 		
 		
@@ -184,8 +183,7 @@ int main(void)
 				}
 			}
 			
-			//Gui_Circle(120, 5, 2, RED);
-			PutStringRus11(110,0,dot,RED,Global_BG_Color);
+			PutStringRus11(Coordinate.Dot_x,Coordinate.Dot_y,dot,RED,Global_BG_Color);
 			
 			Take_new_Messure(&All_data);
 			
@@ -200,15 +198,14 @@ int main(void)
 					count_10_min = 0;
 			}
 			
+			System_Status_Checked();
+			
 			if (pointer_count == 0)
-			{
-				//pfunction();// draw new data on screen if table
+			{// redraw data on screen
 				Draw_table_ex();
 			}
 			
-			
-			//Gui_Circle(120, 5, 2, Global_BG_Color);
-			PutStringRus11(110,0,dot,Global_BG_Color,Global_BG_Color);
+			PutStringRus11(Coordinate.Dot_x,Coordinate.Dot_y,dot,Global_BG_Color,Global_BG_Color);
 		}// end if (minute_flag == 1)
 			
 		
@@ -222,12 +219,10 @@ int main(void)
 		if (button_was_pressed == 1)
 		{
 			button_was_pressed = 0;
-			sprintf(buffer, "%d", BM_1.time_presed);
-			PutStringRus11(10,110,buffer,BLUE,Global_BG_Color);
+			PutStringRus11(10,110,BM_time_buffer,Global_BG_Color,Global_BG_Color);
+			sprintf(BM_time_buffer, "%d", BM_1.time_presed);
+			PutStringRus11(10,110,BM_time_buffer,BLUE,Global_BG_Color);
 			//Store_data_in_new_file();
-			sprintf(buffer, "%d", results.SD_result);
-			PutStringRus11(50,110,buffer,BLUE,Global_BG_Color);
-			//pfunction();
 		}
 		
 
@@ -261,7 +256,7 @@ void Draw_table_ex (void)
 	
 	
 				sprintf(buffer, "%.2f", All_data.Pressure_p/1000);
-				PutStringRus11(0,42,buffer,DARKGREY,Global_BG_Color);
+				PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,buffer,DARKGREY,Global_BG_Color);
 	
         	
 				delay_ms(50);
@@ -270,18 +265,20 @@ void Draw_table_ex (void)
 				{
 					sprintf(buffer, "+%d", All_data.T_in/10);
 					//PutStringRus11(0,0,buffer,RED,LIGHTGREY);
-					PutStringRus(0,0,buffer,RED,Global_BG_Color);
-					sprintf(buffer, "%.2f +%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-					PutStringRus11(0,100,buffer,RED,Global_BG_Color);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,buffer,RED,Global_BG_Color);
+					PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,BLUE,Global_BG_Color);
+				//	sprintf(buffer, "%.2f +%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+				//	PutStringRus11(0,100,buffer,RED,Global_BG_Color);
 					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
 					sprintf(buffer, "-%d", All_data.T_in/10);
 					//PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
-					PutStringRus(0,0,buffer,BLUE,Global_BG_Color);
-					sprintf(buffer, "%.2f -%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-					PutStringRus11(0,100,buffer,RED,Global_BG_Color);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,buffer,BLUE,Global_BG_Color);
+					PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,BLUE,Global_BG_Color);
+				//	sprintf(buffer, "%.2f -%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
+				//	PutStringRus11(0,100,buffer,RED,Global_BG_Color);
 					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				

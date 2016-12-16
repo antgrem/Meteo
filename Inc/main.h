@@ -58,7 +58,20 @@ typedef struct
 	uint8_t T_out_Present;
 	uint8_t Presure_Present;
 	uint8_t RTC_Present;
+	uint8_t Light_Status;
 } System_TypeDef;
+
+typedef struct
+{
+	uint8_t Dot_x, Dot_y;
+	uint8_t Tempr_in_x, Tempr_in_y;
+	uint8_t Tempr_out_x, Tempr_out_y;
+	uint8_t Presure_x, Presure_y;
+	uint8_t Time_x, Time_y;
+	uint8_t SD_char_x, SD_char_y;
+	uint8_t Wifi_char_x, Wifi_char_y;
+	uint8_t Weather_x, Weather_y;
+}Coord_TypeDef;
 
 void Take_new_Messure(Messure_DataTypeDef *data);
 void delay_ms(uint16_t nms);
