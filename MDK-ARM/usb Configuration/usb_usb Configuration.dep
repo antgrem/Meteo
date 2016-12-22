@@ -995,9 +995,9 @@ I (..\Fatf\src\diskio.h)(0x562E3696)
 I (..\Fatf\src\integer.h)(0x56CF0FA4)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54763950)
 I (../Inc/BMP_graph.h)(0x5809FE99)
-I (../Inc/Lcd_Driver.h)(0x5756D5F0)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
 I (../Inc/buttoms.h)(0x584AE47C)
-F (../Src/main.c)(0x58540125)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\main.o" --omf_browse "usb configuration\main.crf" --depend "usb configuration\main.d")
+F (../Src/main.c)(0x585C187B)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\main.o" --omf_browse "usb configuration\main.crf" --depend "usb configuration\main.d")
 I (../Inc/main.h)(0x5853EF47)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x56B105A4)
 I (../Inc/stm32f1xx_hal_conf.h)(0x56CF2654)
@@ -1036,7 +1036,7 @@ I (../Inc/usbd_conf.h)(0x56B105DC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x54763950)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x54763950)
 I (../Inc/LM75_hal.h)(0x57AB4145)
-I (../Inc/Lcd_Driver.h)(0x5756D5F0)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
 I (../Inc/delay.h)(0x56C47EA2)
 I (../Inc/GUI.h)(0x56C47EA2)
 I (../Inc/I2Cdev.h)(0x56C75D98)
@@ -1052,7 +1052,7 @@ I (..\Fatf\fattime.h)(0x554D99B0)
 I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x54763950)
 I (../Inc/My_font.h)(0x5805CD6C)
 I (../Inc/BMP_graph.h)(0x5809FE99)
-I (../Inc/Init.h)(0x57B1DDF7)
+I (../Inc/Init.h)(0x58595620)
 I (../Inc/Terminal.h)(0x580A095A)
 I (../Inc/Hello_screen.h)(0x58525519)
 I (../Inc/buttoms.h)(0x584AE47C)
@@ -1120,7 +1120,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h)(0x56B105A4)
-I (../Inc/Lcd_Driver.h)(0x5756D5F0)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
 I (../Inc/delay.h)(0x56C47EA2)
 F (..\Src\GUI.c)(0x56C47978)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\gui.o" --omf_browse "usb configuration\gui.crf" --depend "usb configuration\gui.d")
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x56B105A4)
@@ -1154,7 +1154,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h)(0x56B105A4)
-I (../Inc/Lcd_Driver.h)(0x5756D5F0)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
 I (../Inc/GUI.h)(0x56C47EA2)
 I (../Inc/delay.h)(0x56C47EA2)
 I (../Inc/font.h)(0x5751754D)
@@ -1192,9 +1192,9 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h)(0x56B105A4)
 I (../Inc/GUI.h)(0x56C47EA2)
-I (../Inc/Lcd_Driver.h)(0x5756D5F0)
-F (..\Src\Init.c)(0x584AE883)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\init.o" --omf_browse "usb configuration\init.crf" --depend "usb configuration\init.d")
-I (../Inc/Init.h)(0x57B1DDF7)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
+F (..\Src\Init.c)(0x5859567A)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\init.o" --omf_browse "usb configuration\init.crf" --depend "usb configuration\init.d")
+I (../Inc/Init.h)(0x58595620)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x56B105A4)
 I (../Inc/stm32f1xx_hal_conf.h)(0x56CF2654)
 I (../Inc/mxconstants.h)(0x56B105DC)
@@ -1231,6 +1231,24 @@ I (../Inc/I2Cdev.h)(0x56C75D98)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x54763950)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x54763950)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5476394E)
+I (../Inc/main.h)(0x5853EF47)
+I (../Inc/usb_device.h)(0x56B105DC)
+I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h)(0x56B10562)
+I (../Inc/usbd_conf.h)(0x56B105DC)
+I (../Inc/LM75_hal.h)(0x57AB4145)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
+I (../Inc/delay.h)(0x56C47EA2)
+I (../Inc/GUI.h)(0x56C47EA2)
+I (..\Fatf\src\ffconf.h)(0x57CFC09B)
+I (..\Fatf\src\diskio.h)(0x562E3696)
+I (..\Fatf\src\integer.h)(0x56CF0FA4)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54763950)
+I (..\Fatf\src\ff.h)(0x562E2F9C)
+I (..\Fatf\sd_spi_stm32.h)(0x554D99B0)
+I (..\Fatf\fattime.h)(0x554D99B0)
+I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x54763950)
+I (../Inc/My_font.h)(0x5805CD6C)
+I (../Inc/BMP_graph.h)(0x5809FE99)
 F (..\Src\BMP_graph.c)(0x5809FE99)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\bmp_graph.o" --omf_browse "usb configuration\bmp_graph.crf" --depend "usb configuration\bmp_graph.d")
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x56B105A4)
 I (../Inc/stm32f1xx_hal_conf.h)(0x56CF2654)
@@ -1271,7 +1289,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5476394E)
 I (../Inc/LM75_hal.h)(0x57AB4145)
 I (../Inc/delay.h)(0x56C47EA2)
 I (../Inc/BMP_graph.h)(0x5809FE99)
-I (../Inc/Lcd_Driver.h)(0x5756D5F0)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
 I (../Inc/GUI.h)(0x56C47EA2)
 I (../Inc/My_font.h)(0x5805CD6C)
 I (../Inc/main.h)(0x5853EF47)
@@ -1286,7 +1304,7 @@ I (..\Fatf\src\ff.h)(0x562E2F9C)
 I (..\Fatf\sd_spi_stm32.h)(0x554D99B0)
 I (..\Fatf\fattime.h)(0x554D99B0)
 I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x54763950)
-I (../Inc/Init.h)(0x57B1DDF7)
+I (../Inc/Init.h)(0x58595620)
 F (..\Src\Terminal.c)(0x584181FA)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\terminal.o" --omf_browse "usb configuration\terminal.crf" --depend "usb configuration\terminal.d")
 I (../Inc/Terminal.h)(0x580A095A)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x56B105A4)
@@ -1320,11 +1338,11 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h)(0x56B105A4)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h)(0x56B105A4)
-I (../Inc/Lcd_Driver.h)(0x5756D5F0)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
 I (../Inc/delay.h)(0x56C47EA2)
 I (../Inc/GUI.h)(0x56C47EA2)
 I (../Inc/My_font.h)(0x5805CD6C)
-F (..\Src\Hello_screen.c)(0x5853F1F7)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\hello_screen.o" --omf_browse "usb configuration\hello_screen.crf" --depend "usb configuration\hello_screen.d")
+F (..\Src\Hello_screen.c)(0x5859709A)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\hello_screen.o" --omf_browse "usb configuration\hello_screen.crf" --depend "usb configuration\hello_screen.d")
 I (../Inc/main.h)(0x5853EF47)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x56B105A4)
 I (../Inc/stm32f1xx_hal_conf.h)(0x56CF2654)
@@ -1363,7 +1381,7 @@ I (../Inc/usbd_conf.h)(0x56B105DC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x54763950)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x54763950)
 I (../Inc/LM75_hal.h)(0x57AB4145)
-I (../Inc/Lcd_Driver.h)(0x5756D5F0)
+I (../Inc/Lcd_Driver.h)(0x585C168D)
 I (../Inc/delay.h)(0x56C47EA2)
 I (../Inc/GUI.h)(0x56C47EA2)
 I (../Inc/I2Cdev.h)(0x56C75D98)
@@ -1379,7 +1397,7 @@ I (..\Fatf\fattime.h)(0x554D99B0)
 I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x54763950)
 I (../Inc/My_font.h)(0x5805CD6C)
 I (../Inc/BMP_graph.h)(0x5809FE99)
-I (../Inc/Init.h)(0x57B1DDF7)
+I (../Inc/Init.h)(0x58595620)
 I (../Inc/hello_screen.h)(0x58525519)
 F (..\Src\buttoms.c)(0x584EAF79)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I D:\Temp\01_MC\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="514" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\buttoms.o" --omf_browse "usb configuration\buttoms.crf" --depend "usb configuration\buttoms.d")
 I (../Inc/buttoms.h)(0x584AE47C)

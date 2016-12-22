@@ -34,14 +34,9 @@ void Sensor_test(void)
 volatile	SD_result_TypeDef res;
 	int16_t test;
 	char df[20];
+	uint8_t dy=10;
 	
-	System.Presure_Present = 0;
-	System.RTC_Present = 0;
-	System.SD_Card_Present = 0;
-	System.T_in_Present = 0;
-	System.T_out_Present = 0;
-	System.Wifi_Present = 0;
-	System.Light_Status = HAL_GPIO_ReadPin(LCD_PORT_P, LCD_LED);
+
 	
 	LCD_LED_SET;
 	Lcd_Clear(BLACK);
@@ -49,54 +44,60 @@ volatile	SD_result_TypeDef res;
 	
 	if (LM75_Temperature_ex(&test) != 0)
 		{// we have problem with sensor
-			PutStringRus11(10,10,"IN T sensor: ERROR",RED,Global_BG_Color);
+			PutStringRus11(10,dy,"IN T sensor: ERROR",RED,Global_BG_Color);
 		}
 	else 
 		{
-			PutStringRus11(10,10,"IN T sensor: OK",GREEN,Global_BG_Color);
+			PutStringRus11(10,dy,"IN T sensor: OK",GREEN,Global_BG_Color);
 			System.T_in_Present = 1;
 		}
 		delay_ms(250);	
+		dy += 22;
 	
 		if (BMP085_testConnection() == 1)
 		{
-			PutStringRus11(10,30,"P sensor: OK",GREEN,Global_BG_Color);
+			PutStringRus11(10,dy,"P sensor: OK",GREEN,Global_BG_Color);
 			System.Presure_Present = 1;
 		}
 		else 
 		{
-			PutStringRus11(10,30,"P sensor: ERROR",RED,Global_BG_Color);
+			PutStringRus11(10,dy,"P sensor: ERROR",RED,Global_BG_Color);
 		}
 		delay_ms(250);
+		dy += 22;
 		
 		if (HAL_RTCEx_BKUPRead(&hrtc, 1) == RTC_IS_SET)
 		{
-			PutStringRus11(10,60,"RTC: OK",GREEN,Global_BG_Color);
+			PutStringRus11(10,dy,"RTC: OK",GREEN,Global_BG_Color);
 			System.RTC_Present = 1;
 		}
 		else 
 		{
-			PutStringRus11(10,60,"RTC: ERROR",RED,Global_BG_Color);
+			PutStringRus11(10,dy,"RTC: ERROR",RED,Global_BG_Color);
 			System.RTC_Present = 0;
 		}
 		
 		delay_ms(250);
+		dy += 22;
 		
-		PutStringRus11(10,90,"OUT T ERROR",RED,Global_BG_Color);
+		PutStringRus11(10,dy,"OUT T ERROR",RED,Global_BG_Color);
+		
+		dy += 22;
 		
 		res.SD_result = f_mount(&FATFS_Obj, "", 1);
 
 	if (res.SD_result == FR_OK) 
 		{
-				PutStringRus11(10,110,"SD: OK",GREEN,Global_BG_Color);
+				PutStringRus11(10,dy,"SD: OK",GREEN,Global_BG_Color);
 				System.SD_Card_Present = 1;
 				f_mount(0, "0:", 1);
 		}
 	else 
 		{
 			sprintf(df, "%d", res.SD_result);
-			PutStringRus11(10,110,"SD: ERROR",RED,Global_BG_Color);
-			PutStringRus11(10,120,df,RED,BLACK);
+			PutStringRus11(10,dy,"SD: ERROR",RED,Global_BG_Color);
+			dy += 11;
+			PutStringRus11(10,dy,df,RED,BLACK);
 		}
 				
 	delay_ms(500);

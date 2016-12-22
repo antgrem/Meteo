@@ -5,6 +5,39 @@ RTC_HandleTypeDef hrtc;
 RTC_TimeTypeDef sTime;
 RTC_DateTypeDef sDate;
 
+extern Coord_TypeDef Coordinate;
+extern System_TypeDef System;
+
+void Init_Variebles (void)
+{
+	//Coordinates of text zone on screen
+	Coordinate.Tempr_in_x = 10;
+	Coordinate.Tempr_in_y = 10;
+	Coordinate.Tempr_out_x = 64;
+	Coordinate.Tempr_out_y = 10;
+	Coordinate.Dot_x = 110;
+	Coordinate.Dot_y = 0;
+	Coordinate.Presure_x = 0;
+	Coordinate.Presure_y = 52;
+	Coordinate.Time_x = 0;
+	Coordinate.Time_y = 87;
+	Coordinate.SD_char_x= 118;
+	Coordinate.SD_char_y = 118;
+	Coordinate.Wifi_char_x = 105;
+	Coordinate.Wifi_char_y = 119;
+	Coordinate.Weather_x = 96;
+	Coordinate.Weather_y = 52;
+	
+	// sensors avaliable
+	System.Presure_Present = 0;
+	System.RTC_Present = 0;
+	System.SD_Card_Present = 0;
+	System.T_in_Present = 0;
+	System.T_out_Present = 0;
+	System.Wifi_Present = 0;
+	System.Light_Status = HAL_GPIO_ReadPin(LCD_PORT_P, LCD_LED);
+}
+
 void RTC_Init(void)
 {
 

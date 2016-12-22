@@ -77,6 +77,8 @@ uint8_t minuts_10=0, count_10_min=0;
 uint8_t end_of_day_flag=0;
 uint32_t count_32;
 uint16_t stage_sd=0;
+uint16_t color = RED;
+uint16_t count=BLUE;
 
 
 void (* pfunction) (void);
@@ -91,26 +93,13 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
+	
+	Init_Variebles();
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
 //  MX_USB_DEVICE_Init();
-	Coordinate.Tempr_in_x = 10;
-	Coordinate.Tempr_in_y = 10;
-	Coordinate.Tempr_out_x = 64;
-	Coordinate.Tempr_out_y = 10;
-	Coordinate.Dot_x = 110;
-	Coordinate.Dot_y = 0;
-	Coordinate.Presure_x = 0;
-	Coordinate.Presure_y = 52;
-	Coordinate.Time_x = 0;
-	Coordinate.Time_y = 87;
-	Coordinate.SD_char_x= 118;
-	Coordinate.SD_char_y = 118;
-	Coordinate.Wifi_char_x = 105;
-	Coordinate.Wifi_char_y = 119;
-	Coordinate.Weather_x = 96;
-	Coordinate.Weather_y = 52;
+	
 
 	RTC_Init();
 	HAL_RTC_GetTime(&hrtc, &(sTime), RTC_FORMAT_BIN);
@@ -155,9 +144,10 @@ int main(void)
 			one_sec_flag = 0;
 			if (pointer_count == 0)
 			{
+								
 				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
-				PutStringRus(Coordinate.Time_x,Coordinate.Time_y,buffer,BLUE,Global_BG_Color);
+				PutStringRus(Coordinate.Time_x,Coordinate.Time_y,buffer,count,Global_BG_Color);
 			}
 			
 			System_Status_Update_Screen();
@@ -251,7 +241,7 @@ void First_Draw_Table (void)
 
 void Draw_table_ex (void)
 {
-	
+	uint16_t color;
 	Take_new_Messure(&All_data);
 	
 	
@@ -263,23 +253,95 @@ void Draw_table_ex (void)
 
 				if (All_data.T_in >= 0)
 				{
+					
+					if (All_data.T_in > 250)
+					{
+						color = RED;
+					}
+					else if (All_data.T_in > 100)
+					{
+						color = 0xFA8A;
+					}
+					else
+					{
+						color = 0xFE55;
+					}
 					sprintf(buffer, "+%d", All_data.T_in/10);
 					//PutStringRus11(0,0,buffer,RED,LIGHTGREY);
-					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,buffer,RED,Global_BG_Color);
-					PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,BLUE,Global_BG_Color);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,buffer,color,Global_BG_Color);
 				//	sprintf(buffer, "%.2f +%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
 				//	PutStringRus11(0,100,buffer,RED,Global_BG_Color);
 					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
 				}
 				else 
 				{
+					
+					if (All_data.T_in < -200)
+					{
+						color = BLUE;
+					}
+					else if (All_data.T_in <-100)
+					{
+						color = 0x6B5F;
+					}
+					else
+					{
+						color = 0xB65F;
+					}
+					
 					sprintf(buffer, "-%d", All_data.T_in/10);
 					//PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
-					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,buffer,BLUE,Global_BG_Color);
-					PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,BLUE,Global_BG_Color);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,buffer,color,Global_BG_Color);
 				//	sprintf(buffer, "%.2f -%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
 				//	PutStringRus11(0,100,buffer,RED,Global_BG_Color);
 					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
+				}
+				
+				if (System.T_out_Present == 0)
+				{
+					sprintf(buffer, "---");
+					PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,DARKGREY,Global_BG_Color);
+				}
+				else
+				{
+					if (All_data.T_out >= 0)
+						{
+							
+							if (All_data.T_out > 250)
+								{
+									color = RED;
+								}
+								else if (All_data.T_out > 100)
+								{
+									color = 0xFA8A;
+								}
+								else
+								{
+									color = 0xFE55;
+								}
+					
+							sprintf(buffer, "+%d", All_data.T_out/10);
+							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,color,Global_BG_Color);
+						}
+						else 
+						{
+							
+							if (All_data.T_out < -200)
+								{
+									color = BLUE;
+								}
+								else if (All_data.T_out <-100)
+								{
+									color = 0x6B5F;
+								}
+								else
+								{
+									color = 0xB65F;
+								}
+					
+							sprintf(buffer, "-%d", All_data.T_out/10);
+							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,color,Global_BG_Color);
+						}
 				}
 				
 				//PutStringRus11(64,0,buffer,BLUE,LIGHTGREY);

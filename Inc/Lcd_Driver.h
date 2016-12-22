@@ -3,6 +3,10 @@
 
 #include "stm32f1xx_hal.h"
 
+// red color 5 bit
+// green color 6 bit !!!
+// blue color 5 bit
+
 #define RED  	0xF800
 #define GREEN	0x07E0
 #define BLUE 	0x001F
