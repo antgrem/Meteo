@@ -18,10 +18,7 @@ void Morda (void);
 void Error_Handler(void);
 void First_Draw_Table (void);
 
-
-
 void Draw_table_ex (void);
-
 	
 extern uint16_t I2Cdev_readTimeout;
 extern I2C_HandleTypeDef * I2Cdev_hi2c;
@@ -67,6 +64,7 @@ DSTATUS res;
 char str_data_name[20];
 char buffer[100], dot[2]="~";
 char BM_time_buffer[10] = "";
+char T_in_string[10] = "", T_out_string[10] = "", Presure_string[10]="", Time_string[10]="";
 SD_result_TypeDef results;
 System_TypeDef System;
 Coord_TypeDef Coordinate;
@@ -146,8 +144,9 @@ int main(void)
 			{
 								
 				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-				sprintf(buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
-				PutStringRus(Coordinate.Time_x,Coordinate.Time_y,buffer,count,Global_BG_Color);
+				PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,Global_BG_Color,Global_BG_Color);
+				sprintf(Time_string, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+				PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,count,Global_BG_Color);
 			}
 			
 			System_Status_Update_Screen();
@@ -245,8 +244,9 @@ void Draw_table_ex (void)
 	Take_new_Messure(&All_data);
 	
 	
-				sprintf(buffer, "%.2f", All_data.Pressure_p/1000);
-				PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,buffer,DARKGREY,Global_BG_Color);
+				PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,Presure_string,Global_BG_Color,Global_BG_Color);
+				sprintf(Presure_string, "%.2f", All_data.Pressure_p/1000);
+				PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,Presure_string,DARKGREY,Global_BG_Color);
 	
         	
 				delay_ms(50);
@@ -266,12 +266,9 @@ void Draw_table_ex (void)
 					{
 						color = 0xFE55;
 					}
-					sprintf(buffer, "+%d", All_data.T_in/10);
-					//PutStringRus11(0,0,buffer,RED,LIGHTGREY);
-					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,buffer,color,Global_BG_Color);
-				//	sprintf(buffer, "%.2f +%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-				//	PutStringRus11(0,100,buffer,RED,Global_BG_Color);
-					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,color,Global_BG_Color);
+					sprintf(T_in_string, "+%d", All_data.T_in/10);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,color,Global_BG_Color);
 				}
 				else 
 				{
@@ -288,13 +285,9 @@ void Draw_table_ex (void)
 					{
 						color = 0xB65F;
 					}
-					
-					sprintf(buffer, "-%d", All_data.T_in/10);
-					//PutStringRus11(0,0,buffer,BLUE,LIGHTGREY);
-					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,buffer,color,Global_BG_Color);
-				//	sprintf(buffer, "%.2f -%d %02d:%02d:%02d", All_data.Pressure_p/1000, All_data.T_in/10, All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-				//	PutStringRus11(0,100,buffer,RED,Global_BG_Color);
-					//PutStringRus(0,100,buffer,RED,LIGHTGREY);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,color,Global_BG_Color);
+					sprintf(T_in_string, "-%d", All_data.T_in/10);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,color,Global_BG_Color);
 				}
 				
 				if (System.T_out_Present == 0)
@@ -319,9 +312,9 @@ void Draw_table_ex (void)
 								{
 									color = 0xFE55;
 								}
-					
-							sprintf(buffer, "+%d", All_data.T_out/10);
-							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,color,Global_BG_Color);
+							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,color,Global_BG_Color);
+							sprintf(T_out_string, "+%d", All_data.T_out/10);
+							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,color,Global_BG_Color);
 						}
 						else 
 						{
@@ -338,20 +331,12 @@ void Draw_table_ex (void)
 								{
 									color = 0xB65F;
 								}
-					
-							sprintf(buffer, "-%d", All_data.T_out/10);
-							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,buffer,color,Global_BG_Color);
+							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,color,Global_BG_Color);
+							sprintf(T_out_string, "-%d", All_data.T_out/10);
+							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,color,Global_BG_Color);
 						}
 				}
 				
-				//PutStringRus11(64,0,buffer,BLUE,LIGHTGREY);
-		
-			//	sprintf(buffer, "%02d:%02d:%02d", All_data.Time.Hours, All_data.Time.Minutes, All_data.Time.Seconds);
-			//	PutStringRus11(0,87,buffer,BLUE,LIGHTGREY);
-				
-				
-				
-				//delay_ms(800);
 }
 
 void Morda (void)
