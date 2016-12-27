@@ -111,19 +111,7 @@ void RTC_Alarm_IRQHandler(void)
 // buttom
 void EXTI1_IRQHandler (void)
 {
-//	pointer_count++;
-//	pointer_count &= 0x01;
-//	if (pointer_count)
-//	{
-//			
-//		pfunction = First_Draw_Graph;
-//		button_was_pressed = 1;
-//	}
-//	else 
-//	{
-//		pfunction = First_Draw_Table;
-//		button_was_pressed = 1;
-//	}
+
 	if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)==0)
 	{//buttom pressed
 		BM_1.time_presed = 0;

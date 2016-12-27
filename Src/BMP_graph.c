@@ -22,7 +22,7 @@ int16_t MAX_temperature, MIN_temperature;
 float old_pressure;
 int16_t old_temprature;
 
-int16_t tempr_data;
+
 int16_t temp_t=150;// half of full scale
 
 uint8_t graph_i=0;

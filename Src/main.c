@@ -13,10 +13,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 
-
-void Morda (void);
 void Error_Handler(void);
-void First_Draw_Table (void);
 
 void Draw_table_ex (void);
 	
@@ -27,9 +24,6 @@ extern I2C_HandleTypeDef hi2c2;
 extern SPI_HandleTypeDef hspi1;
 extern RTC_HandleTypeDef hrtc;
 
-extern float Average_pressure;
-extern int16_t Averaga_temperature;
-extern int16_t tempr_data;
 extern uint8_t pointer_count;
 extern uint8_t sec_count, minute_flag;
 extern uint8_t button_was_pressed;
@@ -41,9 +35,6 @@ extern RTC_DateTypeDef sDate;
 
 extern Buttom_struct BM_1, BM_2, BM_3;
 
-RTC_TimeTypeDef sTime_temp;
-RTC_DateTypeDef sDate_temp;
-
 Messure_DataTypeDef All_data;
 Messure_DataTypeDef Day_data_Array[DAY_DATA_ARRAY_LENGTH];
 
@@ -54,15 +45,16 @@ uint16_t Global_Font_Color = RED, Global_BG_Color = BLACK;
 
 volatile uint8_t store_data = 0;
 uint16_t count_time_store, count_time_store_en=0;
-	
+uint8_t hour_flag = 0;
+
 FRESULT result;
 FATFS FATFS_Obj;
 FIL file;
 FILINFO fno;
 UINT nWritten;
 DSTATUS res;
-char str_data_name[20];
-char buffer[100], dot[2]="~";
+char str_file_name[20];
+char buffer[10], dot[2]="~";
 char BM_time_buffer[10] = "";
 char T_in_string[10] = "", T_out_string[10] = "", Presure_string[10]="", Time_string[10]="";
 SD_result_TypeDef results;
@@ -73,10 +65,8 @@ uint16_t second_1_flag=0, minuts_12_flag=0;
 uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
 uint8_t minuts_10=0, count_10_min=0;
 uint8_t end_of_day_flag=0;
-uint32_t count_32;
 uint16_t stage_sd=0;
-uint16_t color = RED;
-uint16_t count=BLUE;
+
 
 
 void (* pfunction) (void);
@@ -124,13 +114,6 @@ int main(void)
 
 //end of initialls
 
-	pfunction = Draw_table_ex;	
-	pfunction();
-	
-	Take_new_Messure(&All_data);
-	Average_pressure = All_data.Pressure_p/1000;
-	Averaga_temperature = All_data.T_in;
-
 	//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
 
@@ -138,25 +121,25 @@ int main(void)
 	while(1)
 	{
 		if (one_sec_flag == 1)
-		{// one second event
-			one_sec_flag = 0;
-			if (pointer_count == 0)
-			{
-								
-				HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-				PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,Global_BG_Color,Global_BG_Color);
-				sprintf(Time_string, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
-				PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,count,Global_BG_Color);
-			}
-			
-			System_Status_Update_Screen();
-			
-			sprintf(buffer, "A");
-			PutStringRus(Coordinate.Weather_x,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
-			sprintf(buffer, "B");
-			PutStringRus(Coordinate.Weather_x+16,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
-			
-		}// end if (one_sec_flag == 1)
+			{// one second event
+				one_sec_flag = 0;
+				
+				if (pointer_count == 0)
+					{
+						HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+						PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,Global_BG_Color,Global_BG_Color);
+						sprintf(Time_string, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+						PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,BLUE,Global_BG_Color);
+					}
+				
+				System_Status_Update_Screen();
+				
+				sprintf(buffer, "A");
+				PutStringRus(Coordinate.Weather_x,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
+				sprintf(buffer, "B");
+				PutStringRus(Coordinate.Weather_x+16,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
+				
+			}// end if (one_sec_flag == 1)
 		
 		
 		if (minute_flag == 1)
@@ -165,6 +148,7 @@ int main(void)
 			if (++min_count == 60)
 			{
 				min_count = 0;
+				hour_flag = 1;
 				if (++hour_count == 24)
 				{
 					hour_count = 0;
@@ -189,14 +173,16 @@ int main(void)
 			
 			System_Status_Checked();
 			
-			if (pointer_count == 0)
-			{// redraw data on screen
-				Draw_table_ex();
-			}
+			Draw_table_ex();// redraw data on screen
 			
 			PutStringRus11(Coordinate.Dot_x,Coordinate.Dot_y,dot,Global_BG_Color,Global_BG_Color);
 		}// end if (minute_flag == 1)
 			
+		if (hour_flag == 1)
+			{//one hour remain
+				hour_flag = 0;
+			
+			}// end if (hour_flag == 1)
 		
 		if (end_of_day_flag == 1)
 		{// wow, midnight 
@@ -213,40 +199,23 @@ int main(void)
 			PutStringRus11(10,110,BM_time_buffer,BLUE,Global_BG_Color);
 			//Store_data_in_new_file();
 		}
-		
 
-	}
+	}// end while(1)
 
 
 }
 
-
-void First_Draw_Table (void)
-{
-	Lcd_Clear(LIGHTGREY);
-	
-	Gui_DrawLine(63, 0, 63, 40, DARKGREY);
-	Gui_DrawLine(62, 0, 62, 40, DARKGREY);
-	
-	Gui_DrawLine(0, 40, 127, 40, DARKGREY);
-	Gui_DrawLine(0, 41, 127, 41, DARKGREY);
-	
-	Gui_DrawLine(0, 85, 127, 85, DARKGREY);
-	Gui_DrawLine(0, 86, 127, 86, DARKGREY);
-	
-	pfunction = Draw_table_ex;
-}
 
 
 void Draw_table_ex (void)
 {
 	uint16_t color;
-	Take_new_Messure(&All_data);
 	
+	//Take_new_Messure(&All_data);
 	
-				PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,Presure_string,Global_BG_Color,Global_BG_Color);
-				sprintf(Presure_string, "%.2f", All_data.Pressure_p/1000);
-				PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,Presure_string,DARKGREY,Global_BG_Color);
+	PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,Presure_string,Global_BG_Color,Global_BG_Color);
+	sprintf(Presure_string, "%.2f", All_data.Pressure_p/1000);
+	PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,Presure_string,DARKGREY,Global_BG_Color);
 	
         	
 				delay_ms(50);
@@ -339,20 +308,6 @@ void Draw_table_ex (void)
 				
 }
 
-void Morda (void)
-{//draw lines for meteo station
-	
-	Gui_DrawLine(63, 0, 63, 40, DARKGREY);
-	Gui_DrawLine(62, 0, 62, 40, DARKGREY);
-	
-	Gui_DrawLine(0, 40, 127, 40, DARKGREY);
-	Gui_DrawLine(0, 41, 127, 41, DARKGREY);
-	
-	Gui_DrawLine(0, 85, 127, 85, DARKGREY);
-	Gui_DrawLine(0, 86, 127, 86, DARKGREY);
-	
-}
-
 
 void Take_new_Messure(Messure_DataTypeDef *data)
 {
@@ -381,6 +336,7 @@ SD_result_TypeDef Store_data_in_new_file(void)
 	count_time_store = 0;
 	count_time_store_en = 1;
 	SD_result_TypeDef res;
+	char buff[100];
 	
 	res.SD_result = f_mount(&FATFS_Obj, "", 0);
 	res.Stage = 0;
@@ -391,29 +347,29 @@ SD_result_TypeDef Store_data_in_new_file(void)
 			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
 			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 			
-			sprintf(str_data_name, "%04d%02d%02d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
-			res.SD_result = f_open(&file, str_data_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+			sprintf(str_file_name, "%04d%02d%02d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+			res.SD_result = f_open(&file, str_file_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 			res.Stage = 1;
 			if (res.SD_result == FR_OK)
 				{//write redline
 
-					sprintf(buffer, "Time\tT_in\tT_out\tPresure\t\n");
+					sprintf(buff, "Time\tT_in\tT_out\tPresure\t\n");
 					res.SD_result = f_lseek(&file, f_size(&file));
 					res.Stage = 2;
 					if(res.SD_result == FR_OK)
 						{}//go to end of file
 						
 							/* If we put more than 0 characters (everything OK) */
-							count_store_data = f_puts(buffer, &file);
+							count_store_data = f_puts(buff, &file);
 						if (count_store_data > 0) 
 							{}//data were stored, but what to do I don't know
 								
 						for (ij=0; ij < DAY_DATA_ARRAY_LENGTH; ij++)
 							{
 								
-								sprintf(buffer, "%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
+								sprintf(buff, "%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
 								
-								count_store_data = f_puts(buffer, &file);
+								count_store_data = f_puts(buff, &file);
 							}
 							
 					f_close(&file);	

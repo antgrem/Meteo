@@ -34,7 +34,6 @@
 "usb configuration\gui.o"
 "usb configuration\my_font.o"
 "usb configuration\init.o"
-"usb configuration\bmp_graph.o"
 "usb configuration\terminal.o"
 "usb configuration\hello_screen.o"
 "usb configuration\buttoms.o"
