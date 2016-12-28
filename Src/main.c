@@ -124,8 +124,8 @@ int main(void)
 				if (pointer_count == 0)
 					{
 						HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-						PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,Global_BG_Color,Global_BG_Color);
-						sprintf(Time_string, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+					//	PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,Global_BG_Color,Global_BG_Color);
+						sprintf(Time_string, "%02d:%02d:%02d;", sTime.Hours, sTime.Minutes, sTime.Seconds);
 						PutStringRus(Coordinate.Time_x,Coordinate.Time_y,Time_string,BLUE,Global_BG_Color);
 					}
 				
