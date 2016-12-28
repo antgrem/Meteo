@@ -76,5 +76,7 @@ typedef struct
 void Take_new_Messure(Messure_DataTypeDef *data);
 void delay_ms(uint16_t nms);
 SD_result_TypeDef Store_data_in_new_file(void);
+SD_result_TypeDef Create_new_file(void);
+SD_result_TypeDef Write_file(void);
 
 #endif

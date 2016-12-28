@@ -44,7 +44,6 @@
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern RTC_HandleTypeDef hrtc;
 extern void Draw_table (void);
-extern void (* pfunction) (void);
 extern void First_Draw_Table (void);
 
 extern Buttom_struct BM_1, BM_2, BM_3;

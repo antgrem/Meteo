@@ -69,9 +69,6 @@ uint16_t stage_sd=0;
 
 
 
-void (* pfunction) (void);
-
-
 int main(void)
 {
   /* MCU Configuration----------------------------------------------------------*/
@@ -181,13 +178,13 @@ int main(void)
 		if (hour_flag == 1)
 			{//one hour remain
 				hour_flag = 0;
-			
+				//Write_file();
 			}// end if (hour_flag == 1)
 		
 		if (end_of_day_flag == 1)
 		{// wow, midnight 
 			end_of_day_flag = 0;
-			//Store_data_in_new_file();
+			Create_new_file();
 		}
 
 		
@@ -386,6 +383,95 @@ SD_result_TypeDef Store_data_in_new_file(void)
 		return res;
 }
 
+
+// Store data in file
+SD_result_TypeDef Write_file(void)
+{ //FRESULT result;
+	uint8_t ij;
+	count_time_store = 0;
+	count_time_store_en = 1;
+	SD_result_TypeDef res;
+	char buff[100];
+	
+	res.SD_result = f_mount(&FATFS_Obj, "", 0);
+	res.Stage = 0;
+
+	if (res.SD_result == FR_OK) 
+		{
+				
+			res.SD_result = f_open(&file, str_file_name, FA_OPEN_EXISTING | FA_READ | FA_WRITE);
+			res.Stage = 1;
+			if (res.SD_result == FR_OK)
+				{//write redline
+
+					res.SD_result = f_lseek(&file, f_size(&file));
+					res.Stage = 2;
+					if(res.SD_result == FR_OK)
+						{}//go to end of file
+								
+						for (ij=0; ij < DAY_DATA_ARRAY_LENGTH; ij++)
+							{
+								
+								sprintf(buff, "%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
+								
+								count_store_data = f_puts(buff, &file);
+							}
+							
+					f_close(&file);	
+				}			
+					
+						/* Unmount drive, don't forget this! */
+						f_mount(0, "0:", 1);
+			}//end mount SD
+			
+		return res;
+}
+
+
+// create new file in midnight
+SD_result_TypeDef Create_new_file(void)
+{ //FRESULT result;
+	count_time_store = 0;
+	count_time_store_en = 1;
+	SD_result_TypeDef res;
+	char buff[100];
+	
+	res.SD_result = f_mount(&FATFS_Obj, "", 0);
+	res.Stage = 0;
+
+	if (res.SD_result == FR_OK) 
+		{
+				
+			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
+			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+			
+			sprintf(str_file_name, "%04d%02d%02d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+			res.SD_result = f_open(&file, str_file_name, FA_CREATE_NEW | FA_READ | FA_WRITE);
+			res.Stage = 1;
+			if (res.SD_result == FR_OK)
+				{//write redline
+					
+					//first line is day
+					count_store_data = f_puts(str_file_name, &file);
+						if (count_store_data == sizeof(str_file_name)) 
+							{}//data were stored, but what to do I don't know
+					
+					sprintf(buff, "\nTime\tT_in\tT_out\tPresure\t\n");
+					
+					/* If we put more than 0 characters (everything OK) */
+					count_store_data = f_puts(buff, &file);
+						if (count_store_data > 0) 
+							{}//data were stored, but what to do I don't know
+																			
+					f_close(&file);	
+				}			
+					
+						/* Unmount drive, don't forget this! */
+						f_mount(0, "0:", 1);
+			}//end mount SD
+		
+		return res;
+}
 
 
 /**
