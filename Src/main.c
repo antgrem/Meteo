@@ -104,7 +104,8 @@ int main(void)
 	//Lcd_Clear(LIGHTGREY);	
 	
 //		Terminal_shift_line();
-		
+	sprintf(str_file_name, "%04d%02d%02d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+	
 	Hello_Screen();
 	Sensor_test();
 	Lcd_Clear(Global_BG_Color);
@@ -399,7 +400,7 @@ SD_result_TypeDef Write_file(void)
 	if (res.SD_result == FR_OK) 
 		{
 				
-			res.SD_result = f_open(&file, str_file_name, FA_OPEN_EXISTING | FA_READ | FA_WRITE);
+			res.SD_result = f_open(&file, str_file_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 			res.Stage = 1;
 			if (res.SD_result == FR_OK)
 				{//write redline
