@@ -3,6 +3,7 @@ usb configuration\i2cdev.o: ../Inc/I2Cdev.h
 usb configuration\i2cdev.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 usb configuration\i2cdev.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 usb configuration\i2cdev.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+usb configuration\i2cdev.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 usb configuration\i2cdev.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 usb configuration\i2cdev.o: ../Inc/stm32f1xx_hal_conf.h
 usb configuration\i2cdev.o: ../Inc/mxconstants.h

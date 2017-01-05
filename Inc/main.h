@@ -79,4 +79,6 @@ SD_result_TypeDef Store_data_in_new_file(void);
 SD_result_TypeDef Create_new_file(void);
 SD_result_TypeDef Write_file(void);
 
+uint32_t ReadTimeCounter(RTC_HandleTypeDef* hrtc);
+
 #endif

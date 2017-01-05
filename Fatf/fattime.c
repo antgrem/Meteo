@@ -3,7 +3,10 @@
 #include "integer.h"
 #include "fattime.h"
 #include <time.h>
+#include "main.h"
 //#include "rtc.h"
+
+extern RTC_HandleTypeDef hrtc;
 
 DWORD get_fattime (void)
 {
@@ -15,6 +18,7 @@ DWORD get_fattime (void)
 //	RTC_t rtc;
 
 		time_temp = 1456329855;//RTC_GetCounter();
+//		time_temp = ReadTimeCounter(&hrtc);
 		time_tm_temp = localtime(&time_temp);
 	
 	res =  (((DWORD)time_tm_temp->tm_year - 2000) << 25)
