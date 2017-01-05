@@ -29,7 +29,7 @@ void Hello_Screen(void)
 	time_temp = ReadTimeCounter(&hrtc);
 	time_tm_temp = localtime(&time_temp);
 	
-	sprintf(str_temp, "%04d%02d%02d.txt", time_tm_temp->tm_year, time_tm_temp->tm_mon, time_tm_temp->tm_mday);
+	sprintf(str_temp, "%04d %02d %02d", time_tm_temp->tm_year + 1900, time_tm_temp->tm_mon + 1, time_tm_temp->tm_mday);
 	
 	PutStringRus11(10,100,str_temp,YELLOW,Global_BG_Color); 
 	

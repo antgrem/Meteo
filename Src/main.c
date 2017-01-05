@@ -179,7 +179,7 @@ int main(void)
 		if (hour_flag == 1)
 			{//one hour remain
 				hour_flag = 0;
-				//Write_file();
+				Write_file();
 			}// end if (hour_flag == 1)
 		
 		if (end_of_day_flag == 1)
