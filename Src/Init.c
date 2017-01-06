@@ -27,6 +27,8 @@ void Init_Variebles (void)
 	Coordinate.Wifi_char_y = 119;
 	Coordinate.Weather_x = 96;
 	Coordinate.Weather_y = 52;
+	Coordinate.Day_x = 0;
+	Coordinate.Day_y = 118;
 	
 	// sensors avaliable
 	System.Presure_Present = 0;

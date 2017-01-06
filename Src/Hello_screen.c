@@ -12,11 +12,6 @@ extern Coord_TypeDef Coordinate;
 
 void Hello_Screen(void)
 { 
-	time_t time_temp;
-	struct tm* time_tm_temp;
-	char str_temp[15];
-	
-	
 	// function for draw Hello screen 
 	// with firmware version
 	LCD_LED_SET;
@@ -26,18 +21,8 @@ void Hello_Screen(void)
 	
 	PutStringRus11(30,80,"ver 1.0",YELLOW,Global_BG_Color); // "ver 1.0"
 
-	time_temp = ReadTimeCounter(&hrtc);
-	time_tm_temp = localtime(&time_temp);
-	
-	sprintf(str_temp, "%04d %02d %02d", time_tm_temp->tm_year + 1900, time_tm_temp->tm_mon + 1, time_tm_temp->tm_mday);
-	
-	PutStringRus11(10,100,str_temp,YELLOW,Global_BG_Color); 
-	
 	delay_ms(500);
 	delay_ms(500);
-	delay_ms(500);
-	delay_ms(500);
-
 }
 
 
@@ -49,8 +34,6 @@ volatile	SD_result_TypeDef res;
 	int16_t test;
 	char df[20];
 	uint8_t dy=10;
-	
-
 	
 	LCD_LED_SET;
 	Lcd_Clear(BLACK);
@@ -120,6 +103,7 @@ volatile	SD_result_TypeDef res;
 	delay_ms(500);		
 }
 
+
 void System_Status_Checked(void)
 {
 	volatile	SD_result_TypeDef res;
@@ -158,6 +142,7 @@ void System_Status_Checked(void)
 			System.SD_Card_Present = 0;
 		}
 }
+
 
 void System_Status_Update_Screen(void)
 {	

@@ -13,12 +13,9 @@ DWORD get_fattime (void)
 	DWORD res;
 	time_t time_temp;
 	struct tm* time_tm_temp;
-	
-//	res = 0;
-//	RTC_t rtc;
 
-		time_temp = 1456329855;//RTC_GetCounter();
-//		time_temp = ReadTimeCounter(&hrtc);
+	//	time_temp = 1456329855;//RTC_GetCounter();
+		time_temp = ReadTimeCounter(&hrtc);
 		time_tm_temp = localtime(&time_temp);
 	
 	res =  (((DWORD)time_tm_temp->tm_year - 2000) << 25)

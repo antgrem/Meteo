@@ -54,9 +54,11 @@ FILINFO fno;
 UINT nWritten;
 DSTATUS res;
 char str_file_name[20];
+char str_file_year_name[20];
 char buffer[10], dot[2]="~";
 char BM_time_buffer[10] = "";
 char T_in_string[10] = "", T_out_string[10] = "", Presure_string[10]="", Time_string[10]="";
+char Day_string[12];
 SD_result_TypeDef results;
 System_TypeDef System;
 Coord_TypeDef Coordinate;
@@ -67,7 +69,12 @@ uint8_t minuts_10=0, count_10_min=0;
 uint8_t end_of_day_flag=0;
 uint16_t stage_sd=0;
 
+time_t time_day_count;
+struct tm* time_tm_day_count;
 
+time_t time_temp;
+struct tm* time_tm_temp;
+struct tm Day;
 
 int main(void)
 {
@@ -104,7 +111,13 @@ int main(void)
 	//Lcd_Clear(LIGHTGREY);	
 	
 //		Terminal_shift_line();
-	sprintf(str_file_name, "%04d%02d%02d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+	time_temp = ReadTimeCounter(&hrtc);
+	time_tm_temp = localtime(&time_temp);
+	sprintf(str_file_name, "%04d%02d%02d.txt", time_tm_temp->tm_year+1900, time_tm_temp->tm_mon + 1, time_tm_temp->tm_mday);
+	sprintf(str_file_year_name, "%04d_year.txt", time_tm_temp->tm_year+1900);		
+	Day.tm_year = time_tm_temp->tm_year+1900;
+	Day.tm_mon = time_tm_temp->tm_mon + 1;
+	Day.tm_mday = time_tm_temp->tm_mday;
 	
 	Hello_Screen();
 	Sensor_test();
@@ -164,13 +177,13 @@ int main(void)
 				Day_data_Array[count_10_min].T_in = All_data.T_in;
 				Day_data_Array[count_10_min].Pressure_p = All_data.Pressure_p;
 				Day_data_Array[count_10_min].Time = All_data.Time;
+				Day_data_Array[count_10_min].Day = Day;
 				count_10_min++;
 				if (count_10_min == DAY_DATA_ARRAY_LENGTH)
 					count_10_min = 0;
 			}
 			
 			System_Status_Checked();
-			
 			Draw_table_ex();// redraw data on screen
 			
 			PutStringRus11(Coordinate.Dot_x,Coordinate.Dot_y,dot,Global_BG_Color,Global_BG_Color);
@@ -179,13 +192,23 @@ int main(void)
 		if (hour_flag == 1)
 			{//one hour remain
 				hour_flag = 0;
-				Write_file();
+				Write_file(count_10_min);
+				count_10_min = 0;
 			}// end if (hour_flag == 1)
 		
 		if (end_of_day_flag == 1)
 		{// wow, midnight 
 			end_of_day_flag = 0;
 			Create_new_file();
+
+			// draw new day data on left-bottom side of screen
+			time_day_count = ReadTimeCounter(&hrtc);
+			time_tm_day_count = localtime(&time_day_count);
+			sprintf(Day_string, "%04d %02d %02d", time_tm_day_count->tm_year + 1900, time_tm_day_count->tm_mon + 1, time_tm_day_count->tm_mday);
+			PutStringRus11(Coordinate.Day_x,Coordinate.Day_y,Day_string,YELLOW,Global_BG_Color); 
+			Day.tm_year = time_tm_temp->tm_year+1900;
+			Day.tm_mon = time_tm_temp->tm_mon + 1;
+			Day.tm_mday = time_tm_temp->tm_mday;
 		}
 
 		
@@ -341,11 +364,11 @@ SD_result_TypeDef Store_data_in_new_file(void)
 
 	if (res.SD_result == FR_OK) 
 		{
-				
-			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
-			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+
+		time_temp = ReadTimeCounter(&hrtc);
+		time_tm_temp = localtime(&time_temp);
 			
-			sprintf(str_file_name, "%04d%02d%02d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+			sprintf(str_file_name, "%04d%02d%02d.txt", time_tm_temp->tm_year+1900, time_tm_temp->tm_mon + 1, time_tm_temp->tm_mday);
 			res.SD_result = f_open(&file, str_file_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 			res.Stage = 1;
 			if (res.SD_result == FR_OK)
@@ -386,7 +409,7 @@ SD_result_TypeDef Store_data_in_new_file(void)
 
 
 // Store data in file
-SD_result_TypeDef Write_file(void)
+SD_result_TypeDef Write_file(uint8_t Write_count)
 { //FRESULT result;
 	uint8_t ij;
 	count_time_store = 0;
@@ -403,14 +426,13 @@ SD_result_TypeDef Write_file(void)
 			res.SD_result = f_open(&file, str_file_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 			res.Stage = 1;
 			if (res.SD_result == FR_OK)
-				{//write redline
-
+				{
 					res.SD_result = f_lseek(&file, f_size(&file));
 					res.Stage = 2;
 					if(res.SD_result == FR_OK)
 						{}//go to end of file
 								
-						for (ij=0; ij < DAY_DATA_ARRAY_LENGTH; ij++)
+						for (ij=0; ij < Write_count; ij++)
 							{
 								
 								sprintf(buff, "%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
@@ -419,7 +441,26 @@ SD_result_TypeDef Write_file(void)
 							}
 							
 					f_close(&file);	
-				}			
+				}
+
+		// write to all_data file
+			res.SD_result = f_open(&file, str_file_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+			if (res.SD_result == FR_OK)
+				{
+					res.SD_result = f_lseek(&file, f_size(&file));
+					if(res.SD_result == FR_OK)
+						{}//go to end of file
+								
+						for (ij=0; ij < Write_count; ij++)
+							{
+								
+								sprintf(buff, "%04d.%02d.%02d\t%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Day.tm_year, Day_data_Array[ij].Day.tm_mon, Day_data_Array[ij].Day.tm_mday, Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
+								
+								count_store_data = f_puts(buff, &file);
+							}
+							
+					f_close(&file);	
+				}
 					
 						/* Unmount drive, don't forget this! */
 						f_mount(0, "0:", 1);
@@ -443,10 +484,11 @@ SD_result_TypeDef Create_new_file(void)
 	if (res.SD_result == FR_OK) 
 		{
 				
-			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);	
-			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+		time_temp = ReadTimeCounter(&hrtc);
+		time_tm_temp = localtime(&time_temp);
 			
-			sprintf(str_file_name, "%04d%02d%02d.txt", sDate.Year+2000, sDate.Month, sDate.Date);
+			sprintf(str_file_name, "%04d%02d%02d.txt", time_tm_temp->tm_year+1900, time_tm_temp->tm_mon + 1, time_tm_temp->tm_mday);
+			
 			res.SD_result = f_open(&file, str_file_name, FA_CREATE_NEW | FA_READ | FA_WRITE);
 			res.Stage = 1;
 			if (res.SD_result == FR_OK)
@@ -466,6 +508,22 @@ SD_result_TypeDef Create_new_file(void)
 																			
 					f_close(&file);	
 				}			
+			
+
+				sprintf(str_file_year_name, "%04d_year.txt", time_tm_temp->tm_year+1900);
+				res.SD_result = f_open(&file, str_file_year_name, FA_CREATE_NEW | FA_READ | FA_WRITE);
+				if (res.SD_result == FR_OK)
+					{//write redline
+						
+						sprintf(buff, "Data\tTime\tT_in\tT_out\tPresure\t\n");
+						
+						/* If we put more than 0 characters (everything OK) */
+						count_store_data = f_puts(buff, &file);
+							if (count_store_data > 0) 
+								{}//data were stored, but what to do I don't know
+																				
+						f_close(&file);	
+					}		
 					
 						/* Unmount drive, don't forget this! */
 						f_mount(0, "0:", 1);

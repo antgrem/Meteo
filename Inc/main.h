@@ -37,6 +37,8 @@ typedef struct
 	float Pressure_p;
   
   RTC_TimeTypeDef Time;   
+	
+	struct tm Day;
   
 }Messure_DataTypeDef; 
 
@@ -71,13 +73,14 @@ typedef struct
 	uint8_t SD_char_x, SD_char_y;
 	uint8_t Wifi_char_x, Wifi_char_y;
 	uint8_t Weather_x, Weather_y;
+	uint8_t Day_x, Day_y;
 }Coord_TypeDef;
 
 void Take_new_Messure(Messure_DataTypeDef *data);
 void delay_ms(uint16_t nms);
 SD_result_TypeDef Store_data_in_new_file(void);
 SD_result_TypeDef Create_new_file(void);
-SD_result_TypeDef Write_file(void);
+SD_result_TypeDef Write_file(uint8_t Write_count);
 
 uint32_t ReadTimeCounter(RTC_HandleTypeDef* hrtc);
 
