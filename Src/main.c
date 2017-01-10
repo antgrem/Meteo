@@ -186,6 +186,12 @@ int main(void)
 			System_Status_Checked();
 			Draw_table_ex();// redraw data on screen
 			
+						// draw new day data on left-bottom side of screen
+			time_day_count = ReadTimeCounter(&hrtc);
+			time_tm_day_count = localtime(&time_day_count);
+			sprintf(Day_string, "%04d %02d %02d", time_tm_day_count->tm_year + 1900, time_tm_day_count->tm_mon + 1, time_tm_day_count->tm_mday);
+			PutStringRus11(Coordinate.Day_x,Coordinate.Day_y,Day_string,YELLOW,Global_BG_Color); 
+			
 			PutStringRus11(Coordinate.Dot_x,Coordinate.Dot_y,dot,Global_BG_Color,Global_BG_Color);
 		}// end if (minute_flag == 1)
 			
@@ -444,7 +450,7 @@ SD_result_TypeDef Write_file(uint8_t Write_count)
 				}
 
 		// write to all_data file
-			res.SD_result = f_open(&file, str_file_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+			res.SD_result = f_open(&file, str_file_year_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 			if (res.SD_result == FR_OK)
 				{
 					res.SD_result = f_lseek(&file, f_size(&file));
