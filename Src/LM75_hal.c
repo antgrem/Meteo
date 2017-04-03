@@ -115,3 +115,63 @@ uint8_t LM75_Temperature_ex(int16_t *temperature)
 
 	return error;
 }
+
+// Read temperature readings from LM75 in decimal format
+// IIIF where:
+//   III - integer part
+//   F   - fractional part
+// e.g. 355 means 35.5C
+uint8_t LM75_Temperature_IN(int16_t *temperature) 
+{
+	uint16_t raw;
+	int16_t temp;
+	uint8_t adr = 0, tempr[2];
+	uint8_t error = 0;
+
+	adr = LM75_REG_TEMP;	
+	error = HAL_I2C_Master_Transmit(&hi2c1, LM75_ADDRESS_IN, &adr, 1, 1);
+	error = HAL_I2C_Master_Receive(&hi2c1, LM75_ADDRESS_IN, tempr, 2, 1);
+	
+	raw = ((tempr[0]<<8) | tempr[1])>>7;
+	if (raw & 0x0100) {
+		// Negative temperature
+		temp = -10 * (((~(uint8_t)(raw & 0xFE) + 1) & 0x7F) >> 1) - (raw & 0x01) * 5;
+	} else {
+		// Positive temperature
+		temp = ((raw & 0xFE) >> 1) * 10 + (raw & 0x01) * 5;
+	}
+	
+	*temperature = temp;
+
+	return error;
+}
+
+// Read temperature readings from LM75 in decimal format
+// IIIF where:
+//   III - integer part
+//   F   - fractional part
+// e.g. 355 means 35.5C
+uint8_t LM75_Temperature_OUT(int16_t *temperature) 
+{
+	uint16_t raw;
+	int16_t temp;
+	uint8_t adr = 0, tempr[2];
+	uint8_t error = 0;
+
+	adr = LM75_REG_TEMP;	
+	error = HAL_I2C_Master_Transmit(&hi2c1, LM75_ADDRESS_OUT, &adr, 1, 1);
+	error = HAL_I2C_Master_Receive(&hi2c1, LM75_ADDRESS_OUT, tempr, 2, 1);
+	
+	raw = ((tempr[0]<<8) | tempr[1])>>7;
+	if (raw & 0x0100) {
+		// Negative temperature
+		temp = -10 * (((~(uint8_t)(raw & 0xFE) + 1) & 0x7F) >> 1) - (raw & 0x01) * 5;
+	} else {
+		// Positive temperature
+		temp = ((raw & 0xFE) >> 1) * 10 + (raw & 0x01) * 5;
+	}
+	
+	*temperature = temp;
+
+	return error;
+}

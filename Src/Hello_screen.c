@@ -39,7 +39,7 @@ volatile	SD_result_TypeDef res;
 	Lcd_Clear(BLACK);
 	delay_ms(800);
 	
-	if (LM75_Temperature_ex(&test) != 0)
+	if (LM75_Temperature_IN(&test) != 0)
 		{// we have problem with sensor
 			PutStringRus11(10,dy,"IN T sensor: ERROR",RED,Global_BG_Color);
 		}
@@ -77,7 +77,15 @@ volatile	SD_result_TypeDef res;
 		delay_ms(250);
 		dy += 22;
 		
-		PutStringRus11(10,dy,"OUT T ERROR",RED,Global_BG_Color);
+	if (LM75_Temperature_OUT(&test) != 0)
+		{// we have problem with sensor
+			PutStringRus11(10,dy,"OUT T ERROR",RED,Global_BG_Color);
+		}
+	else 
+		{
+			PutStringRus11(10,dy,"OUT T sensor: OK",GREEN,Global_BG_Color);
+			System.T_out_Present = 1;
+		}
 		
 		dy += 22;
 		
@@ -109,7 +117,7 @@ void System_Status_Checked(void)
 	volatile	SD_result_TypeDef res;
 	int16_t test;
 	
-		if (LM75_Temperature_ex(&test) != 0)
+		if (LM75_Temperature_IN(&test) != 0)
 		{// we have problem with sensor
 			System.T_in_Present = 0;
 		}
@@ -128,7 +136,15 @@ void System_Status_Checked(void)
 		}
 		
 		
-		System.T_out_Present = 0;
+	//	System.T_out_Present = 0;
+	if (LM75_Temperature_OUT(&test) != 0)
+		{// we have problem with sensor
+			System.T_out_Present = 0;
+		}
+	else 
+		{
+			System.T_out_Present = 1;
+		}
 		
 		res.SD_result = f_mount(&FATFS_Obj, "", 1);
 

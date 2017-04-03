@@ -348,8 +348,8 @@ void Take_new_Messure(Messure_DataTypeDef *data)
 
 		LM75_Temperature(&(data->T_in), LM75_ADDRESS_IN);
 	
-		if (data->Present_T_out == 1)
-			LM75_Temperature(&(data->T_in), LM75_ADDRESS_OUT);
+		//if (data->Present_T_out == 1)
+			LM75_Temperature(&(data->T_out), LM75_ADDRESS_OUT);
 	
 		HAL_RTC_GetTime(&hrtc, &(data->Time), RTC_FORMAT_BIN);
 	
