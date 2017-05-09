@@ -37,6 +37,7 @@
 "usb configuration\terminal.o"
 "usb configuration\hello_screen.o"
 "usb configuration\buttoms.o"
+"usb configuration\files.o"
 "usb configuration\startup_stm32f103xb.o"
 "usb configuration\usbd_ioreq.o"
 "usb configuration\usbd_ctlreq.o"

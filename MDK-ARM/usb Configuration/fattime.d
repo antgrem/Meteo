@@ -1,5 +1,9 @@
 usb configuration\fattime.o: ..\Fatf\fattime.c
 usb configuration\fattime.o: ..\Fatf\src\integer.h
+usb configuration\fattime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+usb configuration\fattime.o: ..\Fatf\fattime.h
+usb configuration\fattime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
+usb configuration\fattime.o: ../Inc/main.h
 usb configuration\fattime.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 usb configuration\fattime.o: ../Inc/stm32f1xx_hal_conf.h
 usb configuration\fattime.o: ../Inc/mxconstants.h
@@ -32,10 +36,6 @@ usb configuration\fattime.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_s
 usb configuration\fattime.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h
 usb configuration\fattime.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h
 usb configuration\fattime.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h
-usb configuration\fattime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
-usb configuration\fattime.o: ..\Fatf\fattime.h
-usb configuration\fattime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
-usb configuration\fattime.o: ../Inc/main.h
 usb configuration\fattime.o: ../Inc/usb_device.h
 usb configuration\fattime.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
 usb configuration\fattime.o: ../Inc/usbd_conf.h

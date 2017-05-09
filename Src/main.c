@@ -10,6 +10,7 @@
 #include "Terminal.h"
 #include "Hello_screen.h"
 #include "buttoms.h"
+#include "Files.h"
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -37,37 +38,30 @@ extern Buttom_struct BM_1, BM_2, BM_3;
 
 Messure_DataTypeDef All_data;
 Messure_DataTypeDef Day_data_Array[DAY_DATA_ARRAY_LENGTH];
+Messure_DataTypeDef Avarage_data,
+										Avarage_array[4];
+uint16_t circle_array_count;
 
 volatile float p, t, a;
-volatile 	int count_store_data=0;
+//volatile 	int count_store_data=0;
 
 uint16_t Global_Font_Color = RED, Global_BG_Color = BLACK;
 
-volatile uint8_t store_data = 0;
-uint16_t count_time_store, count_time_store_en=0;
 uint8_t hour_flag = 0;
 
-FRESULT result;
-FATFS FATFS_Obj;
-FIL file;
-FILINFO fno;
-UINT nWritten;
-DSTATUS res;
+
 char str_file_name[20];
 char str_file_year_name[20];
 char buffer[10], dot[2]="~";
 char BM_time_buffer[10] = "";
 char T_in_string[10] = "", T_out_string[10] = "", Presure_string[10]="", Time_string[10]="";
 char Day_string[12];
-SD_result_TypeDef results;
 System_TypeDef System;
 Coord_TypeDef Coordinate;
 
-uint16_t second_1_flag=0, minuts_12_flag=0;
 uint8_t set_rtc_time=0, set_rtc_date=0, get_data=0;
 uint8_t minuts_10=0, count_10_min=0;
 uint8_t end_of_day_flag=0;
-uint16_t stage_sd=0;
 
 time_t time_day_count;
 struct tm* time_tm_day_count;
@@ -99,8 +93,6 @@ int main(void)
 	min_count = sTime.Minutes;
 	hour_count = sTime.Hours;
 	
-	count_10_min = (hour_count*60 + min_count) / 10;
-	
 	LM75_Init();	
 	
 	Init_BMP085();
@@ -118,6 +110,7 @@ int main(void)
 	Day.tm_year = time_tm_temp->tm_year+1900;
 	Day.tm_mon = time_tm_temp->tm_mon + 1;
 	Day.tm_mday = time_tm_temp->tm_mday;
+	minuts_10 = time_tm_temp->tm_min % 10;//write data to sd every 10 minuts
 	
 	Hello_Screen();
 	Sensor_test();
@@ -125,6 +118,19 @@ int main(void)
 
 //end of initialls
 
+		Create_new_file();
+			
+		Take_new_Messure(&All_data);
+		
+		Avarage_array[0] = All_data;
+		Avarage_array[1] = All_data;
+		Avarage_array[2] = All_data;
+		Avarage_array[3] = All_data;
+		
+		System_Status_Checked();
+		Draw_table_ex();// redraw data on screen
+			
+			
 	//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
 
@@ -167,20 +173,37 @@ int main(void)
 				}
 			}
 			
+			//draw red dot (start of measurement)
 			PutStringRus11(Coordinate.Dot_x,Coordinate.Dot_y,dot,RED,Global_BG_Color);
 			
 			Take_new_Messure(&All_data);
 			
+			Avarage_array[circle_array_count++] = All_data;
+			if (circle_array_count == 4) 
+				circle_array_count = 0;
+			Avarage_data.T_out = (Avarage_array[0].T_out + Avarage_array[1].T_out + \
+																		Avarage_array[2].T_out + Avarage_array[3].T_out) >> 2;
+			Avarage_data.T_in = (Avarage_array[0].T_in + Avarage_array[1].T_in + \
+																		Avarage_array[2].T_in + Avarage_array[3].T_in) >> 2;
+			Avarage_data.Pressure_p = (Avarage_array[0].Pressure_p + Avarage_array[1].Pressure_p + \
+																		Avarage_array[2].Pressure_p + Avarage_array[3].Pressure_p)/4;
+						
 			if (minuts_10++ == 9)
 			{
 				minuts_10 = 0; 
-				Day_data_Array[count_10_min].T_in = All_data.T_in;
-				Day_data_Array[count_10_min].Pressure_p = All_data.Pressure_p;
-				Day_data_Array[count_10_min].Time = All_data.Time;
-				Day_data_Array[count_10_min].Day = Day;
-				count_10_min++;
-				if (count_10_min == DAY_DATA_ARRAY_LENGTH)
-					count_10_min = 0;
+//				Day_data_Array[count_10_min].T_in = Avarage_data.T_in;
+//				Day_data_Array[count_10_min].T_out = Avarage_data.T_out;
+//				Day_data_Array[count_10_min].Present_T_out = Avarage_data.Present_T_out;
+//				Day_data_Array[count_10_min].Pressure_p = Avarage_data.Pressure_p;
+//				Day_data_Array[count_10_min].Time = All_data.Time;
+//				Day_data_Array[count_10_min].Day = Day;
+//				count_10_min++;
+				
+				
+//				Write_file(count_10_min);
+				Write_file_one(&Avarage_data);
+	
+				count_10_min = 0;
 			}
 			
 			System_Status_Checked();
@@ -198,8 +221,6 @@ int main(void)
 		if (hour_flag == 1)
 			{//one hour remain
 				hour_flag = 0;
-				Write_file(count_10_min);
-				count_10_min = 0;
 			}// end if (hour_flag == 1)
 		
 		if (end_of_day_flag == 1)
@@ -243,7 +264,6 @@ void Draw_table_ex (void)
 	PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,Presure_string,Global_BG_Color,Global_BG_Color);
 	sprintf(Presure_string, "%.2f", All_data.Pressure_p/1000);
 	PutStringRus(Coordinate.Presure_x,Coordinate.Presure_y,Presure_string,DARKGREY,Global_BG_Color);
-	
         	
 				delay_ms(50);
 
@@ -348,195 +368,13 @@ void Take_new_Messure(Messure_DataTypeDef *data)
 
 		LM75_Temperature(&(data->T_in), LM75_ADDRESS_IN);
 	
-		//if (data->Present_T_out == 1)
+		if (System.T_out_Present == 1)
 			LM75_Temperature(&(data->T_out), LM75_ADDRESS_OUT);
 	
 		HAL_RTC_GetTime(&hrtc, &(data->Time), RTC_FORMAT_BIN);
 	
 }
 
-//
-// Store data in new_file
-SD_result_TypeDef Store_data_in_new_file(void)
-{ //FRESULT result;
-	uint8_t ij;
-	count_time_store = 0;
-	count_time_store_en = 1;
-	SD_result_TypeDef res;
-	char buff[100];
-	
-	res.SD_result = f_mount(&FATFS_Obj, "", 0);
-	res.Stage = 0;
-
-	if (res.SD_result == FR_OK) 
-		{
-
-		time_temp = ReadTimeCounter(&hrtc);
-		time_tm_temp = localtime(&time_temp);
-			
-			sprintf(str_file_name, "%04d%02d%02d.txt", time_tm_temp->tm_year+1900, time_tm_temp->tm_mon + 1, time_tm_temp->tm_mday);
-			res.SD_result = f_open(&file, str_file_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
-			res.Stage = 1;
-			if (res.SD_result == FR_OK)
-				{//write redline
-
-					sprintf(buff, "Time\tT_in\tT_out\tPresure\t\n");
-					res.SD_result = f_lseek(&file, f_size(&file));
-					res.Stage = 2;
-					if(res.SD_result == FR_OK)
-						{}//go to end of file
-						
-							/* If we put more than 0 characters (everything OK) */
-							count_store_data = f_puts(buff, &file);
-						if (count_store_data > 0) 
-							{}//data were stored, but what to do I don't know
-								
-						for (ij=0; ij < DAY_DATA_ARRAY_LENGTH; ij++)
-							{
-								
-								sprintf(buff, "%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
-								
-								count_store_data = f_puts(buff, &file);
-							}
-							
-					f_close(&file);	
-				}			
-					
-						/* Unmount drive, don't forget this! */
-						f_mount(0, "0:", 1);
-			}//end mount SD
-		
-			if (count_store_data == EOF)
-				store_data = 1;
-		count_time_store_en = 0;//stop increment count_time_store value
-			
-		return res;
-}
-
-
-// Store data in file
-SD_result_TypeDef Write_file(uint8_t Write_count)
-{ //FRESULT result;
-	uint8_t ij;
-	count_time_store = 0;
-	count_time_store_en = 1;
-	SD_result_TypeDef res;
-	char buff[100];
-	
-	res.SD_result = f_mount(&FATFS_Obj, "", 0);
-	res.Stage = 0;
-
-	if (res.SD_result == FR_OK) 
-		{
-				
-			res.SD_result = f_open(&file, str_file_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
-			res.Stage = 1;
-			if (res.SD_result == FR_OK)
-				{
-					res.SD_result = f_lseek(&file, f_size(&file));
-					res.Stage = 2;
-					if(res.SD_result == FR_OK)
-						{}//go to end of file
-								
-						for (ij=0; ij < Write_count; ij++)
-							{
-								
-								sprintf(buff, "%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
-								
-								count_store_data = f_puts(buff, &file);
-							}
-							
-					f_close(&file);	
-				}
-
-		// write to all_data file
-			res.SD_result = f_open(&file, str_file_year_name, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
-			if (res.SD_result == FR_OK)
-				{
-					res.SD_result = f_lseek(&file, f_size(&file));
-					if(res.SD_result == FR_OK)
-						{}//go to end of file
-								
-						for (ij=0; ij < Write_count; ij++)
-							{
-								
-								sprintf(buff, "%04d.%02d.%02d\t%02d:%02d:%02d\t%d\t%f\t\n", Day_data_Array[ij].Day.tm_year, Day_data_Array[ij].Day.tm_mon, Day_data_Array[ij].Day.tm_mday, Day_data_Array[ij].Time.Hours, Day_data_Array[ij].Time.Minutes, Day_data_Array[ij].Time.Seconds, Day_data_Array[ij].T_in, Day_data_Array[ij].Pressure_p);
-								
-								count_store_data = f_puts(buff, &file);
-							}
-							
-					f_close(&file);	
-				}
-					
-						/* Unmount drive, don't forget this! */
-						f_mount(0, "0:", 1);
-			}//end mount SD
-			
-		return res;
-}
-
-
-// create new file in midnight
-SD_result_TypeDef Create_new_file(void)
-{ //FRESULT result;
-	count_time_store = 0;
-	count_time_store_en = 1;
-	SD_result_TypeDef res;
-	char buff[100];
-	
-	res.SD_result = f_mount(&FATFS_Obj, "", 0);
-	res.Stage = 0;
-
-	if (res.SD_result == FR_OK) 
-		{
-				
-		time_temp = ReadTimeCounter(&hrtc);
-		time_tm_temp = localtime(&time_temp);
-			
-			sprintf(str_file_name, "%04d%02d%02d.txt", time_tm_temp->tm_year+1900, time_tm_temp->tm_mon + 1, time_tm_temp->tm_mday);
-			
-			res.SD_result = f_open(&file, str_file_name, FA_CREATE_NEW | FA_READ | FA_WRITE);
-			res.Stage = 1;
-			if (res.SD_result == FR_OK)
-				{//write redline
-					
-					//first line is day
-					count_store_data = f_puts(str_file_name, &file);
-						if (count_store_data == sizeof(str_file_name)) 
-							{}//data were stored, but what to do I don't know
-					
-					sprintf(buff, "\nTime\tT_in\tT_out\tPresure\t\n");
-					
-					/* If we put more than 0 characters (everything OK) */
-					count_store_data = f_puts(buff, &file);
-						if (count_store_data > 0) 
-							{}//data were stored, but what to do I don't know
-																			
-					f_close(&file);	
-				}			
-			
-
-				sprintf(str_file_year_name, "%04d_year.txt", time_tm_temp->tm_year+1900);
-				res.SD_result = f_open(&file, str_file_year_name, FA_CREATE_NEW | FA_READ | FA_WRITE);
-				if (res.SD_result == FR_OK)
-					{//write redline
-						
-						sprintf(buff, "Data\tTime\tT_in\tT_out\tPresure\t\n");
-						
-						/* If we put more than 0 characters (everything OK) */
-						count_store_data = f_puts(buff, &file);
-							if (count_store_data > 0) 
-								{}//data were stored, but what to do I don't know
-																				
-						f_close(&file);	
-					}		
-					
-						/* Unmount drive, don't forget this! */
-						f_mount(0, "0:", 1);
-			}//end mount SD
-		
-		return res;
-}
 
 
 

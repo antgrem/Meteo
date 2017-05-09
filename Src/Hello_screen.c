@@ -3,12 +3,11 @@
 
 
 extern RTC_HandleTypeDef hrtc;
-extern FATFS FATFS_Obj;
-extern FIL file;
 extern uint16_t Global_Font_Color, Global_BG_Color;
 extern uint16_t stage_sd;
 extern System_TypeDef System;
 extern Coord_TypeDef Coordinate;
+extern Messure_DataTypeDef All_data;
 
 void Hello_Screen(void)
 { 
@@ -19,7 +18,7 @@ void Hello_Screen(void)
 	
 	PutStringRus11(30,15,"METEO",GREEN,Global_BG_Color);// "METEO"
 	
-	PutStringRus11(30,80,"ver 1.0",YELLOW,Global_BG_Color); // "ver 1.0"
+	PutStringRus11(30,80,"ver 1.1",YELLOW,Global_BG_Color); // "ver 1.1"
 
 	delay_ms(500);
 	delay_ms(500);
@@ -34,6 +33,7 @@ volatile	SD_result_TypeDef res;
 	int16_t test;
 	char df[20];
 	uint8_t dy=10;
+	FATFS FATFS_Obj;
 	
 	LCD_LED_SET;
 	Lcd_Clear(BLACK);
@@ -116,6 +116,7 @@ void System_Status_Checked(void)
 {
 	volatile	SD_result_TypeDef res;
 	int16_t test;
+	FATFS FATFS_Obj;
 	
 		if (LM75_Temperature_IN(&test) != 0)
 		{// we have problem with sensor
@@ -140,10 +141,12 @@ void System_Status_Checked(void)
 	if (LM75_Temperature_OUT(&test) != 0)
 		{// we have problem with sensor
 			System.T_out_Present = 0;
+			All_data.Present_T_out = 0;
 		}
 	else 
 		{
 			System.T_out_Present = 1;
+			All_data.Present_T_out = 1;
 		}
 		
 		res.SD_result = f_mount(&FATFS_Obj, "", 1);

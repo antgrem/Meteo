@@ -21,6 +21,7 @@
 #include "Init.h"
 #include "stm32f1xx_hal_rtc.h"
 
+
 #define DAY_DATA_ARRAY_LENGTH 144
 
 //data structure definition  
@@ -78,9 +79,6 @@ typedef struct
 
 void Take_new_Messure(Messure_DataTypeDef *data);
 void delay_ms(uint16_t nms);
-SD_result_TypeDef Store_data_in_new_file(void);
-SD_result_TypeDef Create_new_file(void);
-SD_result_TypeDef Write_file(uint8_t Write_count);
 
 uint32_t ReadTimeCounter(RTC_HandleTypeDef* hrtc);
 

@@ -49,7 +49,6 @@ extern void First_Draw_Table (void);
 extern Buttom_struct BM_1, BM_2, BM_3;
 
 extern uint16_t minuts_12_flag;
-extern uint16_t count_time_store, count_time_store_en;
 
 uint8_t pointer_count = 0, button_was_pressed = 0;
 uint8_t sec_count=0, minute_flag=0;
@@ -69,9 +68,6 @@ void SysTick_Handler(void)
   HAL_IncTick();
 	disk_timerproc();
   HAL_SYSTICK_IRQHandler();
-	
-	if (count_time_store_en == 1)
-		count_time_store++;
 	
 	if(BM_1.State == BM_PRESSED)
 		BM_1.time_presed++;
@@ -125,6 +121,23 @@ void EXTI1_IRQHandler (void)
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
 }
 
+// buttom
+void EXTI2_IRQHandler (void)
+{
+
+	if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2)==0)
+	{//buttom pressed
+		BM_2.time_presed = 0;
+		BM_2.State = BM_PRESSED;
+	}
+	else
+	{
+		BM_2.State = BM_RELEASED;
+	}
+	button_was_pressed = 1;
+	
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
+}
 
 // buttom
 void EXTI3_IRQHandler (void)

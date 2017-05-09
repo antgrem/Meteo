@@ -496,11 +496,11 @@ ARM Macro Assembler    Page 8
               00000000 
 Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend="usb con
 figuration\startup_stm32f103xb.d" -o"usb configuration\startup_stm32f103xb.o" -
-IC:\Users\Anton\Documents\GitHub\Meteo\MDK-ARM\RTE -IC:\Keil_v5\ARM\PACK\ARM\CM
-SIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0 --predef
-ine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 513" --predefine="_
-RTE_ SETA 1" --predefine="STM32F10X_MD SETA 1" --list=startup_stm32f103xb.lst .
-./Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/arm/startup_stm32f103xb.s
+IC:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMS
+IS\5.0.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0 --predefi
+ne="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 513" --predefine="_R
+TE_ SETA 1" --predefine="STM32F10X_MD SETA 1" --list=startup_stm32f103xb.lst ..
+/Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/arm/startup_stm32f103xb.s
 
 
 

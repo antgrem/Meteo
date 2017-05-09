@@ -36,8 +36,6 @@
 #include "ffconf.h"
 #include "diskio.h"
 
-extern uint16_t stage_sd;
-
 // demo uses a command line option to define this (see Makefile):
 // #define STM32_SD_USE_DMA
 
@@ -722,7 +720,6 @@ DSTATUS disk_initialize (
 	for (n = 10; n; n--) rcvr_spi();	/* 80 dummy clocks */
 
 	ty = 0;
-	stage_sd = 0;
 	if (send_cmd(CMD0, 0) == 1) {			/* Enter Idle state */
 		Timer1 = 1000;						/* Initialization timeout of 1000 milliseconds */
 		if (send_cmd(CMD8, 0x1AA) == 1) {	/* SDHC */
