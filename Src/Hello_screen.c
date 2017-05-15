@@ -1,5 +1,6 @@
 #include "main.h"
 #include "hello_screen.h"
+#include "ctype.h"
 
 
 extern RTC_HandleTypeDef hrtc;
@@ -8,6 +9,8 @@ extern uint16_t stage_sd;
 extern System_TypeDef System;
 extern Coord_TypeDef Coordinate;
 extern Messure_DataTypeDef All_data;
+
+char wifi_name[30], wifi_pass[30];
 
 void Hello_Screen(void)
 { 
@@ -34,6 +37,10 @@ volatile	SD_result_TypeDef res;
 	char df[20];
 	uint8_t dy=10;
 	FATFS FATFS_Obj;
+	FIL file_pass;
+	TCHAR buffer[30];
+	uint8_t count;
+	TCHAR *buff_p = NULL;
 	
 	LCD_LED_SET;
 	Lcd_Clear(BLACK);
@@ -95,6 +102,37 @@ volatile	SD_result_TypeDef res;
 		{
 				PutStringRus11(10,dy,"SD: OK",GREEN,Global_BG_Color);
 				System.SD_Card_Present = 1;
+//test
+		res.SD_result = f_open(&file_pass, "WiFi.txt", FA_READ);
+		if (res.SD_result == FR_OK)
+		{
+			buff_p = f_gets(buffer, 30, &file_pass);
+			
+			if (buff_p)
+			{
+				count = 0;
+				while((*buff_p != ' ')&&(count != 30))
+				{
+					wifi_name[count] = *buff_p++;
+					count++;
+				}
+				wifi_name[count] = '\0';
+				
+				buff_p++;
+				count = 0;
+				while((*buff_p != ' ')&&(count != 30))
+				{
+					wifi_pass[count] = *buff_p++;
+					count++;
+				}
+				wifi_pass[count] = '\0';
+			}
+			PutStringRus11(10,dy+20,wifi_name,GREEN,Global_BG_Color);
+				
+			f_close(&file_pass);
+		}
+//test end			
+			
 				f_mount(0, "0:", 1);
 		}
 	else 

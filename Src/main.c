@@ -119,7 +119,8 @@ int main(void)
 //end of initialls
 
 		Create_new_file();
-			
+		Init_offset();			
+		
 		Take_new_Messure(&All_data);
 		
 		Avarage_array[0] = All_data;
@@ -151,10 +152,10 @@ int main(void)
 				
 				System_Status_Update_Screen();
 				
-				sprintf(buffer, "A");
-				PutStringRus(Coordinate.Weather_x,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
-				sprintf(buffer, "B");
-				PutStringRus(Coordinate.Weather_x+16,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
+//				sprintf(buffer, "A");
+//				PutStringRus(Coordinate.Weather_x,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
+//				sprintf(buffer, "B");
+//				PutStringRus(Coordinate.Weather_x+16,Coordinate.Weather_y,buffer,BLUE,Global_BG_Color);
 				
 			}// end if (one_sec_flag == 1)
 		
@@ -191,19 +192,10 @@ int main(void)
 			if (minuts_10++ == 9)
 			{
 				minuts_10 = 0; 
-//				Day_data_Array[count_10_min].T_in = Avarage_data.T_in;
-//				Day_data_Array[count_10_min].T_out = Avarage_data.T_out;
-//				Day_data_Array[count_10_min].Present_T_out = Avarage_data.Present_T_out;
-//				Day_data_Array[count_10_min].Pressure_p = Avarage_data.Pressure_p;
-//				Day_data_Array[count_10_min].Time = All_data.Time;
-//				Day_data_Array[count_10_min].Day = Day;
-//				count_10_min++;
-				
-				
-//				Write_file(count_10_min);
+				Avarage_data.Time = All_data.Time;
+				Avarage_data.Day = Day;
+			
 				Write_file_one(&Avarage_data);
-	
-				count_10_min = 0;
 			}
 			
 			System_Status_Checked();
