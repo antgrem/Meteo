@@ -195,7 +195,7 @@ int main(void)
 				Avarage_data.Time = All_data.Time;
 				Avarage_data.Day = Day;
 			
-				Write_file_one(&Avarage_data);
+				Write_file(&Avarage_data);
 			}
 			
 			System_Status_Checked();

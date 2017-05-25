@@ -14,8 +14,7 @@ extern char str_file_year_name[20];
 
 void Init_offset(void);
 FRESULT Create_new_file(void);
-FRESULT Write_file(uint8_t Write_count);
-FRESULT Write_file_one(Messure_DataTypeDef *Data);
+FRESULT Write_file(Messure_DataTypeDef *Data);
 
 
 
