@@ -222,8 +222,6 @@ void Hello_Screen(void)
 	
 	delay_ms(500);
 	delay_ms(500);
-	delay_ms(500);
-	delay_ms(500);
 
 }
 
