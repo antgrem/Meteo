@@ -547,14 +547,14 @@ F (..\Fatf\src\ff.c)(0x58E94386)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --
 I (..\Fatf\src\ff.h)(0x58E94386)
 I (..\Fatf\src\integer.h)(0x58E94771)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54765570)
-I (..\Fatf\src\ffconf.h)(0x58FF1D3D)
+I (..\Fatf\src\ffconf.h)(0x5B86EC06)
 I (..\Fatf\src\diskio.h)(0x58E9480E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5476556A)
 F (..\Fatf\src\option\unicode.c)(0x58E94386)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\unicode.o" --omf_browse "usb configuration\unicode.crf" --depend "usb configuration\unicode.d")
 I (..\Fatf\src\option\../ff.h)(0x58E94386)
 I (..\Fatf\src\option\../integer.h)(0x58E94771)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54765570)
-I (..\Fatf\src\option\../ffconf.h)(0x58FF1D3D)
+I (..\Fatf\src\option\../ffconf.h)(0x5B86EC06)
 I (..\Fatf\src\option\ccsbcs.c)(0x58E94386)
 F (..\Fatf\fattime.c)(0x58E5F8A1)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\fattime.o" --omf_browse "usb configuration\fattime.crf" --depend "usb configuration\fattime.d")
 I (..\Fatf\src\integer.h)(0x58E94771)
@@ -605,7 +605,7 @@ I (../Inc/GUI.h)(0x587BCCCF)
 I (../Inc/I2Cdev.h)(0x58E5F8A1)
 I (../Inc/BMP085.h)(0x587BCCCF)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5476556E)
-I (..\Fatf\src\ffconf.h)(0x58FF1D3D)
+I (..\Fatf\src\ffconf.h)(0x5B86EC06)
 I (..\Fatf\src\diskio.h)(0x58E9480E)
 I (..\Fatf\src\ff.h)(0x58E94386)
 I (..\Fatf\sd_spi_stm32.h)(0x587BCCCF)
@@ -644,7 +644,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x587BCCCE)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h)(0x587BCCCE)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h)(0x587BCCCE)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h)(0x587BCCCE)
-I (..\Fatf\src\ffconf.h)(0x58FF1D3D)
+I (..\Fatf\src\ffconf.h)(0x5B86EC06)
 I (..\Fatf\src\diskio.h)(0x58E9480E)
 I (..\Fatf\src\integer.h)(0x58E94771)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54765570)
@@ -958,7 +958,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54765570)
 I (../Inc/BMP_graph.h)(0x58E5F8A1)
 I (../Inc/Lcd_Driver.h)(0x58E5F8A1)
 I (../Inc/buttoms.h)(0x58E5F8A1)
-F (../Src/main.c)(0x591D50DC)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\main.o" --omf_browse "usb configuration\main.crf" --depend "usb configuration\main.d")
+F (../Src/main.c)(0x5B844694)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\main.o" --omf_browse "usb configuration\main.crf" --depend "usb configuration\main.d")
 I (../Inc/main.h)(0x58EB609B)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x587BCCCE)
 I (../Inc/stm32f1xx_hal_conf.h)(0x587BCCCF)
@@ -1004,7 +1004,7 @@ I (../Inc/I2Cdev.h)(0x58E5F8A1)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54765570)
 I (../Inc/BMP085.h)(0x587BCCCF)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5476556E)
-I (..\Fatf\src\ffconf.h)(0x58FF1D3D)
+I (..\Fatf\src\ffconf.h)(0x5B86EC06)
 I (..\Fatf\src\diskio.h)(0x58E9480E)
 I (..\Fatf\src\integer.h)(0x58E94771)
 I (..\Fatf\src\ff.h)(0x58E94386)
@@ -1017,7 +1017,7 @@ I (../Inc/Init.h)(0x58E5F8A1)
 I (../Inc/Terminal.h)(0x58E5F8A1)
 I (../Inc/Hello_screen.h)(0x58E5F8A1)
 I (../Inc/buttoms.h)(0x58E5F8A1)
-I (../Inc/Files.h)(0x591D50DC)
+I (../Inc/Files.h)(0x5B7AD6F7)
 F (../Src/stm32f1xx_hal_msp.c)(0x587BCCCF)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\stm32f1xx_hal_msp.o" --omf_browse "usb configuration\stm32f1xx_hal_msp.crf" --depend "usb configuration\stm32f1xx_hal_msp.d")
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x587BCCCE)
 I (../Inc/stm32f1xx_hal_conf.h)(0x587BCCCF)
@@ -1155,7 +1155,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h)(0x587BCCCE)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h)(0x587BCCCE)
 I (../Inc/GUI.h)(0x587BCCCF)
 I (../Inc/Lcd_Driver.h)(0x58E5F8A1)
-F (..\Src\Init.c)(0x58E8FE9C)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\init.o" --omf_browse "usb configuration\init.crf" --depend "usb configuration\init.d")
+F (..\Src\Init.c)(0x5B7C09DB)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\init.o" --omf_browse "usb configuration\init.crf" --depend "usb configuration\init.d")
 I (../Inc/Init.h)(0x58E5F8A1)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x587BCCCE)
 I (../Inc/stm32f1xx_hal_conf.h)(0x587BCCCF)
@@ -1202,7 +1202,7 @@ I (../Inc/LM75_hal.h)(0x58E5F8B2)
 I (../Inc/Lcd_Driver.h)(0x58E5F8A1)
 I (../Inc/delay.h)(0x587BCCCF)
 I (../Inc/GUI.h)(0x587BCCCF)
-I (..\Fatf\src\ffconf.h)(0x58FF1D3D)
+I (..\Fatf\src\ffconf.h)(0x5B86EC06)
 I (..\Fatf\src\diskio.h)(0x58E9480E)
 I (..\Fatf\src\integer.h)(0x58E94771)
 I (..\Fatf\src\ff.h)(0x58E94386)
@@ -1248,7 +1248,7 @@ I (../Inc/Lcd_Driver.h)(0x58E5F8A1)
 I (../Inc/delay.h)(0x587BCCCF)
 I (../Inc/GUI.h)(0x587BCCCF)
 I (../Inc/My_font.h)(0x58E5F8A1)
-F (..\Src\Hello_screen.c)(0x5919E67D)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\hello_screen.o" --omf_browse "usb configuration\hello_screen.crf" --depend "usb configuration\hello_screen.d")
+F (..\Src\Hello_screen.c)(0x5B85A28B)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\hello_screen.o" --omf_browse "usb configuration\hello_screen.crf" --depend "usb configuration\hello_screen.d")
 I (../Inc/main.h)(0x58EB609B)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x587BCCCE)
 I (../Inc/stm32f1xx_hal_conf.h)(0x587BCCCF)
@@ -1294,7 +1294,7 @@ I (../Inc/I2Cdev.h)(0x58E5F8A1)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54765570)
 I (../Inc/BMP085.h)(0x587BCCCF)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5476556E)
-I (..\Fatf\src\ffconf.h)(0x58FF1D3D)
+I (..\Fatf\src\ffconf.h)(0x5B86EC06)
 I (..\Fatf\src\diskio.h)(0x58E9480E)
 I (..\Fatf\src\integer.h)(0x58E94771)
 I (..\Fatf\src\ff.h)(0x58E94386)
@@ -1306,6 +1306,7 @@ I (../Inc/BMP_graph.h)(0x58E5F8A1)
 I (../Inc/Init.h)(0x58E5F8A1)
 I (../Inc/hello_screen.h)(0x58E5F8A1)
 I (C:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x54765570)
+I (../Inc/Files.h)(0x5B7AD6F7)
 F (..\Src\buttoms.c)(0x58E5F8A1)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\buttoms.o" --omf_browse "usb configuration\buttoms.crf" --depend "usb configuration\buttoms.d")
 I (../Inc/buttoms.h)(0x58E5F8A1)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x587BCCCE)
@@ -1339,8 +1340,8 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x587BCCCE)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h)(0x587BCCCE)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h)(0x587BCCCE)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h)(0x587BCCCE)
-F (..\Src\Files.c)(0x591D510C)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\files.o" --omf_browse "usb configuration\files.crf" --depend "usb configuration\files.d")
-I (../Inc/Files.h)(0x591D50DC)
+F (..\Src\Files.c)(0x5B86F5CB)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I..\Fatf -I..\Fatf\src -I..\Fatf\src\option --C99-I C:\Users\User\Documents\GitHub\Meteo\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-D__UVISION_VERSION="513" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o "usb configuration\files.o" --omf_browse "usb configuration\files.crf" --depend "usb configuration\files.d")
+I (../Inc/Files.h)(0x5B7AD6F7)
 I (../Inc/main.h)(0x58EB609B)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x587BCCCE)
 I (../Inc/stm32f1xx_hal_conf.h)(0x587BCCCF)
@@ -1386,7 +1387,7 @@ I (../Inc/I2Cdev.h)(0x58E5F8A1)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x54765570)
 I (../Inc/BMP085.h)(0x587BCCCF)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5476556E)
-I (..\Fatf\src\ffconf.h)(0x58FF1D3D)
+I (..\Fatf\src\ffconf.h)(0x5B86EC06)
 I (..\Fatf\src\diskio.h)(0x58E9480E)
 I (..\Fatf\src\integer.h)(0x58E94771)
 I (..\Fatf\src\ff.h)(0x58E94386)

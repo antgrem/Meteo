@@ -237,3 +237,72 @@ FRESULT Create_new_file(void)
 		return result;
 }
 
+FRESULT Read_Config_file(void)
+{
+	int16_t count_store_data=0;
+	FIL config_file;
+	char str[80];
+	
+	uint8_t try_mount, try_expand;
+	char config_file_name[] = "config.txt";
+	
+//mount sd card	
+	try_mount = 0;
+	result = f_mount(&FATFS_Obj, "0:", 1);
+	while ((result != FR_OK) && (try_mount++ != 10))
+	{
+		result = f_mount(&FATFS_Obj, "0:", 1);
+		delay_ms(200);
+	}
+	
+	if (result == FR_OK) 
+		{//sd card mounted correctly
+			result = f_open(&config_file, config_file_name, FA_OPEN_EXISTING | FA_READ | FA_WRITE);
+			if (result == FR_OK)
+			{//file exist
+				Lcd_Clear(BLACK);	
+				delay_ms(100);
+				sprintf(str, "Config file exist");
+				PutStringRus11(20,20, str,GREEN,BLACK); 
+				
+				f_gets(str, 10, &config_file);
+				PutStringRus11(20,40, str,GREEN,BLACK); 
+				
+
+				delay_ms(500);
+				delay_ms(500);
+				
+				f_sync(&config_file);
+				f_close(&config_file);			
+			}
+				else
+				{//config file does not exist
+				Lcd_Clear(BLACK);	
+				delay_ms(100);
+				sprintf(str, "Create new config file");
+				PutStringRus11(20, 20, str,GREEN,BLACK); 
+
+					result = f_open(&config_file, config_file_name, FA_CREATE_NEW | FA_READ | FA_WRITE);
+					if (result == FR_OK)
+					{
+						f_close(&config_file);
+						delay_ms(100);
+					}
+					
+				result = f_open(&config_file, config_file_name, FA_READ | FA_WRITE);
+				if (result == FR_OK)
+				{
+						/* If we put more than 0 characters (everything OK) */
+					count_store_data = f_puts("wifi:\npas:\n", &config_file);
+	
+					f_sync(&config_file);
+					f_close(&config_file);
+				}
+			}
+						/* Unmount drive, don't forget this! */
+						f_mount(0, "0:", 1);
+			}//end mount SD
+		
+		return result;	
+}
+

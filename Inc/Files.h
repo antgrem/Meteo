@@ -16,6 +16,8 @@ void Init_offset(void);
 FRESULT Create_new_file(void);
 FRESULT Write_file(Messure_DataTypeDef *Data);
 
+FRESULT Read_Config_file(void);
+
 
 
 #endif

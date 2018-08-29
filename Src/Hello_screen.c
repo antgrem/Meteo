@@ -1,6 +1,7 @@
 #include "main.h"
 #include "hello_screen.h"
 #include "ctype.h"
+#include "Files.h"
 
 
 extern RTC_HandleTypeDef hrtc;
@@ -21,7 +22,7 @@ void Hello_Screen(void)
 	
 	PutStringRus11(30,15,"METEO",GREEN,Global_BG_Color);// "METEO"
 	
-	PutStringRus11(30,80,"ver 1.1",YELLOW,Global_BG_Color); // "ver 1.1"
+	PutStringRus11(30,80,"ver 1.2",YELLOW,Global_BG_Color); // "ver 1.2"
 
 	delay_ms(500);
 	delay_ms(500);
@@ -103,6 +104,7 @@ volatile	SD_result_TypeDef res;
 				PutStringRus11(10,dy,"SD: OK",GREEN,Global_BG_Color);
 				System.SD_Card_Present = 1;
 //test
+			Read_Config_file();
 		res.SD_result = f_open(&file_pass, "WiFi.txt", FA_READ);
 		if (res.SD_result == FR_OK)
 		{

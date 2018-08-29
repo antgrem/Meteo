@@ -102,7 +102,6 @@ int main(void)
 	LCD_LED_SET;
 	//Lcd_Clear(LIGHTGREY);	
 	
-//		Terminal_shift_line();
 	time_temp = ReadTimeCounter(&hrtc);
 	time_tm_temp = localtime(&time_temp);
 	sprintf(str_file_name, "%04d%02d%02d.txt", time_tm_temp->tm_year+1900, time_tm_temp->tm_mon + 1, time_tm_temp->tm_mday);
@@ -274,7 +273,7 @@ void Draw_table_ex (void)
 					{
 						color = 0xFE55;
 					}
-					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,color,Global_BG_Color);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,Global_BG_Color,Global_BG_Color);
 					sprintf(T_in_string, "+%d", All_data.T_in/10);
 					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,color,Global_BG_Color);
 				}
@@ -293,7 +292,7 @@ void Draw_table_ex (void)
 					{
 						color = 0xB65F;
 					}
-					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,color,Global_BG_Color);
+					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,Global_BG_Color,Global_BG_Color);
 					sprintf(T_in_string, "-%d", All_data.T_in/10);
 					PutStringRus(Coordinate.Tempr_in_x,Coordinate.Tempr_in_y,T_in_string,color,Global_BG_Color);
 				}
@@ -320,7 +319,7 @@ void Draw_table_ex (void)
 								{
 									color = 0xFE55;
 								}
-							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,color,Global_BG_Color);
+							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,Global_BG_Color,Global_BG_Color);
 							sprintf(T_out_string, "+%d", All_data.T_out/10);
 							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,color,Global_BG_Color);
 						}
@@ -339,7 +338,7 @@ void Draw_table_ex (void)
 								{
 									color = 0xB65F;
 								}
-							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,color,Global_BG_Color);
+							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,Global_BG_Color,Global_BG_Color);
 							sprintf(T_out_string, "-%d", All_data.T_out/10);
 							PutStringRus(Coordinate.Tempr_out_x,Coordinate.Tempr_out_y,T_out_string,color,Global_BG_Color);
 						}

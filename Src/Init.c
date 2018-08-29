@@ -42,7 +42,7 @@ void Init_Variebles (void)
 
 void RTC_Init(void)
 {
-
+//int something = 0;
   RTC_DateTypeDef DateToUpdate;
 	
     HAL_PWR_EnableBkUpAccess();
@@ -73,7 +73,7 @@ void RTC_Init(void)
 					sTime.Minutes = 0x10;
 					sTime.Seconds = 0;
 
-					//HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
+					HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
 
 
 					DateToUpdate.WeekDay = RTC_WEEKDAY_THURSDAY;
@@ -81,9 +81,13 @@ void RTC_Init(void)
 					DateToUpdate.Date = 0x11;
 					DateToUpdate.Year = 0x16;
 					
-					//HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
+					HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD);
 				
-//directly write to counter						
+			}
+			HAL_RTCEx_BKUPWrite(&hrtc, 1, RTC_IS_SET);
+		}
+		
+		//directly write to counter						
 //		if(something == 1)
 //		{
 //			something = 0;
@@ -93,11 +97,6 @@ void RTC_Init(void)
 //			hrtc.Instance->CNTH = 0x57DF;
 //			hrtc.Instance->CRL &= ~RTC_CRL_CNF;
 //		}
-
-
-			}
-			HAL_RTCEx_BKUPWrite(&hrtc, 1, RTC_IS_SET);
-		}
 		
 		HAL_RTCEx_SetSecond_IT(&hrtc);
 	
